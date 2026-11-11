@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FIV Kite" />
+  <meta name="theme-color" content="#090e17" />
+  <title>FIV Kite Desk | LA28</title>
+  <link rel="apple-touch-icon" href="./icon.png" />
+  <link rel="icon" type="image/png" href="./icon.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #090e17;
+      --card: #111827;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --azzurro: #0ea5e9;
+      --azzurro-glow: rgba(14, 165, 233, 0.16);
+      --green: #10b981;
+      --green-bg: rgba(16, 185, 129, 0.15);
+      --amber: #f59e0b;
+      --amber-bg: rgba(245, 158, 11, 0.15);
+      --red: #ef4444;
+      --red-bg: rgba(239, 68, 68, 0.15);
+      --safe-top: env(safe-area-inset-top, 16px);
+      --safe-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+      padding-bottom: calc(80px + var(--safe-bottom));
+      overflow-x: hidden;
+    }
+
+    /* Sticky Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9, 14, 23, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: calc(12px + var(--safe-top)) 16px 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-flag {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0066cc, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-title p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .refresh-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .refresh-btn:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    /* Container */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 14px 14px 20px 14px;
+    }
+
+    /* Segmented Tabs */
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      border: 1px solid var(--card-border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 9px 6px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--azzurro);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(14, 165, 233, 0.35);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .athlete-name {
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sync-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 20px;
+    }
+
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .kpi-grid.cols-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kpi-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-left: 4px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .kpi-box.status-green {
+      background: rgba(16, 185, 129, 0.13);
+      border-color: rgba(16, 185, 129, 0.35);
+      border-left: 5px solid #10b981;
+    }
+    .kpi-box.status-green .kpi-value { color: #34d399; }
+
+    .kpi-box.status-amber {
+      background: rgba(245, 158, 11, 0.13);
+      border-color: rgba(245, 158, 11, 0.38);
+      border-left: 5px solid #f59e0b;
+    }
+    .kpi-box.status-amber .kpi-value { color: #fbbf24; }
+
+    .kpi-box.status-red {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.42);
+      border-left: 5px solid #ef4444;
+    }
+    .kpi-box.status-red .kpi-value { color: #f87171; }
+
+    .kpi-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: #cbd5e1;
+      margin-top: 3px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-green { background: #10b981; box-shadow: 0 0 10px #10b981; }
+    .dot-amber { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
+    .dot-red { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+
+    /* Alert Banner */
+    .alert-banner {
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.35;
+    }
+    .alert-amber { background: var(--amber-bg); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .alert-red { background: var(--red-bg); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .alert-green { background: var(--green-bg); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    /* Weight Progress Bar */
+    .weight-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .weight-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .progress-track {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5e9, #10b981);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+    .weight-scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* Chart Container */
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chart-title span {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .chart-wrap {
+      position: relative;
+      height: 185px;
+      width: 100%;
+    }
+
+    /* Points Breakdown List */
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+    }
+    .breakdown-item:last-child {
+      border-bottom: none;
+    }
+    .breakdown-label {
+      color: var(--muted);
+    }
+    .breakdown-val {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Activity Matrix Table */
+    .matrix-row {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 11px 12px;
+      margin-bottom: 8px;
+    }
+    .matrix-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .matrix-cat {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .matrix-yesterday {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--azzurro);
+    }
+    .matrix-averages {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 6px;
+    }
+    .matrix-avg-val {
+      color: var(--text);
+      font-weight: 600;
+      display: block;
+      font-size: 12px;
+    }
+
+    /* Auth / Setup Modal */
+    .auth-screen {
+      max-width: 420px;
+      margin: 60px auto;
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      text-align: center;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: #090e17;
+      color: white;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: var(--azzurro);
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-flag">FIV</div>
+      <div class="brand-title">
+        <h1>Formula Kite Desk</h1>
+        <p id="last-updated">Caricamento dati...</p>
+      </div>
+    </div>
+    <button class="refresh-btn" onclick="loadDashboardData(true)">
+      <span>↻</span> Aggiorna
+    </button>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container" id="main-app">
+    <!-- Segmented Navigation -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('oggi')">Oggi (Squadra)</button>
+      <button class="tab-btn" onclick="switchTab('riccardo')">Riccardo</button>
+      <button class="tab-btn" onclick="switchTab('flavio')">Flavio</button>
+    </div>
+
+    <!-- VIEW 1: SQUADRA OGGI -->
+    <div id="view-oggi">
+      <!-- Riccardo Summary Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="athlete-name">👤 Riccardo Pianosi</div>
+          <span id="ric-sync-badge" class="sync-badge badge-green">Whoop OK</span>
+        </div>
+        <div id="ric-alert-box"></div>
+        <div class="kpi-grid">
+          <div class="kpi-box">
+            <div class="kpi-label">Motore Whoop <span id="ric-rec-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-rec-val">--%</div>
+            <div class="kpi-sub" id="ric-rec-sub">Target oggi: --</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">HRV Notte <span id="ric-hrv-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-hrv-val">-- ms</div>
+            <div class="kpi-sub" id="ric-hrv-sub">Base: -- ms | 7gg: --</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Sonno <span id="ric-slp-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-slp-val">--h</div>
+            <div class="kpi-sub" id="ric-slp-sub">--:-- ➔ --:--</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Punti LA28 Ieri <span id="ric-pts-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-pts-val">-- / --</div>
+            <div class="kpi-sub" id="ric-pts-sub">Trend 7gg: --% (Ob. ≥85%)</div>
+          </div>
+        </div>
+        <div class="weight-box">
+          <div class="weight-top">
+            <span>⚖️ Peso Corporeo: <strong id="ric-weight-val">-- kg</strong></span>
+            <span style="color: var(--azzurro);">Target: 103–105 kg</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="ric-weight-bar" style="width: 0%;"></div>
+          </div>
+          <div class="weight-scale">
+            <span>98 kg (Viana)</span>
+            <span id="ric-weight-30d">Media 30gg: -- kg</span>
+            <span>105 kg (Max)</span>
+          </div>
+        </div>
+        <div class="kpi-box" style="margin-bottom: 0;">
+          <div class="kpi-label">Carico Ieri (Garmin)</div>
+          <div class="kpi-value" id="ric-act-val" style="font-size: 15px; margin-top: 2px;">--</div>
+          <div class="kpi-sub" id="ric-act-sub">Dettagli completi in tab Riccardo</div>
+        </div>
+      </div>
+
+      <!-- Flavio Summary Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="athlete-name">👤 Flavio Marx</div>
+          <span id="fla-sync-badge" class="sync-badge badge-green">Garmin OK</span>
+        </div>
+        <div id="fla-alert-box"></div>
+        <div class="kpi-grid">
+          <div class="kpi-box">
+            <div class="kpi-label">HRV Notte <span id="fla-hrv-dot" class="dot"></span></div>
+            <div class="kpi-value" id="fla-hrv-val">-- ms</div>
+            <div class="kpi-sub" id="fla-hrv-sub">Range: -- | Sett: --</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">RHR Notte <span id="fla-rhr-dot" class="dot"></span></div>
+            <div class="kpi-value" id="fla-rhr-val">-- bpm</div>
+            <div class="kpi-sub" id="fla-rhr-sub">Base 7gg: -- bpm</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Sonno Garmin <span id="fla-slp-dot" class="dot"></span></div>
+            <div class="kpi-value" id="fla-slp-val">--h</div>
+            <div class="kpi-sub" id="fla-slp-sub">Score: --/100</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Carico Ieri</div>
+            <div class="kpi-value" id="fla-act-val" style="font-size: 15px; margin-top: 4px;">--</div>
+            <div class="kpi-sub" id="fla-act-sub">Dettagli in tab Flavio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: RICCARDO DETTAGLIO & GRAFICI -->
+    <div id="view-riccardo" class="hidden">
+      <div class="card">
+        <div class="chart-title">
+          📈 Trend HRV & Recovery (14gg)
+          <span id="ric-chart-base">Baseline HRV: -- ms</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chartRicHrv"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          🏋️‍♂️ Carichi Garmin: Ieri vs Medie Storiche
+          <span>Acqua, Palestra & Cardio</span>
+        </div>
+        <div id="ric-matrix-container"></div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          🏆 Compliance Punti LA28 vs Target (≥85%)
+          <span>Ultime 2 settimane</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chartRicPoints"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          📋 Bilancio Ieri & Dolore Plantare
+          <span id="ric-ctx-badge">--</span>
+        </div>
+        <div id="ric-breakdown-list"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: FLAVIO DETTAGLIO & GRAFICI -->
+    <div id="view-flavio" class="hidden">
+      <div class="card">
+        <div class="chart-title">
+          📉 Andamento HRV & RHR Notturno (14gg)
+          <span>Monitoraggio carico & recupero</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chartFlaHrv"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          🏋️‍♂️ Matrice Carichi: Ieri vs Medie Storiche
+          <span>Durata media per sessione</span>
+        </div>
+        <div id="fla-matrix-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Screen (Shown only on GitHub Pages without token) -->
+  <div id="auth-screen" class="auth-screen hidden">
+    <div class="brand-flag" style="margin: 0 auto 12px auto; width: 48px; height: 48px; font-size: 18px;">FIV</div>
+    <h2 style="margin-bottom: 8px;">Accesso Riservato Coach</h2>
+    <p style="font-size: 13px; color: var(--muted);">Inserisci la chiave di accesso FIV una sola volta. Verrà salvata in sicurezza nella memoria privata di questo iPhone.</p>
+    <input type="password" id="token-input" class="auth-input" placeholder="github_pat_..." />
+    <button class="auth-btn" onclick="saveTokenAndLoad()">Sblocca FIV Kite Desk</button>
+  </div>
+
+  <script>
+    let globalData = null;
+    let charts = {};
+
+    // Read token from URL hash (#token=...) if present and save to localStorage
+    (function checkHashToken() {
+      if (window.location.hash && window.location.hash.includes('token=')) {
+        const params = new URLSearchParams(window.location.hash.substring(1));
+        const t = params.get('token');
+        if (t) {
+          localStorage.setItem('fiv_gh_token', t);
+          history.replaceState(null, '', window.location.pathname);
+        }
+      }
+    })();
+
+    function saveTokenAndLoad() {
+      const val = document.getElementById('token-input').value.trim();
+      if (!val) return;
+      localStorage.setItem('fiv_gh_token', val);
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('main-app').classList.remove('hidden');
+      loadDashboardData(true);
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach((b, idx) => {
+        b.classList.remove('active');
+        if ((tab === 'oggi' && idx === 0) || (tab === 'riccardo' && idx === 1) || (tab === 'flavio' && idx === 2)) {
+          b.classList.add('active');
+        }
+      });
+      document.getElementById('view-oggi').classList.toggle('hidden', tab !== 'oggi');
+      document.getElementById('view-riccardo').classList.toggle('hidden', tab !== 'riccardo');
+      document.getElementById('view-flavio').classList.toggle('hidden', tab !== 'flavio');
+
+      // Trigger chart resize on tab reveal
+      setTimeout(() => {
+        Object.values(charts).forEach(c => c && c.resize());
+      }, 50);
+    }
+
+    async function fetchJsonData() {
+      // 1. Try relative local paths only when running locally (skip on github.io)
+      if (!window.location.hostname.includes('github.io')) {
+        const localCandidates = ['../data/dashboard_data.json', './dashboard_data.json'];
+        for (const path of localCandidates) {
+          try {
+            const res = await fetch(path + '?t=' + Date.now());
+            if (res.ok) return await res.json();
+          } catch (e) {}
+        }
+      }
+
+      // 2. Fallback to Private GitHub Repo API using saved Coach token
+      const token = localStorage.getItem('fiv_gh_token');
+      if (!token) {
+        document.getElementById('main-app').classList.add('hidden');
+        document.getElementById('auth-screen').classList.remove('hidden');
+        return null;
+      }
+
+      const apiUrl = 'https://api.github.com/repos/simonevannesi/Coaching_FIV/contents/data/dashboard_data.json?ref=main&_=' + Date.now();
+      const res = await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.raw'
+        },
+        cache: 'no-store'
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        localStorage.removeItem('fiv_gh_token');
+        document.getElementById('main-app').classList.add('hidden');
+        document.getElementById('auth-screen').classList.remove('hidden');
+        return null;
+      }
+      if (!res.ok) throw new Error('Errore caricamento dati GitHub');
+      return await res.json();
+    }
+
+    function setDot(elId, color) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.className = 'dot dot-' + color;
+      const box = el.closest('.kpi-box');
+      if (box) {
+        box.classList.remove('status-green', 'status-amber', 'status-red');
+        box.classList.add('status-' + color);
+      }
+    }
+
+    function renderDashboard(d) {
+      globalData = d;
+      document.getElementById('last-updated').textContent = `Aggiornato: ${d.meta.generated_display}`;
+
+      // ================= RICCARDO =================
+      const ric = d.riccardo;
+      const ro = ric.oggi;
+
+      const ricBadge = document.getElementById('ric-sync-badge');
+      if (ro.synced_today) {
+        ricBadge.className = 'sync-badge badge-green';
+        ricBadge.textContent = 'Whoop Sync ✓';
+      } else {
+        ricBadge.className = 'sync-badge badge-amber';
+        ricBadge.textContent = `Ultimo: ${ro.data || 'N/D'}`;
+      }
+
+      // Recovery
+      const rec = ro.recovery;
+      document.getElementById('ric-rec-val').textContent = rec !== null ? `${Math.round(rec)}%` : 'N/D';
+      const recColor = rec >= 67 ? 'green' : (rec >= 34 ? 'amber' : 'red');
+      setDot('ric-rec-dot', recColor);
+      document.getElementById('ric-rec-sub').textContent = rec >= 67 ? 'Target: Giorno Pieno 10pt' : (rec >= 34 ? 'Target: Carico Controllato' : 'Target: Max 6pt Tutela');
+
+      // HRV
+      const hrv = ro.hrv;
+      document.getElementById('ric-hrv-val').textContent = hrv !== null ? `${hrv.toFixed(1)} ms` : 'N/D';
+      setDot('ric-hrv-dot', hrv >= 95 ? 'green' : (hrv >= 80 ? 'amber' : 'red'));
+      document.getElementById('ric-hrv-sub').textContent = `Base: ${ro.hrv_baseline || '--'} | 7gg: ${ro.hrv_7gg || '--'}`;
+
+      // Sleep
+      const slp = ro.sleep_h;
+      document.getElementById('ric-slp-val').textContent = slp !== null ? `${slp.toFixed(2)}h` : 'N/D';
+      setDot('ric-slp-dot', slp >= 7.2 ? 'green' : (slp >= 6.5 ? 'amber' : 'red'));
+      document.getElementById('ric-slp-sub').textContent = `${ro.bed_time} ➔ ${ro.wake_time} (7gg: ${ro.sonno_7gg || '--'}h)`;
+
+      // Points LA28
+      const pi = ric.punti_ieri;
+      const t7 = ric.trend_punti_7gg_pct;
+      if (pi && pi.max > 0) {
+        document.getElementById('ric-pts-val').textContent = `${pi.fatti} / ${pi.max}`;
+        const pPct = Math.round((pi.fatti / pi.max) * 100);
+        setDot('ric-pts-dot', pPct >= 85 ? 'green' : (pPct >= 70 ? 'amber' : 'red'));
+      } else {
+        document.getElementById('ric-pts-val').textContent = 'Freeze';
+        setDot('ric-pts-dot', 'green');
+      }
+      document.getElementById('ric-pts-sub').textContent = `Trend 7gg: ${t7 !== null ? t7 + '%' : '--'} (Ob. ≥85%)`;
+
+      // Weight Bar (98 to 105 kg range)
+      const pw = ric.peso;
+      if (pw.ultimo) {
+        document.getElementById('ric-weight-val').textContent = `${pw.ultimo} kg`;
+        const pct = Math.min(100, Math.max(0, ((pw.ultimo - 98.0) / (105.0 - 98.0)) * 100));
+        document.getElementById('ric-weight-bar').style.width = `${pct}%`;
+        const deltaStr = pw.delta_30gg > 0 ? `+${pw.delta_30gg}` : pw.delta_30gg;
+        document.getElementById('ric-weight-30d').textContent = `Media 30gg: ${pw.media_30gg} kg (${deltaStr})`;
+      }
+
+      // Riccardo Pain Alert
+      const dol = pi && pi.dolore ? pi.dolore : (ric.dolore_oggi ? parseFloat(ric.dolore_oggi) : 1);
+      const ricAlert = document.getElementById('ric-alert-box');
+      if (dol >= 3) {
+        ricAlert.innerHTML = `<div class="alert-banner alert-red">⚠️ <b>Attenzione Dolore Plantare:</b> Segnalato livello <b>${dol}/5</b> nell'ultimo log. Verificare protocollo scarico & straps.</div>`;
+      } else {
+        ricAlert.innerHTML = '';
+      }
+
+      // Helper per Matrice Carichi condivisa (Riccardo & Flavio)
+      function renderActivityMatrix(containerId, actsObj) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        const cats = [
+          { key: 'palestra', label: '🏋️‍♂️ Palestra' },
+          { key: 'acqua', label: '🪁 Acqua (Kite)' },
+          { key: 'cardio', label: '🚴‍♂️ Cardio' }
+        ];
+        el.innerHTML = cats.map(c => {
+          const s = (actsObj && actsObj[c.key]) || {};
+          const kmStr = s.ieri_km > 0 ? ` (${s.ieri_km} km)` : '';
+          const hrStr = s.ieri_hr ? ` | FC ${s.ieri_hr} bpm` : '';
+          const ieriText = s.ieri_dur > 0 ? `${s.ieri_dur}h${kmStr}${hrStr}` : 'Riposo (0h)';
+          return `
+            <div class="matrix-row">
+              <div class="matrix-top">
+                <span class="matrix-cat">${c.label}</span>
+                <span class="matrix-yesterday">Ieri: ${ieriText}</span>
+              </div>
+              <div class="matrix-averages">
+                <div>7 Giorni <span class="matrix-avg-val">${s.avg7 || 0}h (${s.n7 || 0} sess)</span></div>
+                <div>30 Giorni <span class="matrix-avg-val">${s.avg30 || 0}h (${s.n30 || 0} sess)</span></div>
+                <div>6 Mesi <span class="matrix-avg-val">${s.avg180 || 0}h (${s.n180 || 0} sess)</span></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Riccardo Carico Ieri Overview & Matrice
+      const ricActs = ric.attivita || {};
+      const ricActiveCats = [];
+      if (ricActs.acqua && ricActs.acqua.ieri_dur > 0) ricActiveCats.push(`Kite ${ricActs.acqua.ieri_dur}h`);
+      if (ricActs.palestra && ricActs.palestra.ieri_dur > 0) ricActiveCats.push(`Palestra ${ricActs.palestra.ieri_dur}h`);
+      if (ricActs.cardio && ricActs.cardio.ieri_dur > 0) ricActiveCats.push(`Cardio ${ricActs.cardio.ieri_dur}h`);
+      document.getElementById('ric-act-val').textContent = ricActiveCats.length ? ricActiveCats.join(' + ') : 'Riposo';
+      renderActivityMatrix('ric-matrix-container', ricActs);
+
+      // Riccardo Breakdown list
+      const bdList = document.getElementById('ric-breakdown-list');
+      if (pi && pi.dettagli) {
+        document.getElementById('ric-ctx-badge').textContent = `${pi.tipo} (${pi.fatti}/${pi.max} pt)`;
+        bdList.innerHTML = pi.dettagli.map(([k, v]) => `
+          <div class="breakdown-item">
+            <span class="breakdown-label">${k}</span>
+            <span class="breakdown-val">${v}</span>
+          </div>
+        `).join('');
+      } else {
+        bdList.innerHTML = '<div style="color:var(--muted);font-size:13px;">Nessun dettaglio disponibile</div>';
+      }
+
+      // ================= FLAVIO =================
+      const fla = d.flavio;
+      const fo = fla.oggi || {};
+      const fh = fo.hrv || {};
+      const fr = fo.rhr || {};
+      const fs = fo.sonno || {};
+
+      const flaBadge = document.getElementById('fla-sync-badge');
+      if (fla.synced_today) {
+        flaBadge.className = 'sync-badge badge-green';
+        flaBadge.textContent = 'Garmin Sync ✓';
+      } else {
+        flaBadge.className = 'sync-badge badge-amber';
+        flaBadge.textContent = 'In attesa sync';
+      }
+
+      // Flavio HRV
+      document.getElementById('fla-hrv-val').textContent = fh.val ? `${fh.val} ms` : 'N/D';
+      const fStatus = fh.status || 'N/D';
+      setDot('fla-hrv-dot', fStatus === 'BALANCED' ? 'green' : (fStatus.includes('UNBALANCED') || fStatus.includes('LOW') ? 'amber' : 'red'));
+      document.getElementById('fla-hrv-sub').textContent = `Range: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} | ${fStatus}`;
+
+      // Flavio RHR
+      document.getElementById('fla-rhr-val').textContent = fr.val ? `${fr.val} bpm` : 'N/D';
+      const rDelta = (fr.val && fr.baseline_7gg) ? +(fr.val - fr.baseline_7gg).toFixed(1) : 0;
+      setDot('fla-rhr-dot', rDelta <= 2 ? 'green' : (rDelta <= 5 ? 'amber' : 'red'));
+      document.getElementById('fla-rhr-sub').textContent = `Base 7gg: ${fr.baseline_7gg || '--'} (${rDelta > 0 ? '+' + rDelta : rDelta} bpm)`;
+
+      // Flavio Sleep
+      document.getElementById('fla-slp-val').textContent = fs.ore ? `${fs.ore}h` : 'N/D';
+      setDot('fla-slp-dot', fs.score >= 80 ? 'green' : (fs.score >= 70 ? 'amber' : 'red'));
+      document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (Base: ${fs.baseline_ore || '--'}h)`;
+
+      // Flavio Yesterday Activity Summary
+      const acts = fla.attivita || {};
+      const activeCats = [];
+      if (acts.acqua && acts.acqua.ieri_dur > 0) activeCats.push(`Kite ${acts.acqua.ieri_dur}h`);
+      if (acts.palestra && acts.palestra.ieri_dur > 0) activeCats.push(`Palestra ${acts.palestra.ieri_dur}h`);
+      if (acts.cardio && acts.cardio.ieri_dur > 0) activeCats.push(`Cardio ${acts.cardio.ieri_dur}h`);
+      document.getElementById('fla-act-val').textContent = activeCats.length ? activeCats.join(' + ') : 'Riposo';
+
+      // Flavio Trend Alert
+      const flaAlert = document.getElementById('fla-alert-box');
+      if (fStatus === 'UNBALANCED' || rDelta >= 3.5) {
+        flaAlert.innerHTML = `<div class="alert-banner alert-amber">⚠️ <b>Segnale Fatica Garmin:</b> HRV <b>${fh.val} ms (${fStatus})</b> e RHR a <b>+${rDelta} bpm</b> sulla media 7gg. Verifica lo stato prima di caricare.</div>`;
+      } else {
+        flaAlert.innerHTML = '';
+      }
+
+      // Flavio Matrix
+      renderActivityMatrix('fla-matrix-container', acts);
+
+      // ================= CHARTS =================
+      renderCharts(d);
+    }
+
+    function renderCharts(d) {
+      Chart.defaults.color = '#94a3b8';
+      Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, sans-serif';
+      Chart.defaults.font.size = 11;
+
+      const ricHist = (d.riccardo.history || []).slice(-14);
+      const ricBaseVal = d.riccardo.oggi.hrv_baseline || 100.1;
+      document.getElementById('ric-chart-base').textContent = `Baseline HRV: ${ricBaseVal} ms`;
+
+      // Chart 1: Riccardo HRV, Baseline Line & Recovery
+      if (charts.ricHrv) charts.ricHrv.destroy();
+      charts.ricHrv = new Chart(document.getElementById('chartRicHrv'), {
+        type: 'line',
+        data: {
+          labels: ricHist.map(x => x.label),
+          datasets: [
+            {
+              label: 'HRV (ms)',
+              data: ricHist.map(x => x.hrv),
+              borderColor: '#0ea5e9',
+              backgroundColor: 'rgba(14, 165, 233, 0.12)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: true,
+              yAxisID: 'y'
+            },
+            {
+              label: `Baseline (${ricBaseVal} ms)`,
+              data: ricHist.map(() => ricBaseVal),
+              borderColor: '#f8fafc',
+              borderDash: [6, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Recovery %',
+              data: ricHist.map(x => x.recovery),
+              borderColor: '#10b981',
+              borderDash: [3, 3],
+              borderWidth: 1.8,
+              tension: 0.35,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
+            y1: { type: 'linear', position: 'right', min: 0, max: 100, grid: { display: false } }
+          }
+        }
+      });
+
+      // Chart 2: Riccardo LA28 Points vs 85% Target Line
+      if (charts.ricPts) charts.ricPts.destroy();
+      charts.ricPts = new Chart(document.getElementById('chartRicPoints'), {
+        type: 'bar',
+        data: {
+          labels: ricHist.map(x => x.label),
+          datasets: [
+            {
+              type: 'line',
+              label: 'Target 85%',
+              data: ricHist.map(() => 85),
+              borderColor: '#f8fafc',
+              borderDash: [5, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false
+            },
+            {
+              type: 'bar',
+              label: '% Punti LA28',
+              data: ricHist.map(x => x.points_pct),
+              backgroundColor: ricHist.map(x => x.points_pct >= 85 ? '#10b981' : (x.points_pct >= 70 ? '#f59e0b' : '#ef4444')),
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+
+      // Chart 3: Flavio HRV, Baseline Min & RHR
+      const flaHist = d.flavio.history || [];
+      const flaBaseLow = (d.flavio.oggi && d.flavio.oggi.hrv && d.flavio.oggi.hrv.baseline_low) || 47;
+      if (charts.flaHrv) charts.flaHrv.destroy();
+      charts.flaHrv = new Chart(document.getElementById('chartFlaHrv'), {
+        type: 'line',
+        data: {
+          labels: flaHist.map(x => x.label),
+          datasets: [
+            {
+              label: 'HRV (ms)',
+              data: flaHist.map(x => x.hrv),
+              borderColor: '#38bdf8',
+              backgroundColor: 'rgba(56, 189, 248, 0.14)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: true,
+              yAxisID: 'y'
+            },
+            {
+              label: `Soglia Min (${flaBaseLow} ms)`,
+              data: flaHist.map(() => flaBaseLow),
+              borderColor: '#f8fafc',
+              borderDash: [6, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false,
+              yAxisID: 'y'
+            },
+            {
+              label: 'RHR (bpm)',
+              data: flaHist.map(x => x.rhr),
+              borderColor: '#f59e0b',
+              borderWidth: 2,
+              tension: 0.35,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
+            y1: { type: 'linear', position: 'right', grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    async function loadDashboardData(force = false) {
+      try {
+        document.getElementById('last-updated').textContent = 'Sincronizzazione in corso...';
+        const data = await fetchJsonData();
+        if (data) renderDashboard(data);
+      } catch (e) {
+        document.getElementById('last-updated').textContent = 'Errore caricamento dati';
+        console.error(e);
+      }
+    }
+
+    loadDashboardData();
+  </script>
+</body>
+</html>
