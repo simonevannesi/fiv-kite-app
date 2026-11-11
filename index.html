@@ -718,7 +718,7 @@
       document.getElementById('ric-rec-val').textContent = rec !== null ? `${Math.round(rec)}%` : 'N/D';
       const recColor = rec >= 67 ? 'green' : (rec >= 34 ? 'amber' : 'red');
       setDot('ric-rec-dot', recColor);
-      document.getElementById('ric-rec-sub').textContent = rec >= 67 ? 'Target: Giorno Pieno 10pt' : (rec >= 34 ? 'Target: Carico Controllato' : 'Target: Max 6pt Tutela');
+      document.getElementById('ric-rec-sub').textContent = `Base: ${ro.recovery_baseline || '--'}% | ` + (rec >= 67 ? '10pt' : (rec >= 34 ? 'Gestione' : '6pt'));
 
       // HRV
       const hrv = ro.hrv;
@@ -797,10 +797,21 @@
       // Riccardo Carico Ieri Overview & Matrice
       const ricActs = ric.attivita || {};
       const ricActiveCats = [];
-      if (ricActs.acqua && ricActs.acqua.ieri_dur > 0) ricActiveCats.push(`Kite ${ricActs.acqua.ieri_dur}h`);
-      if (ricActs.palestra && ricActs.palestra.ieri_dur > 0) ricActiveCats.push(`Palestra ${ricActs.palestra.ieri_dur}h`);
-      if (ricActs.cardio && ricActs.cardio.ieri_dur > 0) ricActiveCats.push(`Cardio ${ricActs.cardio.ieri_dur}h`);
+      const ricActiveSubs = [];
+      if (ricActs.acqua && ricActs.acqua.ieri_dur > 0) {
+        ricActiveCats.push(`Kite ${ricActs.acqua.ieri_dur}h`);
+        ricActiveSubs.push(`7gg: ${ricActs.acqua.avg7}h | 30gg: ${ricActs.acqua.avg30}h`);
+      }
+      if (ricActs.palestra && ricActs.palestra.ieri_dur > 0) {
+        ricActiveCats.push(`Palestra ${ricActs.palestra.ieri_dur}h`);
+        ricActiveSubs.push(`7gg: ${ricActs.palestra.avg7}h | 30gg: ${ricActs.palestra.avg30}h`);
+      }
+      if (ricActs.cardio && ricActs.cardio.ieri_dur > 0) {
+        ricActiveCats.push(`Cardio ${ricActs.cardio.ieri_dur}h`);
+        ricActiveSubs.push(`7gg: ${ricActs.cardio.avg7}h | 30gg: ${ricActs.cardio.avg30}h`);
+      }
       document.getElementById('ric-act-val').textContent = ricActiveCats.length ? ricActiveCats.join(' + ') : 'Riposo';
+      document.getElementById('ric-act-sub').textContent = ricActiveSubs.length ? `Media sessione ➔ ${ricActiveSubs[0]}` : 'Nessuna sessione ieri';
       renderActivityMatrix('ric-matrix-container', ricActs);
 
       // Riccardo Breakdown list
@@ -833,30 +844,42 @@
         flaBadge.textContent = 'In attesa sync';
       }
 
-      // Flavio HRV
+      // Flavio HRV (identico formato a Riccardo: Base | 7gg)
       document.getElementById('fla-hrv-val').textContent = fh.val ? `${fh.val} ms` : 'N/D';
       const fStatus = fh.status || 'N/D';
-      setDot('fla-hrv-dot', fStatus === 'BALANCED' ? 'green' : (fStatus.includes('UNBALANCED') || fStatus.includes('LOW') ? 'amber' : 'red'));
-      document.getElementById('fla-hrv-sub').textContent = `Range: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} | ${fStatus}`;
+      const fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
+      setDot('fla-hrv-dot', fColor);
+      document.getElementById('fla-hrv-sub').textContent = `Base: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} | 7gg: ${fh.weekly || '--'} (${fStatus})`;
 
-      // Flavio RHR
+      // Flavio RHR (identico formato: Base 7gg + delta)
       document.getElementById('fla-rhr-val').textContent = fr.val ? `${fr.val} bpm` : 'N/D';
       const rDelta = (fr.val && fr.baseline_7gg) ? +(fr.val - fr.baseline_7gg).toFixed(1) : 0;
       setDot('fla-rhr-dot', rDelta <= 2 ? 'green' : (rDelta <= 5 ? 'amber' : 'red'));
       document.getElementById('fla-rhr-sub').textContent = `Base 7gg: ${fr.baseline_7gg || '--'} (${rDelta > 0 ? '+' + rDelta : rDelta} bpm)`;
 
-      // Flavio Sleep
+      // Flavio Sleep (identico formato: Score + media 7gg)
       document.getElementById('fla-slp-val').textContent = fs.ore ? `${fs.ore}h` : 'N/D';
       setDot('fla-slp-dot', fs.score >= 80 ? 'green' : (fs.score >= 70 ? 'amber' : 'red'));
-      document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (Base: ${fs.baseline_ore || '--'}h)`;
+      document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (7gg: ${fs.baseline_ore || '--'}h - Sc. ${fs.baseline_score || '--'})`;
 
-      // Flavio Yesterday Activity Summary
+      // Flavio Yesterday Activity Summary con medie 7gg/30gg
       const acts = fla.attivita || {};
       const activeCats = [];
-      if (acts.acqua && acts.acqua.ieri_dur > 0) activeCats.push(`Kite ${acts.acqua.ieri_dur}h`);
-      if (acts.palestra && acts.palestra.ieri_dur > 0) activeCats.push(`Palestra ${acts.palestra.ieri_dur}h`);
-      if (acts.cardio && acts.cardio.ieri_dur > 0) activeCats.push(`Cardio ${acts.cardio.ieri_dur}h`);
+      const activeSubs = [];
+      if (acts.acqua && acts.acqua.ieri_dur > 0) {
+        activeCats.push(`Kite ${acts.acqua.ieri_dur}h`);
+        activeSubs.push(`7gg: ${acts.acqua.avg7}h | 30gg: ${acts.acqua.avg30}h`);
+      }
+      if (acts.palestra && acts.palestra.ieri_dur > 0) {
+        activeCats.push(`Palestra ${acts.palestra.ieri_dur}h`);
+        activeSubs.push(`7gg: ${acts.palestra.avg7}h | 30gg: ${acts.palestra.avg30}h`);
+      }
+      if (acts.cardio && acts.cardio.ieri_dur > 0) {
+        activeCats.push(`Cardio ${acts.cardio.ieri_dur}h`);
+        activeSubs.push(`7gg: ${acts.cardio.avg7}h | 30gg: ${acts.cardio.avg30}h`);
+      }
       document.getElementById('fla-act-val').textContent = activeCats.length ? activeCats.join(' + ') : 'Riposo';
+      document.getElementById('fla-act-sub').textContent = activeSubs.length ? `Media ➔ ${activeSubs[0]}` : 'Nessuna sessione ieri';
 
       // Flavio Trend Alert
       const flaAlert = document.getElementById('fla-alert-box');
