@@ -881,13 +881,9 @@
       document.getElementById('fla-act-val').textContent = activeCats.length ? activeCats.join(' + ') : 'Riposo';
       document.getElementById('fla-act-sub').textContent = activeSubs.length ? `Media ➔ ${activeSubs[0]}` : 'Nessuna sessione ieri';
 
-      // Flavio Trend Alert
+      // Flavio Alert rimosso su richiesta del Coach (bastano i colori delle card)
       const flaAlert = document.getElementById('fla-alert-box');
-      if (fStatus === 'UNBALANCED' || rDelta >= 3.5) {
-        flaAlert.innerHTML = `<div class="alert-banner alert-amber">⚠️ <b>Segnale Fatica Garmin:</b> HRV <b>${fh.val} ms (${fStatus})</b> e RHR a <b>+${rDelta} bpm</b> sulla media 7gg. Verifica lo stato prima di caricare.</div>`;
-      } else {
-        flaAlert.innerHTML = '';
-      }
+      if (flaAlert) flaAlert.innerHTML = '';
 
       // Flavio Matrix
       renderActivityMatrix('fla-matrix-container', acts);
