@@ -1,0 +1,17 @@
+{
+  "name": "FIV Formula Kite Desk",
+  "short_name": "FIV Kite",
+  "description": "Dashboard tecnica quotidiana Formula Kite Maschile LA28",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090e17",
+  "theme_color": "#090e17",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
