@@ -789,7 +789,7 @@
         ricAlert.innerHTML = '';
       }
 
-      // Helper per Matrice Carichi condivisa (Riccardo & Flavio)
+      // Helper condiviso per Matrice Carichi (Palestra=sessioni, Cardio=ore, Acqua=km)
       function renderActivityMatrix(containerId, actsObj) {
         const el = document.getElementById(containerId);
         if (!el) return;
@@ -803,6 +803,23 @@
           const kmStr = s.ieri_km > 0 ? ` (${s.ieri_km} km)` : '';
           const hrStr = s.ieri_hr ? ` | FC ${s.ieri_hr} bpm` : '';
           const ieriText = s.ieri_dur > 0 ? `${s.ieri_dur}h${kmStr}${hrStr}` : 'Riposo (0h)';
+
+          let col1Label = 'Ultimi 7gg', col1Val = '';
+          let col2Label = 'Media/Sett (30gg)', col2Val = '';
+          let col3Label = 'Media 6 Mesi', col3Val = `${s.avg180 || 0}h (${s.n180 || 0} sess)`;
+
+          if (c.key === 'palestra') {
+            col1Val = `${s.n7 || 0} sess (${s.avg7 || 0}h)`;
+            col2Val = `${s.sess_wk_30 || 0} sess/sett`;
+          } else if (c.key === 'cardio') {
+            col1Val = `${s.sum_dur7 || 0}h (${s.n7 || 0} sess)`;
+            col2Val = `${s.h_wk_30 || 0}h/sett`;
+          } else {
+            // Acqua (Kite): media km ultimi 7gg e media km settimanali ultimo mese
+            col1Val = `${s.avg_km7 || 0} km/sess (${s.sum_km7 || 0} km)`;
+            col2Val = `${s.km_wk_30 || 0} km/sett`;
+          }
+
           return `
             <div class="matrix-row">
               <div class="matrix-top">
@@ -810,33 +827,38 @@
                 <span class="matrix-yesterday">Ieri: ${ieriText}</span>
               </div>
               <div class="matrix-averages">
-                <div>7 Giorni <span class="matrix-avg-val">${s.avg7 || 0}h (${s.n7 || 0} sess)</span></div>
-                <div>30 Giorni <span class="matrix-avg-val">${s.avg30 || 0}h (${s.n30 || 0} sess)</span></div>
-                <div>6 Mesi <span class="matrix-avg-val">${s.avg180 || 0}h (${s.n180 || 0} sess)</span></div>
+                <div>${col1Label} <span class="matrix-avg-val">${col1Val}</span></div>
+                <div>${col2Label} <span class="matrix-avg-val">${col2Val}</span></div>
+                <div>${col3Label} <span class="matrix-avg-val">${col3Val}</span></div>
               </div>
             </div>
           `;
         }).join('');
       }
 
+      function setSummaryLoadBox(valId, subId, actsObj) {
+        const a = actsObj || {};
+        const cats = [];
+        const subs = [];
+        if (a.acqua && a.acqua.ieri_dur > 0) {
+          cats.push(`Kite ${a.acqua.ieri_dur}h`);
+          subs.push(`7gg: ${a.acqua.avg_km7 || 0} km/s | Sett 30gg: ${a.acqua.km_wk_30 || 0} km`);
+        }
+        if (a.palestra && a.palestra.ieri_dur > 0) {
+          cats.push(`Palestra ${a.palestra.ieri_dur}h`);
+          subs.push(`7gg: ${a.palestra.n7 || 0} sess | Sett 30gg: ${a.palestra.sess_wk_30 || 0} sess`);
+        }
+        if (a.cardio && a.cardio.ieri_dur > 0) {
+          cats.push(`Cardio ${a.cardio.ieri_dur}h`);
+          subs.push(`7gg: ${a.cardio.sum_dur7 || 0}h | Sett 30gg: ${a.cardio.h_wk_30 || 0}h`);
+        }
+        document.getElementById(valId).textContent = cats.length ? cats.join(' + ') : 'Riposo';
+        document.getElementById(subId).textContent = subs.length ? subs[0] : `Palestra 7gg: ${(a.palestra && a.palestra.n7) || 0} sess`;
+      }
+
       // Riccardo Carico Ieri Overview & Matrice
       const ricActs = ric.attivita || {};
-      const ricActiveCats = [];
-      const ricActiveSubs = [];
-      if (ricActs.acqua && ricActs.acqua.ieri_dur > 0) {
-        ricActiveCats.push(`Kite ${ricActs.acqua.ieri_dur}h`);
-        ricActiveSubs.push(`7gg: ${ricActs.acqua.avg7}h | 30gg: ${ricActs.acqua.avg30}h`);
-      }
-      if (ricActs.palestra && ricActs.palestra.ieri_dur > 0) {
-        ricActiveCats.push(`Palestra ${ricActs.palestra.ieri_dur}h`);
-        ricActiveSubs.push(`7gg: ${ricActs.palestra.avg7}h | 30gg: ${ricActs.palestra.avg30}h`);
-      }
-      if (ricActs.cardio && ricActs.cardio.ieri_dur > 0) {
-        ricActiveCats.push(`Cardio ${ricActs.cardio.ieri_dur}h`);
-        ricActiveSubs.push(`7gg: ${ricActs.cardio.avg7}h | 30gg: ${ricActs.cardio.avg30}h`);
-      }
-      document.getElementById('ric-act-val').textContent = ricActiveCats.length ? ricActiveCats.join(' + ') : 'Riposo';
-      document.getElementById('ric-act-sub').textContent = ricActiveSubs.length ? `Media sessione ➔ ${ricActiveSubs[0]}` : 'Nessuna sessione ieri';
+      setSummaryLoadBox('ric-act-val', 'ric-act-sub', ricActs);
       renderActivityMatrix('ric-matrix-container', ricActs);
 
       // Riccardo Breakdown list
@@ -889,22 +911,7 @@
 
       // Flavio Yesterday Activity Summary con medie 7gg/30gg
       const acts = fla.attivita || {};
-      const activeCats = [];
-      const activeSubs = [];
-      if (acts.acqua && acts.acqua.ieri_dur > 0) {
-        activeCats.push(`Kite ${acts.acqua.ieri_dur}h`);
-        activeSubs.push(`7gg: ${acts.acqua.avg7}h | 30gg: ${acts.acqua.avg30}h`);
-      }
-      if (acts.palestra && acts.palestra.ieri_dur > 0) {
-        activeCats.push(`Palestra ${acts.palestra.ieri_dur}h`);
-        activeSubs.push(`7gg: ${acts.palestra.avg7}h | 30gg: ${acts.palestra.avg30}h`);
-      }
-      if (acts.cardio && acts.cardio.ieri_dur > 0) {
-        activeCats.push(`Cardio ${acts.cardio.ieri_dur}h`);
-        activeSubs.push(`7gg: ${acts.cardio.avg7}h | 30gg: ${acts.cardio.avg30}h`);
-      }
-      document.getElementById('fla-act-val').textContent = activeCats.length ? activeCats.join(' + ') : 'Riposo';
-      document.getElementById('fla-act-sub').textContent = activeSubs.length ? `Media ➔ ${activeSubs[0]}` : 'Nessuna sessione ieri';
+      setSummaryLoadBox('fla-act-val', 'fla-act-sub', acts);
 
       // Flavio Alert rimosso su richiesta del Coach (bastano i colori delle card)
       const flaAlert = document.getElementById('fla-alert-box');
