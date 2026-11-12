@@ -723,19 +723,22 @@
 
     function renderDashboard(d) {
       globalData = d;
-      document.getElementById('last-updated').textContent = `Aggiornato: ${d.meta.generated_display}`;
+      const realTodayIso = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Rome' });
+      const isDataFromToday = (d.meta.today_iso === realTodayIso);
+      document.getElementById('last-updated').textContent = `Aggiornato: ${d.meta.generated_display}` + (isDataFromToday ? '' : ' (Dati di ieri)');
 
       // ================= RICCARDO =================
       const ric = d.riccardo;
       const ro = ric.oggi;
 
+      const ricSyncedRealToday = (ro.data === realTodayIso);
       const ricBadge = document.getElementById('ric-sync-badge');
-      if (ro.synced_today) {
+      if (ricSyncedRealToday) {
         ricBadge.className = 'sync-badge badge-green';
         ricBadge.textContent = 'Whoop Sync ✓';
       } else {
         ricBadge.className = 'sync-badge badge-amber';
-        ricBadge.textContent = `Ultimo: ${ro.data || 'N/D'}`;
+        ricBadge.textContent = `⏳ Sync mancante (${ro.data ? ro.data.slice(5) : 'N/D'})`;
       }
 
       // Recovery
@@ -882,13 +885,14 @@
       const fr = fo.rhr || {};
       const fs = fo.sonno || {};
 
+      const flaSyncedRealToday = (isDataFromToday && fla.synced_today);
       const flaBadge = document.getElementById('fla-sync-badge');
-      if (fla.synced_today) {
+      if (flaSyncedRealToday) {
         flaBadge.className = 'sync-badge badge-green';
         flaBadge.textContent = 'Garmin Sync ✓';
       } else {
         flaBadge.className = 'sync-badge badge-amber';
-        flaBadge.textContent = 'In attesa sync';
+        flaBadge.textContent = `⏳ Sync mancante (${d.meta.today_iso ? d.meta.today_iso.slice(5) : 'N/D'})`;
       }
 
       // Flavio HRV (identico formato a Riccardo: Base | 7gg)
