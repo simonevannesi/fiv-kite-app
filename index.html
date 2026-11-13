@@ -729,7 +729,22 @@
 
       // ================= RICCARDO =================
       const ric = d.riccardo;
-      const ro = ric.oggi;
+      const ro = ric.oggi || {};
+
+      // Fallback robusto da storico per Riccardo se per qualsiasi motivo oggi è vuoto
+      if (ro.recovery === null && ro.hrv === null && Array.isArray(ric.history) && ric.history.length > 0) {
+        for (let i = ric.history.length - 1; i >= 0; i--) {
+          const rh = ric.history[i];
+          if (rh.recovery !== null || rh.hrv !== null) {
+            ro.recovery = rh.recovery;
+            ro.hrv = rh.hrv;
+            ro.rhr = rh.rhr;
+            ro.sleep_h = rh.sleep_h;
+            if (!ro.data) ro.data = rh.date;
+            break;
+          }
+        }
+      }
 
       const ricSyncedRealToday = (ro.data === realTodayIso);
       const ricBadge = document.getElementById('ric-sync-badge');
@@ -881,18 +896,34 @@
       // ================= FLAVIO =================
       const fla = d.flavio;
       const fo = fla.oggi || {};
-      const fh = fo.hrv || {};
-      const fr = fo.rhr || {};
-      const fs = fo.sonno || {};
+      let fh = fo.hrv || {};
+      let fr = fo.rhr || {};
+      let fs = fo.sonno || {};
+      let flaDataDate = fo.data;
 
-      const flaSyncedRealToday = (isDataFromToday && fla.synced_today);
+      // Fallback robusto da storico se oggi non ha dati validi (stesso principio di Riccardo)
+      if ((!fh.val && (!fs.ore || fs.ore === 0)) && Array.isArray(fla.history) && fla.history.length > 0) {
+        for (let i = fla.history.length - 1; i >= 0; i--) {
+          const h = fla.history[i];
+          if (h.hrv || h.sleep_h || h.rhr) {
+            fh = { val: h.hrv, status: h.hrv_status || 'N/D', baseline_low: fh.baseline_low, baseline_high: fh.baseline_high, weekly: fh.weekly };
+            fr = { val: h.rhr, baseline_7gg: fr.baseline_7gg };
+            fs = { ore: h.sleep_h, score: h.sleep_score, baseline_ore: fs.baseline_ore, baseline_score: fs.baseline_score };
+            if (!flaDataDate) flaDataDate = h.date;
+            break;
+          }
+        }
+      }
+
+      const flaSyncedRealToday = (isDataFromToday && fla.synced_today && flaDataDate === realTodayIso);
       const flaBadge = document.getElementById('fla-sync-badge');
       if (flaSyncedRealToday) {
         flaBadge.className = 'sync-badge badge-green';
         flaBadge.textContent = 'Garmin Sync ✓';
       } else {
         flaBadge.className = 'sync-badge badge-amber';
-        flaBadge.textContent = `⏳ Sync mancante (${d.meta.today_iso ? d.meta.today_iso.slice(5) : 'N/D'})`;
+        const dateTag = flaDataDate ? flaDataDate.slice(5) : (d.meta.today_iso ? d.meta.today_iso.slice(5) : 'N/D');
+        flaBadge.textContent = `⏳ Sync mancante (${dateTag})`;
       }
 
       // Flavio HRV (identico formato a Riccardo: Base | 7gg)
