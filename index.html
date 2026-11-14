@@ -469,7 +469,7 @@
           <div class="kpi-box">
             <div class="kpi-label">HRV Notte <span id="ric-hrv-dot" class="dot"></span></div>
             <div class="kpi-value" id="ric-hrv-val">-- ms</div>
-            <div class="kpi-sub" id="ric-hrv-sub">Base 30gg: -- ms</div>
+            <div class="kpi-sub" id="ric-hrv-sub">Range 30gg: -- ms</div>
           </div>
           <div class="kpi-box">
             <div class="kpi-label">Sonno <span id="ric-slp-dot" class="dot"></span></div>
@@ -514,7 +514,7 @@
           <div class="kpi-box">
             <div class="kpi-label">HRV Notte <span id="fla-hrv-dot" class="dot"></span></div>
             <div class="kpi-value" id="fla-hrv-val">-- ms</div>
-            <div class="kpi-sub" id="fla-hrv-sub">Base 30gg: -- ms</div>
+            <div class="kpi-sub" id="fla-hrv-sub">Range 30gg: -- ms</div>
           </div>
           <div class="kpi-box">
             <div class="kpi-label">RHR Notte <span id="fla-rhr-dot" class="dot"></span></div>
@@ -767,24 +767,25 @@
       setDot('ric-rec-dot', recColor);
       document.getElementById('ric-rec-sub').textContent = `Base 30gg: ${ro.recovery_baseline || 63.5}% | ` + (rec >= 67 ? '10pt' : (rec >= 34 ? 'Gestione' : '6pt'));
 
-      // HRV (Dinamico su Base 30gg: Verde entro -6.5%, Giallo tra -6.5% e -18%, Rosso < -18%)
+      // HRV: Corridoio Scientifico Plews/Buchheit (SWC = 0.75 SD su 30gg)
       const hrv = ro.hrv;
       document.getElementById('ric-hrv-val').textContent = hrv !== null ? `${hrv.toFixed(1)} ms` : 'N/D';
-      const baseHrv = ro.hrv_baseline || 99.6;
+      const baseHrv = ro.hrv_baseline || 98.4;
+      const lowHrv = ro.hrv_baseline_low || (baseHrv - 8.2);
+      const highHrv = ro.hrv_baseline_high || (baseHrv + 8.2);
       let hrvColor = 'green';
-      if (hrv !== null && baseHrv > 0) {
-        const deltaPct = ((hrv - baseHrv) / baseHrv) * 100;
-        if (deltaPct < -18) {
-          hrvColor = 'red';
-        } else if (deltaPct < -6.5) {
-          hrvColor = 'amber';
+      if (hrv !== null) {
+        if (hrv < (lowHrv * 0.88)) {
+          hrvColor = 'red'; // Crollo sotto il limite minimo
+        } else if (hrv < lowHrv || hrv > (highHrv * 1.15)) {
+          hrvColor = 'amber'; // Fuori corridoio (fatica acuta o iperattivita parasimpatica)
         } else {
-          hrvColor = 'green';
+          hrvColor = 'green'; // In pieno corridoio di normalita
         }
       }
       setDot('ric-hrv-dot', hrvColor);
       const hDelta = (hrv && baseHrv) ? +(hrv - baseHrv).toFixed(1) : 0;
-      document.getElementById('ric-hrv-sub').textContent = `Base 30gg: ${baseHrv} ms (${hDelta > 0 ? '+' + hDelta : hDelta} ms)`;
+      document.getElementById('ric-hrv-sub').textContent = `Range 30gg: ${Math.round(lowHrv)}–${Math.round(highHrv)} ms (${hDelta > 0 ? '+' + hDelta : hDelta} ms)`;
 
       // Sleep
       const slp = ro.sleep_h;
@@ -943,12 +944,12 @@
         flaBadge.textContent = `⏳ Sync mancante (${dateTag})`;
       }
 
-      // Flavio HRV (Base 30gg Firstbeat)
+      // Flavio HRV (Range 30gg Firstbeat)
       document.getElementById('fla-hrv-val').textContent = fh.val ? `${fh.val} ms` : 'N/D';
       const fStatus = fh.status || 'N/D';
       const fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
       setDot('fla-hrv-dot', fColor);
-      document.getElementById('fla-hrv-sub').textContent = `Base 30gg: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
+      document.getElementById('fla-hrv-sub').textContent = `Range 30gg: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
 
       // Flavio RHR (Base 30gg con soglie scientifiche: Verde <= +1.5, Giallo +1.6-+3.9, Rosso >= +4.0)
       document.getElementById('fla-rhr-val').textContent = fr.val ? `${fr.val} bpm` : 'N/D';
