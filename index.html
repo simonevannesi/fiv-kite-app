@@ -723,9 +723,11 @@
 
     function renderDashboard(d) {
       globalData = d;
-      const realTodayIso = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Rome' });
+      // Calcolo robusto della data odierna (YYYY-MM-DD) indipendente da Safari/locale
+      const now = new Date();
+      const realTodayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
       const isDataFromToday = (d.meta.today_iso === realTodayIso);
-      document.getElementById('last-updated').textContent = `Aggiornato: ${d.meta.generated_display}` + (isDataFromToday ? '' : ' (Dati di ieri)');
+      document.getElementById('last-updated').textContent = `Aggiornato: ${d.meta.generated_display}` + (isDataFromToday ? '' : ' (Dati precedenti)');
 
       // ================= RICCARDO =================
       const ric = d.riccardo;
@@ -746,9 +748,9 @@
         }
       }
 
-      const ricSyncedRealToday = (ro.data === realTodayIso);
+      const ricSynced = (ro.synced_today === true || ro.data === realTodayIso);
       const ricBadge = document.getElementById('ric-sync-badge');
-      if (ricSyncedRealToday) {
+      if (ricSynced) {
         ricBadge.className = 'sync-badge badge-green';
         ricBadge.textContent = 'Whoop Sync ✓';
       } else {
@@ -915,9 +917,9 @@
         }
       }
 
-      const flaSyncedRealToday = (isDataFromToday && fla.synced_today && flaDataDate === realTodayIso);
+      const flaSynced = (fla.synced_today === true || flaDataDate === realTodayIso);
       const flaBadge = document.getElementById('fla-sync-badge');
-      if (flaSyncedRealToday) {
+      if (flaSynced) {
         flaBadge.className = 'sync-badge badge-green';
         flaBadge.textContent = 'Garmin Sync ✓';
       } else {
