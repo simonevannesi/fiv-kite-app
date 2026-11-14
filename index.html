@@ -278,6 +278,44 @@
     .alert-red { background: var(--red-bg); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
     .alert-green { background: var(--green-bg); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
 
+    /* Readiness Directive Banner */
+    .readiness-banner {
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .readiness-banner.banner-green {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .readiness-banner.banner-amber {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .readiness-banner.banner-red {
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+    .readiness-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .banner-green .readiness-title { color: #34d399; }
+    .banner-amber .readiness-title { color: #fbbf24; }
+    .banner-red .readiness-title { color: #f87171; }
+    .readiness-desc {
+      font-size: 11.5px;
+      color: #cbd5e1;
+      line-height: 1.35;
+    }
+
     /* Weight Progress Bar */
     .weight-box {
       background: rgba(255, 255, 255, 0.03);
@@ -459,6 +497,7 @@
           <div class="athlete-name">👤 Riccardo Pianosi</div>
           <span id="ric-sync-badge" class="sync-badge badge-green">Whoop OK</span>
         </div>
+        <div id="ric-readiness-banner"></div>
         <div id="ric-alert-box"></div>
         <div class="kpi-grid">
           <div class="kpi-box">
@@ -509,6 +548,7 @@
           <div class="athlete-name">👤 Flavio Marx</div>
           <span id="fla-sync-badge" class="sync-badge badge-green">Garmin OK</span>
         </div>
+        <div id="fla-readiness-banner"></div>
         <div id="fla-alert-box"></div>
         <div class="kpi-grid">
           <div class="kpi-box">
@@ -825,6 +865,54 @@
         ricAlert.innerHTML = '';
       }
 
+      // Calcolo Direttiva Coach & Colore Generale Giornata Riccardo (Regola Gerarchica del Veto)
+      const rRec = rec !== null ? rec : 60;
+      const rDol = dol !== null ? dol : 1;
+      const rHrv = hrv;
+      const rRhr = ro.rhr;
+      const rRhrBase = 53.4;
+      const rRhrDelta = (rRhr && rRhrBase) ? +(rRhr - rRhrBase).toFixed(1) : 0;
+      const rSlp = slp;
+
+      let rDayColor = 'green';
+      let rDayTitle = '🟢 GIORNATA VERDE: FULL PUSH / DOPPIO TURNO';
+      let rDayDesc = 'Tutti i parametri in pieno equilibrio • Via libera a doppi turni in acqua, simulazioni B2 al limite a 37 nodi e palestra completa.';
+
+      const rIsRed = (rRec < 34) || (rDol >= 3) || (rRhrDelta >= 4.5) || (rHrv !== null && rHrv < (lowHrv * 0.88)) || (rSlp !== null && rSlp < 5.5);
+      const rIsAmber = (rRec < 67) || (rDol === 2) || (rRhrDelta >= 1.6) || (rHrv !== null && (rHrv < lowHrv || rHrv > highHrv * 1.15)) || (rSlp !== null && rSlp < 7.0);
+
+      if (rIsRed) {
+        rDayColor = 'red';
+        rDayTitle = '🔴 GIORNATA ROSSA: REST / RIGENERAZIONE';
+        const reasons = [];
+        if (rRec < 34) reasons.push(`Recovery Whoop ${Math.round(rRec)}%`);
+        if (rDol >= 3) reasons.push(`Dolore plantare ${rDol}/5`);
+        if (rRhrDelta >= 4.5) reasons.push(`RHR +${rRhrDelta} bpm`);
+        if (rHrv < lowHrv * 0.88) reasons.push(`Crollo HRV ${rHrv} ms`);
+        if (rSlp < 5.5) reasons.push(`Sonno ${rSlp}h`);
+        rDayDesc = `<b>Allarme (${reasons.join(', ')}):</b> Stop ai lavori ad alta velocità nel chop. Solo recupero attivo, fisioterapia e controllo medico.`;
+      } else if (rIsAmber) {
+        rDayColor = 'amber';
+        rDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & MODULAZIONE';
+        const reasons = [];
+        if (rRec < 67) reasons.push(`Recovery Whoop ${Math.round(rRec)}%`);
+        if (rHrv < lowHrv) reasons.push(`HRV ${rHrv} ms sotto range`);
+        if (rRhrDelta >= 1.6) reasons.push(`RHR +${rRhrDelta} bpm`);
+        if (rSlp < 7.0) reasons.push(`Sonno ${rSlp}h`);
+        if (rDol === 2) reasons.push(`Fastidio plantare 2/5`);
+        rDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Volume ed assetto foil in acqua OK • Taglio carichi pesanti a terra • Anticipare sonno.`;
+      }
+
+      const ricBannerEl = document.getElementById('ric-readiness-banner');
+      if (ricBannerEl) {
+        ricBannerEl.innerHTML = `
+          <div class="readiness-banner banner-${rDayColor}">
+            <div class="readiness-title">${rDayTitle}</div>
+            <div class="readiness-desc">${rDayDesc}</div>
+          </div>
+        `;
+      }
+
       // Helper condiviso per Matrice Carichi (Palestra=sessioni, Cardio=ore, Acqua=km)
       function renderActivityMatrix(containerId, actsObj) {
         const el = document.getElementById(containerId);
@@ -974,6 +1062,54 @@
 
       // Flavio Matrix
       renderActivityMatrix('fla-matrix-container', acts);
+
+      // Calcolo Direttiva Coach & Colore Generale Giornata Flavio (Regola Gerarchica del Veto)
+      const fHrvVal = fh.val;
+      const fBaseLow = fh.baseline_low || 47;
+      const fBaseHigh = fh.baseline_high || 58;
+      const fRhrVal = fr.val;
+      const fBaseRhr = fr.baseline_30gg || 55.6;
+      const fRDelta = (fRhrVal && fBaseRhr) ? +(fRhrVal - fBaseRhr).toFixed(1) : 0;
+      const fSlpH = fs.ore;
+      const fScore = fs.score;
+      const fSt = fh.status || 'BALANCED';
+
+      let fDayColor = 'green';
+      let fDayTitle = '🟢 GIORNATA VERDE: FULL PUSH / ALTA INTENSITÀ';
+      let fDayDesc = 'Sistema autonomico in equilibrio • Pieno via libera a sessioni ad alta velocità nel chop, partenze tirate e palestra completa.';
+
+      const fIsRed = (fSt === 'LOW' || fSt === 'POOR') || (fRDelta >= 4.5) || (fSlpH !== null && fSlpH < 5.5) || (fScore !== null && fScore < 60);
+      const fIsAmber = (fSt === 'UNBALANCED') || (fRDelta >= 1.6) || (fSlpH !== null && fSlpH < 7.0) || (fScore !== null && fScore < 75);
+
+      if (fIsRed) {
+        fDayColor = 'red';
+        fDayTitle = '🔴 GIORNATA ROSSA: REST / SCARICO';
+        const reasons = [];
+        if (fSt === 'LOW' || fSt === 'POOR') reasons.push(`HRV status ${fSt}`);
+        if (fRDelta >= 4.5) reasons.push(`RHR +${fRDelta} bpm`);
+        if (fSlpH < 5.5) reasons.push(`Sonno ${fSlpH}h`);
+        if (fScore < 60) reasons.push(`Sleep score ${fScore}`);
+        fDayDesc = `<b>Allarme (${reasons.join(', ')}):</b> Stop carichi neuromuscolari • Solo rigenerazione attiva • Controllo idratazione.`;
+      } else if (fIsAmber) {
+        fDayColor = 'amber';
+        fDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & GESTIONE';
+        const reasons = [];
+        if (fSt === 'UNBALANCED') reasons.push(`HRV 7gg sotto range (${fSt})`);
+        if (fRDelta >= 1.6) reasons.push(`RHR +${fRDelta} bpm`);
+        if (fSlpH < 7.0) reasons.push(`Sonno ${fSlpH}h`);
+        if (fScore < 75) reasons.push(`Sleep score ${fScore}`);
+        fDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Uscita kite e lavoro tecnico OK • Evitare doppio turno massimale • Focus sonno notturno.`;
+      }
+
+      const flaBannerEl = document.getElementById('fla-readiness-banner');
+      if (flaBannerEl) {
+        flaBannerEl.innerHTML = `
+          <div class="readiness-banner banner-${fDayColor}">
+            <div class="readiness-title">${fDayTitle}</div>
+            <div class="readiness-desc">${fDayDesc}</div>
+          </div>
+        `;
+      }
 
       // ================= CHARTS =================
       renderCharts(d);
