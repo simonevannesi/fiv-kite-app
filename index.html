@@ -767,13 +767,24 @@
       setDot('ric-rec-dot', recColor);
       document.getElementById('ric-rec-sub').textContent = `Base 30gg: ${ro.recovery_baseline || 63.5}% | ` + (rec >= 67 ? '10pt' : (rec >= 34 ? 'Gestione' : '6pt'));
 
-      // HRV (Bande Deviazione Standard su Base 30gg: Verde >= 87.5ms, Giallo 82.0-87.4ms, Rosso < 82ms)
+      // HRV (Dinamico su Base 30gg: Verde entro -6.5%, Giallo tra -6.5% e -18%, Rosso < -18%)
       const hrv = ro.hrv;
       document.getElementById('ric-hrv-val').textContent = hrv !== null ? `${hrv.toFixed(1)} ms` : 'N/D';
-      const baseHrv = ro.hrv_baseline || 98.4;
-      const hrvColor = hrv >= 87.5 ? 'green' : (hrv >= 82.0 ? 'amber' : 'red');
+      const baseHrv = ro.hrv_baseline || 99.6;
+      let hrvColor = 'green';
+      if (hrv !== null && baseHrv > 0) {
+        const deltaPct = ((hrv - baseHrv) / baseHrv) * 100;
+        if (deltaPct < -18) {
+          hrvColor = 'red';
+        } else if (deltaPct < -6.5) {
+          hrvColor = 'amber';
+        } else {
+          hrvColor = 'green';
+        }
+      }
       setDot('ric-hrv-dot', hrvColor);
-      document.getElementById('ric-hrv-sub').textContent = `Base 30gg: ${baseHrv} ms`;
+      const hDelta = (hrv && baseHrv) ? +(hrv - baseHrv).toFixed(1) : 0;
+      document.getElementById('ric-hrv-sub').textContent = `Base 30gg: ${baseHrv} ms (${hDelta > 0 ? '+' + hDelta : hDelta} ms)`;
 
       // Sleep
       const slp = ro.sleep_h;
