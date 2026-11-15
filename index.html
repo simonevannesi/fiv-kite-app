@@ -886,7 +886,7 @@
       let rDayDesc = 'Tutti i parametri in pieno equilibrio • Via libera a doppi turni in acqua, simulazioni B2 al limite a 37 nodi e palestra completa.';
 
       const rIsRed = (rRec < 34) || (rDol >= 3) || (rRhrDelta >= 4.5) || (rHrv !== null && rHrv < (lowHrv * 0.88)) || (rSlp !== null && rSlp < 5.5);
-      const rIsAmber = (rRec < 67) || (rDol === 2) || (rRhrDelta >= 1.6) || (rHrv !== null && (rHrv < lowHrv || rHrv > highHrv * 1.15)) || (rSlp !== null && rSlp < 7.0);
+      const rIsAmber = (rRec < 67) || (rDol === 2) || (rRhrDelta >= 2.5) || (rHrv !== null && (rHrv < lowHrv || rHrv > highHrv * 1.15)) || (rSlp !== null && rSlp < 7.0);
 
       if (rIsRed) {
         rDayColor = 'red';
@@ -904,7 +904,7 @@
         const reasons = [];
         if (rRec < 67) reasons.push(`Recovery Whoop ${Math.round(rRec)}%`);
         if (rHrv < lowHrv) reasons.push(`HRV ${rHrv} ms sotto range`);
-        if (rRhrDelta >= 1.6) reasons.push(`RHR +${rRhrDelta} bpm`);
+        if (rRhrDelta >= 2.5) reasons.push(`RHR +${rRhrDelta} bpm`);
         if (rSlp < 7.0) reasons.push(`Sonno ${rSlp}h`);
         if (rDol === 2) reasons.push(`Fastidio plantare 2/5`);
         rDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Volume ed assetto foil in acqua OK • Taglio carichi pesanti a terra • Anticipare sonno.`;
