@@ -768,8 +768,14 @@
       // Calcolo robusto della data odierna (YYYY-MM-DD) indipendente da Safari/locale
       const now = new Date();
       const realTodayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      function fmtTag(isoStr) {
+        if (!isoStr) return '--';
+        const p = isoStr.split('-');
+        return p.length >= 3 ? `${p[2]}/${p[1]}` : isoStr;
+      }
+
       const isDataFromToday = (d.meta.today_iso === realTodayIso);
-      document.getElementById('last-updated').textContent = `Aggiornato: ${d.meta.generated_display}` + (isDataFromToday ? '' : ' (Dati precedenti)');
+      document.getElementById('last-updated').textContent = `Desk: ${d.meta.generated_display}` + (isDataFromToday ? '' : ' • Dati precedenti');
 
       // ================= RICCARDO =================
       const ric = d.riccardo;
@@ -790,14 +796,15 @@
         }
       }
 
-      const ricSynced = (ro.synced_today === true || ro.data === realTodayIso);
+      const ricIsToday = (ro.data === realTodayIso && ro.synced_today === true);
+      const ricDateTag = fmtTag(ro.data);
       const ricBadge = document.getElementById('ric-sync-badge');
-      if (ricSynced) {
+      if (ricIsToday) {
         ricBadge.className = 'sync-badge badge-green';
-        ricBadge.textContent = 'Whoop Sync ✓';
+        ricBadge.textContent = `Whoop Sync ✓ (Oggi ${ricDateTag})`;
       } else {
         ricBadge.className = 'sync-badge badge-amber';
-        ricBadge.textContent = `⏳ Sync mancante (${ro.data ? ro.data.slice(5) : 'N/D'})`;
+        ricBadge.textContent = `⏳ Dati ${ricDateTag} (Attesa ${fmtTag(realTodayIso)})`;
       }
 
       // Recovery (Whoop 30d calibrated)
@@ -901,6 +908,10 @@
         if (rSlp < 7.0) reasons.push(`Sonno ${rSlp}h`);
         if (rDol === 2) reasons.push(`Fastidio plantare 2/5`);
         rDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Volume ed assetto foil in acqua OK • Taglio carichi pesanti a terra • Anticipare sonno.`;
+      }
+
+      if (!ricIsToday) {
+        rDayDesc = `<span style="color:#fcd34d;">⚠️ <b>In attesa del sync Whoop di oggi (${fmtTag(realTodayIso)}):</b> i dati e la direttiva sottostanti sono riferiti a ieri (${ricDateTag}).</span><br>` + rDayDesc;
       }
 
       const ricBannerEl = document.getElementById('ric-readiness-banner');
@@ -1021,15 +1032,15 @@
         }
       }
 
-      const flaSynced = (fla.synced_today === true || flaDataDate === realTodayIso);
+      const flaIsToday = (flaDataDate === realTodayIso && fla.synced_today === true);
+      const flaDateTag = fmtTag(flaDataDate);
       const flaBadge = document.getElementById('fla-sync-badge');
-      if (flaSynced) {
+      if (flaIsToday) {
         flaBadge.className = 'sync-badge badge-green';
-        flaBadge.textContent = 'Garmin Sync ✓';
+        flaBadge.textContent = `Garmin Sync ✓ (Oggi ${flaDateTag})`;
       } else {
         flaBadge.className = 'sync-badge badge-amber';
-        const dateTag = flaDataDate ? flaDataDate.slice(5) : (d.meta.today_iso ? d.meta.today_iso.slice(5) : 'N/D');
-        flaBadge.textContent = `⏳ Sync mancante (${dateTag})`;
+        flaBadge.textContent = `⏳ Dati ${flaDateTag} (Attesa ${fmtTag(realTodayIso)})`;
       }
 
       // Flavio HRV (Range 30gg Firstbeat)
@@ -1099,6 +1110,10 @@
         if (fSlpH < 7.0) reasons.push(`Sonno ${fSlpH}h`);
         if (fScore < 75) reasons.push(`Sleep score ${fScore}`);
         fDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Uscita kite e lavoro tecnico OK • Evitare doppio turno massimale • Focus sonno notturno.`;
+      }
+
+      if (!flaIsToday) {
+        fDayDesc = `<span style="color:#fcd34d;">⚠️ <b>In attesa del sync Garmin di oggi (${fmtTag(realTodayIso)}):</b> i dati e la direttiva sottostanti sono riferiti a ieri (${flaDateTag}).</span><br>` + fDayDesc;
       }
 
       const flaBannerEl = document.getElementById('fla-readiness-banner');
