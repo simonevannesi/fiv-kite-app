@@ -1281,19 +1281,52 @@
       });
     }
 
-    async function loadDashboardData(force = false) {
-      if (force && window.location.hostname.includes('github.io')) {
-        const cleanUrl = window.location.href.split('?')[0].split('#')[0];
-        const hash = window.location.hash || '';
-        window.location.replace(`${cleanUrl}?v=${Date.now()}${hash}`);
-        return;
-      }
+    async function triggerCloudWorkflow(token) {
+      if (!token) return false;
       try {
-        document.getElementById('last-updated').textContent = 'Sincronizzazione in corso...';
+        const res = await fetch('https://api.github.com/repos/simonevannesi/Coaching_FIV/actions/workflows/morning_recap.yml/dispatches', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ref: 'main' })
+        });
+        return res.status === 204;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function loadDashboardData(force = false) {
+      const statusEl = document.getElementById('last-updated');
+      const token = getSavedToken();
+
+      if (force) {
+        statusEl.textContent = 'Richiesta sync inviata al cloud...';
+        triggerCloudWorkflow(token).then(dispatched => {
+          if (dispatched) {
+            statusEl.textContent = '⚡ Cloud Sync attivo! Estrazione Garmin & Whoop...';
+            // Auto-refresh after cloud job completes
+            setTimeout(async () => {
+              const d = await fetchJsonData();
+              if (d) renderDashboard(d);
+            }, 18000);
+            setTimeout(async () => {
+              const d = await fetchJsonData();
+              if (d) renderDashboard(d);
+            }, 35000);
+          }
+        });
+      }
+
+      try {
+        if (!force) statusEl.textContent = 'Caricamento dati...';
         const data = await fetchJsonData();
         if (data) renderDashboard(data);
       } catch (e) {
-        document.getElementById('last-updated').textContent = 'Errore caricamento dati';
+        statusEl.textContent = 'Errore caricamento dati';
         console.error(e);
       }
     }
