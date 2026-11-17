@@ -1,0 +1,614 @@
+{
+  "meta": {
+    "generated_at": "2026-11-17T18:58:05.893486+01:00",
+    "generated_display": "17/11/2026 18:58",
+    "today_iso": "2026-11-17",
+    "riccardo_synced": true,
+    "flavio_synced": true
+  },
+  "riccardo": {
+    "oggi": {
+      "data": "2026-11-17",
+      "synced_today": true,
+      "recovery": 51.0,
+      "hrv": 85.1,
+      "rhr": 59.0,
+      "sleep_h": 7.88,
+      "bed_time": "01:27",
+      "wake_time": "10:01",
+      "hrv_baseline": 96.7,
+      "hrv_baseline_low": 88.1,
+      "hrv_baseline_high": 105.2,
+      "hrv_3gg": 90.9,
+      "hrv_7gg": 92.1,
+      "sonno_7gg": 7.66,
+      "recovery_baseline": 66.7
+    },
+    "peso": {
+      "ultimo": 102.3,
+      "media_3gg": 102.73,
+      "media_30gg": 101.91,
+      "delta_30gg": 0.82,
+      "target_min": 103.0,
+      "target_max": 105.0
+    },
+    "punti_ieri": {
+      "tipo": "RADUNO",
+      "max": 10,
+      "fatti": 9,
+      "dettagli": [
+        [
+          "Attività (Garmin)",
+          "+5 / 5 pt 🟢 (Kite in acqua 2.16h - 60.9km)"
+        ],
+        [
+          "Fisio & Piedi",
+          "+3 / 3 pt 🟢 (Dolore: 2/5)"
+        ],
+        [
+          "Cura Foil",
+          "+1 / 1 pt 🟢"
+        ],
+        [
+          "Tattica & Video",
+          "+0 / 1 pt 🔴"
+        ]
+      ],
+      "dolore": 2
+    },
+    "trend_punti_7gg_pct": 71,
+    "dolore_oggi": "2.0",
+    "nota_dolore": "Mal di schiena in acqua",
+    "quiver": {
+      "totale": 23,
+      "categorie": {
+        "KITE": 13,
+        "MAST": 5,
+        "GLIDER": 4,
+        "TAVOLA": 1
+      }
+    },
+    "attivita": {
+      "palestra": {
+        "ieri_dur": 1.2,
+        "ieri_km": 0.0,
+        "ieri_hr": 115,
+        "avg7": 0.98,
+        "n7": 5,
+        "sum_dur7": 4.91,
+        "sum_km7": 0.0,
+        "avg_km7": 0.0,
+        "avg30": 1.06,
+        "n30": 14,
+        "sess_wk_30": 3.3,
+        "h_wk_30": 3.46,
+        "km_wk_30": 0.5,
+        "avg180": 1.19,
+        "n180": 55
+      },
+      "acqua": {
+        "ieri_dur": 2.16,
+        "ieri_km": 60.9,
+        "ieri_hr": 119,
+        "avg7": 1.82,
+        "n7": 5,
+        "sum_dur7": 9.1,
+        "sum_km7": 284.1,
+        "avg_km7": 56.8,
+        "avg30": 1.82,
+        "n30": 5,
+        "sess_wk_30": 1.2,
+        "h_wk_30": 2.12,
+        "km_wk_30": 66.3,
+        "avg180": 1.86,
+        "n180": 49
+      },
+      "cardio": {
+        "ieri_dur": 0.0,
+        "ieri_km": 0.0,
+        "ieri_hr": null,
+        "avg7": 1.18,
+        "n7": 1,
+        "sum_dur7": 1.18,
+        "sum_km7": 30.5,
+        "avg_km7": 30.5,
+        "avg30": 1.05,
+        "n30": 6,
+        "sess_wk_30": 1.4,
+        "h_wk_30": 1.47,
+        "km_wk_30": 33.6,
+        "avg180": 1.06,
+        "n180": 20
+      }
+    },
+    "history": [
+      {
+        "date": "2026-10-28",
+        "label": "28/10",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": 101.5,
+        "pain": null,
+        "points_pct": 90,
+        "tipo": "Autogestito"
+      },
+      {
+        "date": "2026-10-29",
+        "label": "29/10",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": 101.7,
+        "pain": null,
+        "points_pct": 0,
+        "tipo": "TRAVEL"
+      },
+      {
+        "date": "2026-10-30",
+        "label": "30/10",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": 101.3,
+        "pain": null,
+        "points_pct": 0,
+        "tipo": "TRAVEL"
+      },
+      {
+        "date": "2026-10-31",
+        "label": "31/10",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": null,
+        "pain": null,
+        "points_pct": 50,
+        "tipo": "Autogestito"
+      },
+      {
+        "date": "2026-11-01",
+        "label": "01/11",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": null,
+        "pain": null,
+        "points_pct": 0,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-02",
+        "label": "02/11",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": null,
+        "pain": null,
+        "points_pct": 80,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-03",
+        "label": "03/11",
+        "recovery": 77.0,
+        "hrv": 101.6,
+        "rhr": 54.0,
+        "sleep_h": 6.78,
+        "weight": 103.6,
+        "pain": null,
+        "points_pct": 50,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-04",
+        "label": "04/11",
+        "recovery": 40.0,
+        "hrv": 77.3,
+        "rhr": 58.0,
+        "sleep_h": 7.65,
+        "weight": null,
+        "pain": null,
+        "points_pct": 90,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-05",
+        "label": "05/11",
+        "recovery": 75.0,
+        "hrv": 100.6,
+        "rhr": 53.0,
+        "sleep_h": 7.97,
+        "weight": 103.3,
+        "pain": 1.0,
+        "points_pct": 30,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-06",
+        "label": "06/11",
+        "recovery": 90.0,
+        "hrv": 110.8,
+        "rhr": 50.0,
+        "sleep_h": 7.32,
+        "weight": 103.1,
+        "pain": 2.0,
+        "points_pct": 30,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-07",
+        "label": "07/11",
+        "recovery": 58.0,
+        "hrv": 91.5,
+        "rhr": 53.0,
+        "sleep_h": 7.97,
+        "weight": null,
+        "pain": 1.0,
+        "points_pct": 40,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-08",
+        "label": "08/11",
+        "recovery": 86.0,
+        "hrv": 108.9,
+        "rhr": 49.0,
+        "sleep_h": 6.66,
+        "weight": 102.8,
+        "pain": 1.0,
+        "points_pct": 10,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-09",
+        "label": "09/11",
+        "recovery": 89.0,
+        "hrv": 113.0,
+        "rhr": 49.0,
+        "sleep_h": 6.86,
+        "weight": 102.3,
+        "pain": 1.0,
+        "points_pct": 0,
+        "tipo": "TRAVEL"
+      },
+      {
+        "date": "2026-11-10",
+        "label": "10/11",
+        "recovery": 73.0,
+        "hrv": 101.5,
+        "rhr": 53.0,
+        "sleep_h": 7.17,
+        "weight": null,
+        "pain": 1.0,
+        "points_pct": 30,
+        "tipo": "Home"
+      },
+      {
+        "date": "2026-11-11",
+        "label": "11/11",
+        "recovery": 83.0,
+        "hrv": 108.2,
+        "rhr": 54.0,
+        "sleep_h": 7.47,
+        "weight": null,
+        "pain": null,
+        "points_pct": null,
+        "tipo": null
+      },
+      {
+        "date": "2026-11-12",
+        "label": "12/11",
+        "recovery": 54.0,
+        "hrv": 94.1,
+        "rhr": 54.0,
+        "sleep_h": 7.13,
+        "weight": null,
+        "pain": 1.0,
+        "points_pct": 10,
+        "tipo": "Raduno"
+      },
+      {
+        "date": "2026-11-13",
+        "label": "13/11",
+        "recovery": 42.0,
+        "hrv": 79.7,
+        "rhr": 59.0,
+        "sleep_h": 7.89,
+        "weight": null,
+        "pain": 1.0,
+        "points_pct": 50,
+        "tipo": "Raduno"
+      },
+      {
+        "date": "2026-11-14",
+        "label": "14/11",
+        "recovery": 55.0,
+        "hrv": 89.9,
+        "rhr": 57.0,
+        "sleep_h": 8.28,
+        "weight": null,
+        "pain": 1.0,
+        "points_pct": 10,
+        "tipo": "Raduno"
+      },
+      {
+        "date": "2026-11-15",
+        "label": "15/11",
+        "recovery": 70.0,
+        "hrv": 100.9,
+        "rhr": 55.0,
+        "sleep_h": 7.29,
+        "weight": null,
+        "pain": null,
+        "points_pct": null,
+        "tipo": null
+      },
+      {
+        "date": "2026-11-16",
+        "label": "16/11",
+        "recovery": 52.0,
+        "hrv": 86.8,
+        "rhr": 56.0,
+        "sleep_h": 7.67,
+        "weight": null,
+        "pain": 2.0,
+        "points_pct": 40,
+        "tipo": "Raduno"
+      },
+      {
+        "date": "2026-11-17",
+        "label": "17/11",
+        "recovery": 51.0,
+        "hrv": 85.1,
+        "rhr": 59.0,
+        "sleep_h": 7.88,
+        "weight": null,
+        "pain": null,
+        "points_pct": null,
+        "tipo": null
+      }
+    ]
+  },
+  "flavio": {
+    "disponibile": true,
+    "synced_today": true,
+    "oggi": {
+      "data": "2026-11-17",
+      "synced_today": true,
+      "hrv": {
+        "val": 52,
+        "baseline_low": 47,
+        "baseline_high": 58,
+        "weekly": 45,
+        "status": "UNBALANCED"
+      },
+      "rhr": {
+        "val": 57,
+        "baseline_30gg": 55.6,
+        "baseline_7gg": 57.7
+      },
+      "sonno": {
+        "ore": 7.93,
+        "score": 85,
+        "qual": "GOOD",
+        "baseline_ore_30gg": 7.29,
+        "baseline_score_30gg": 79,
+        "baseline_ore_7gg": 7.8,
+        "baseline_score_7gg": 83
+      }
+    },
+    "attivita": {
+      "palestra": {
+        "ieri_dur": 0.0,
+        "ieri_km": 0.0,
+        "avg7": 1.27,
+        "n7": 3,
+        "sum_dur7": 3.82,
+        "sum_km7": 0.0,
+        "avg_km7": 0.0,
+        "avg30": 1.28,
+        "n30": 11,
+        "sess_wk_30": 2.6,
+        "h_wk_30": 3.29,
+        "km_wk_30": 0.0,
+        "avg180": 1.33,
+        "n180": 16
+      },
+      "acqua": {
+        "ieri_dur": 1.88,
+        "ieri_km": 60.0,
+        "avg7": 1.77,
+        "n7": 5,
+        "sum_dur7": 8.83,
+        "sum_km7": 280.4,
+        "avg_km7": 56.1,
+        "avg30": 1.98,
+        "n30": 11,
+        "sess_wk_30": 2.6,
+        "h_wk_30": 5.09,
+        "km_wk_30": 159.0,
+        "avg180": 1.9,
+        "n180": 13
+      },
+      "cardio": {
+        "ieri_dur": 0.0,
+        "ieri_km": 0.0,
+        "avg7": 1.18,
+        "n7": 1,
+        "sum_dur7": 1.18,
+        "sum_km7": 30.6,
+        "avg_km7": 30.6,
+        "avg30": 1.18,
+        "n30": 1,
+        "sess_wk_30": 0.2,
+        "h_wk_30": 0.28,
+        "km_wk_30": 7.1,
+        "avg180": 1.82,
+        "n180": 6
+      }
+    },
+    "history": [
+      {
+        "date": "2026-11-04",
+        "label": "04/11",
+        "hrv": 63,
+        "hrv_status": "BALANCED",
+        "rhr": 52,
+        "sleep_h": 8.07,
+        "sleep_score": 86,
+        "activity_h": 3.9,
+        "activity_desc": "Palestra 0.95h, Acqua 2.95h"
+      },
+      {
+        "date": "2026-11-05",
+        "label": "05/11",
+        "hrv": 46,
+        "hrv_status": "BALANCED",
+        "rhr": 55,
+        "sleep_h": 7.68,
+        "sleep_score": 86,
+        "activity_h": 1.41,
+        "activity_desc": "Palestra 1.41h"
+      },
+      {
+        "date": "2026-11-06",
+        "label": "06/11",
+        "hrv": 45,
+        "hrv_status": "BALANCED",
+        "rhr": 54,
+        "sleep_h": 3.94,
+        "sleep_score": 43,
+        "activity_h": 0,
+        "activity_desc": ""
+      },
+      {
+        "date": "2026-11-07",
+        "label": "07/11",
+        "hrv": 57,
+        "hrv_status": "BALANCED",
+        "rhr": 51,
+        "sleep_h": 8.5,
+        "sleep_score": 88,
+        "activity_h": 1.71,
+        "activity_desc": "Palestra 1.71h"
+      },
+      {
+        "date": "2026-11-08",
+        "label": "08/11",
+        "hrv": 54,
+        "hrv_status": "BALANCED",
+        "rhr": 54,
+        "sleep_h": 8.55,
+        "sleep_score": 78,
+        "activity_h": 0,
+        "activity_desc": ""
+      },
+      {
+        "date": "2026-11-09",
+        "label": "09/11",
+        "hrv": 47,
+        "hrv_status": "BALANCED",
+        "rhr": 55,
+        "sleep_h": 5.97,
+        "sleep_score": 73,
+        "activity_h": 0,
+        "activity_desc": ""
+      },
+      {
+        "date": "2026-11-10",
+        "label": "10/11",
+        "hrv": 40,
+        "hrv_status": "BALANCED",
+        "rhr": 58,
+        "sleep_h": 7.56,
+        "sleep_score": 79,
+        "activity_h": 1.27,
+        "activity_desc": "Palestra 1.27h"
+      },
+      {
+        "date": "2026-11-11",
+        "label": "11/11",
+        "hrv": 36,
+        "hrv_status": "UNBALANCED",
+        "rhr": 59,
+        "sleep_h": 7.22,
+        "sleep_score": 75,
+        "activity_h": 1.43,
+        "activity_desc": "Palestra 1.43h"
+      },
+      {
+        "date": "2026-11-12",
+        "label": "12/11",
+        "hrv": 50,
+        "hrv_status": "UNBALANCED",
+        "rhr": 58,
+        "sleep_h": 7.55,
+        "sleep_score": 89,
+        "activity_h": 2.55,
+        "activity_desc": "Acqua 2.55h"
+      },
+      {
+        "date": "2026-11-13",
+        "label": "13/11",
+        "hrv": 46,
+        "hrv_status": "UNBALANCED",
+        "rhr": 56,
+        "sleep_h": 8.44,
+        "sleep_score": 86,
+        "activity_h": 1.98,
+        "activity_desc": "Palestra 1.12h, Acqua 0.86h"
+      },
+      {
+        "date": "2026-11-14",
+        "label": "14/11",
+        "hrv": 47,
+        "hrv_status": "UNBALANCED",
+        "rhr": 57,
+        "sleep_h": 7.89,
+        "sleep_score": 86,
+        "activity_h": 3.11,
+        "activity_desc": "Cardio 1.18h, Acqua 1.93h"
+      },
+      {
+        "date": "2026-11-15",
+        "label": "15/11",
+        "hrv": 40,
+        "hrv_status": "LOW",
+        "rhr": 57,
+        "sleep_h": 7.33,
+        "sleep_score": 82,
+        "activity_h": 1.61,
+        "activity_desc": "Acqua 1.61h"
+      },
+      {
+        "date": "2026-11-16",
+        "label": "16/11",
+        "hrv": 47,
+        "hrv_status": "LOW",
+        "rhr": 59,
+        "sleep_h": 8.58,
+        "sleep_score": 85,
+        "activity_h": 1.88,
+        "activity_desc": "Acqua 1.88h"
+      },
+      {
+        "date": "2026-11-17",
+        "label": "17/11",
+        "hrv": 52,
+        "hrv_status": "UNBALANCED",
+        "rhr": 57,
+        "sleep_h": 7.93,
+        "sleep_score": 85,
+        "activity_h": 2.82,
+        "activity_desc": "Cardio 0.75h, Acqua 2.07h"
+      }
+    ]
+  }
+}
