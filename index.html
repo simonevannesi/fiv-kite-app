@@ -714,15 +714,16 @@
     }
 
     async function fetchJsonData() {
-      // 1. Try relative local paths only when running locally (skip on github.io)
-      if (!window.location.hostname.includes('github.io')) {
-        const localCandidates = ['../data/dashboard_data.json', './dashboard_data.json'];
-        for (const path of localCandidates) {
-          try {
-            const res = await fetch(path + '?t=' + Date.now());
-            if (res.ok) return await res.json();
-          } catch (e) {}
-        }
+      // 1. Direct fetch with cache-busting timestamp (instant, works everywhere including github.io)
+      const localCandidates = ['./dashboard_data.json', './data/dashboard_data.json', '../data/dashboard_data.json'];
+      for (const path of localCandidates) {
+        try {
+          const res = await fetch(path + '?t=' + Date.now(), { cache: 'no-store' });
+          if (res.ok) {
+            const parsed = await res.json();
+            if (parsed && parsed.meta) return parsed;
+          }
+        } catch (e) {}
       }
 
       // 2. Fallback to Private GitHub Repo API using saved Coach token
