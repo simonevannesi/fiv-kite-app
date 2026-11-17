@@ -1043,10 +1043,21 @@
         flaBadge.textContent = `⏳ Dati ${flaDateTag} (Attesa ${fmtTag(realTodayIso)})`;
       }
 
-      // Flavio HRV (Range 30gg Firstbeat)
+      // Flavio HRV (Range 30gg Firstbeat): Verde pieno se dentro la baseline 47-58 ms
       document.getElementById('fla-hrv-val').textContent = fh.val ? `${fh.val} ms` : 'N/D';
       const fStatus = fh.status || 'N/D';
-      const fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
+      let fColor = 'green';
+      if (fh.val && fh.baseline_low) {
+        if (fh.val >= fh.baseline_low && fh.val <= (fh.baseline_high || 999)) {
+          fColor = 'green';
+        } else if (fh.val < fh.baseline_low - 4) {
+          fColor = 'red';
+        } else {
+          fColor = 'amber';
+        }
+      } else {
+        fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
+      }
       setDot('fla-hrv-dot', fColor);
       document.getElementById('fla-hrv-sub').textContent = `Range 30gg: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
 
@@ -1090,14 +1101,16 @@
       let fDayTitle = '🟢 GIORNATA VERDE: FULL PUSH / ALTA INTENSITÀ';
       let fDayDesc = 'Sistema autonomico in equilibrio • Pieno via libera a sessioni ad alta velocità nel chop, partenze tirate e palestra completa.';
 
-      const fIsRed = (fSt === 'LOW' || fSt === 'POOR') || (fRDelta >= 4.5) || (fSlpH !== null && fSlpH < 5.5) || (fScore !== null && fScore < 60);
-      const fIsAmber = (fSt === 'UNBALANCED') || (fRDelta >= 1.6) || (fSlpH !== null && fSlpH < 7.0) || (fScore !== null && fScore < 75);
+      // Allerta HRV solo se il valore reale notturno scende sotto la baseline minima
+      const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fBaseLow);
+      const fIsRed = (fSt === 'POOR') || (fHrvVal && fHrvVal < fBaseLow - 4) || (fRDelta >= 4.5) || (fSlpH !== null && fSlpH < 5.5) || (fScore !== null && fScore < 60);
+      const fIsAmber = (fHrvDepressed) || (fRDelta >= 2.5) || (fSlpH !== null && fSlpH < 7.0) || (fScore !== null && fScore < 75);
 
       if (fIsRed) {
         fDayColor = 'red';
         fDayTitle = '🔴 GIORNATA ROSSA: REST / SCARICO';
         const reasons = [];
-        if (fSt === 'LOW' || fSt === 'POOR') reasons.push(`HRV status ${fSt}`);
+        if (fSt === 'POOR' || (fHrvVal && fHrvVal < fBaseLow - 4)) reasons.push(`HRV depresso (${fHrvVal} ms)`);
         if (fRDelta >= 4.5) reasons.push(`RHR +${fRDelta} bpm`);
         if (fSlpH < 5.5) reasons.push(`Sonno ${fSlpH}h`);
         if (fScore < 60) reasons.push(`Sleep score ${fScore}`);
@@ -1106,8 +1119,8 @@
         fDayColor = 'amber';
         fDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & GESTIONE';
         const reasons = [];
-        if (fSt === 'UNBALANCED') reasons.push(`HRV 7gg sotto range (${fSt})`);
-        if (fRDelta >= 1.6) reasons.push(`RHR +${fRDelta} bpm`);
+        if (fHrvDepressed) reasons.push(`HRV sotto range (${fHrvVal} < ${fBaseLow} ms)`);
+        if (fRDelta >= 2.5) reasons.push(`RHR +${fRDelta} bpm`);
         if (fSlpH < 7.0) reasons.push(`Sonno ${fSlpH}h`);
         if (fScore < 75) reasons.push(`Sleep score ${fScore}`);
         fDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Uscita kite e lavoro tecnico OK • Evitare doppio turno massimale • Focus sonno notturno.`;
