@@ -887,15 +887,16 @@
       let rDayDesc = `Recupero Whoop solido (${Math.round(rRec)}%) con HRV in corridoio (${rHrv ? rHrv.toFixed(1) : '--'} ms) e piedi asintomatici. Pieno via libera a sessioni ad alta velocità nel chop, simulazioni di passo al traverso B2 a 37+ nodi e lavoro di forza completo.`;
 
       // Veto Rigoroso: Solo condizioni clinicamente o autonomicamente limitanti attivano il rosso o l'ambra
-      const rIsRed = (rRec < 34) || (rDol >= 3) || (rHrv !== null && rHrv < (lowHrv * 0.75)) || (rSlp !== null && rSlp < 5.0) || (rRhrDelta >= 6.5 && rRec < 50);
-      const rIsAmber = (rRec < 67) || (rDol === 2) || (rHrv !== null && (rHrv < lowHrv || rHrv > highHrv * 1.20)) || (rSlp !== null && rSlp < 6.5) || (rRhrDelta >= 4.5 && rRec < 67);
+      // Fastidio 2/5 è fisiologico post-carico (punteggio pieno nel form LA28). Solo dolore >= 3/5 modula e >= 4/5 ferma.
+      const rIsRed = (rRec < 34) || (rDol >= 4) || (rHrv !== null && rHrv < (lowHrv * 0.75)) || (rSlp !== null && rSlp < 5.0) || (rRhrDelta >= 6.5 && rRec < 50);
+      const rIsAmber = (rRec < 67) || (rDol >= 3) || (rHrv !== null && (rHrv < lowHrv || rHrv > highHrv * 1.20)) || (rSlp !== null && rSlp < 6.5) || (rRhrDelta >= 4.5 && rRec < 67);
 
       if (rIsRed) {
         rDayColor = 'red';
         rDayTitle = '🔴 GIORNATA ROSSA: SCARICO ATTIVO & RECUPERO';
         const reasons = [];
         if (rRec < 34) reasons.push(`Recovery Whoop ${Math.round(rRec)}%`);
-        if (rDol >= 3) reasons.push(`Dolore plantare ${rDol}/5`);
+        if (rDol >= 4) reasons.push(`Dolore plantare acuto ${rDol}/5`);
         if (rHrv < lowHrv * 0.75) reasons.push(`Crollo HRV ${rHrv} ms`);
         if (rSlp < 5.0) reasons.push(`Debito sonno severo (${rSlp}h)`);
         if (rRhrDelta >= 6.5) reasons.push(`RHR elevato (+${rRhrDelta} bpm)`);
@@ -905,9 +906,9 @@
         rDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & MODULAZIONE';
         const reasons = [];
         if (rRec < 67) reasons.push(`Recovery Whoop ${Math.round(rRec)}%`);
+        if (rDol >= 3) reasons.push(`Dolore plantare ${rDol}/5 da monitorare`);
         if (rHrv < lowHrv) reasons.push(`HRV ${rHrv} ms sotto range`);
         if (rSlp < 6.5) reasons.push(`Sonno ridotto (${rSlp}h)`);
-        if (rDol === 2) reasons.push(`Fastidio plantare 2/5`);
         if (rRhrDelta >= 4.5) reasons.push(`RHR +${rRhrDelta} bpm`);
         rDayDesc = `<b>Fatica acuta o attenzione biomeccanica (${reasons.join(', ')}):</b> Volume in acqua consentito ma modulare l'intensità del traverso nel chop duro. Evitare carichi massimali a terra; verificare assetto e tensione straps.`;
       }
