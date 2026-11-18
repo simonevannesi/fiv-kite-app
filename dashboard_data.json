@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-11-18T13:00:52.739266+01:00",
-    "generated_display": "18/11/2026 13:00",
+    "generated_at": "2026-11-18T20:39:46.021381+01:00",
+    "generated_display": "18/11/2026 20:39",
     "today_iso": "2026-11-18",
     "riccardo_synced": true,
-    "flavio_synced": true
+    "flavio_synced": false
   },
   "riccardo": {
     "oggi": {
@@ -378,238 +378,16 @@
     ]
   },
   "flavio": {
-    "disponibile": true,
-    "synced_today": true,
+    "disponibile": false,
+    "synced_today": false,
     "oggi": {
       "data": "2026-11-18",
-      "synced_today": true,
-      "hrv": {
-        "val": 50,
-        "baseline_low": 46,
-        "baseline_high": 58,
-        "weekly": 47,
-        "status": "BALANCED"
-      },
-      "rhr": {
-        "val": 56,
-        "baseline_30gg": 55.6,
-        "baseline_7gg": 57.6
-      },
-      "sonno": {
-        "ore": 7.22,
-        "score": 80,
-        "qual": "GOOD",
-        "baseline_ore_30gg": 7.28,
-        "baseline_score_30gg": 79,
-        "baseline_ore_7gg": 7.85,
-        "baseline_score_7gg": 84
-      }
+      "synced_today": false,
+      "hrv": {},
+      "rhr": {},
+      "sonno": {}
     },
-    "attivita": {
-      "palestra": {
-        "ieri_dur": 0.0,
-        "ieri_km": 0.0,
-        "avg7": 1.27,
-        "n7": 2,
-        "sum_dur7": 2.55,
-        "sum_km7": 0.0,
-        "avg_km7": 0.0,
-        "avg30": 1.28,
-        "n30": 11,
-        "sess_wk_30": 2.6,
-        "h_wk_30": 3.29,
-        "km_wk_30": 0.0,
-        "avg180": 1.33,
-        "n180": 16
-      },
-      "acqua": {
-        "ieri_dur": 2.07,
-        "ieri_km": 68.6,
-        "avg7": 1.82,
-        "n7": 6,
-        "sum_dur7": 10.9,
-        "sum_km7": 348.9,
-        "avg_km7": 58.2,
-        "avg30": 1.99,
-        "n30": 12,
-        "sess_wk_30": 2.8,
-        "h_wk_30": 5.57,
-        "km_wk_30": 175.0,
-        "avg180": 1.91,
-        "n180": 14
-      },
-      "cardio": {
-        "ieri_dur": 0.75,
-        "ieri_km": 20.8,
-        "avg7": 0.96,
-        "n7": 2,
-        "sum_dur7": 1.93,
-        "sum_km7": 51.4,
-        "avg_km7": 25.7,
-        "avg30": 0.96,
-        "n30": 2,
-        "sess_wk_30": 0.5,
-        "h_wk_30": 0.45,
-        "km_wk_30": 12.0,
-        "avg180": 1.67,
-        "n180": 7
-      }
-    },
-    "history": [
-      {
-        "date": "2026-11-05",
-        "label": "05/11",
-        "hrv": 46,
-        "hrv_status": "BALANCED",
-        "rhr": 55,
-        "sleep_h": 7.68,
-        "sleep_score": 86,
-        "activity_h": 1.41,
-        "activity_desc": "Palestra 1.41h"
-      },
-      {
-        "date": "2026-11-06",
-        "label": "06/11",
-        "hrv": 45,
-        "hrv_status": "BALANCED",
-        "rhr": 54,
-        "sleep_h": 3.94,
-        "sleep_score": 43,
-        "activity_h": 0,
-        "activity_desc": ""
-      },
-      {
-        "date": "2026-11-07",
-        "label": "07/11",
-        "hrv": 57,
-        "hrv_status": "BALANCED",
-        "rhr": 51,
-        "sleep_h": 8.5,
-        "sleep_score": 88,
-        "activity_h": 1.71,
-        "activity_desc": "Palestra 1.71h"
-      },
-      {
-        "date": "2026-11-08",
-        "label": "08/11",
-        "hrv": 54,
-        "hrv_status": "BALANCED",
-        "rhr": 54,
-        "sleep_h": 8.55,
-        "sleep_score": 78,
-        "activity_h": 0,
-        "activity_desc": ""
-      },
-      {
-        "date": "2026-11-09",
-        "label": "09/11",
-        "hrv": 47,
-        "hrv_status": "BALANCED",
-        "rhr": 55,
-        "sleep_h": 5.97,
-        "sleep_score": 73,
-        "activity_h": 0,
-        "activity_desc": ""
-      },
-      {
-        "date": "2026-11-10",
-        "label": "10/11",
-        "hrv": 40,
-        "hrv_status": "BALANCED",
-        "rhr": 58,
-        "sleep_h": 7.56,
-        "sleep_score": 79,
-        "activity_h": 1.27,
-        "activity_desc": "Palestra 1.27h"
-      },
-      {
-        "date": "2026-11-11",
-        "label": "11/11",
-        "hrv": 36,
-        "hrv_status": "UNBALANCED",
-        "rhr": 59,
-        "sleep_h": 7.22,
-        "sleep_score": 75,
-        "activity_h": 1.43,
-        "activity_desc": "Palestra 1.43h"
-      },
-      {
-        "date": "2026-11-12",
-        "label": "12/11",
-        "hrv": 50,
-        "hrv_status": "UNBALANCED",
-        "rhr": 58,
-        "sleep_h": 7.55,
-        "sleep_score": 89,
-        "activity_h": 2.55,
-        "activity_desc": "Acqua 2.55h"
-      },
-      {
-        "date": "2026-11-13",
-        "label": "13/11",
-        "hrv": 46,
-        "hrv_status": "UNBALANCED",
-        "rhr": 56,
-        "sleep_h": 8.44,
-        "sleep_score": 86,
-        "activity_h": 1.98,
-        "activity_desc": "Palestra 1.12h, Acqua 0.86h"
-      },
-      {
-        "date": "2026-11-14",
-        "label": "14/11",
-        "hrv": 47,
-        "hrv_status": "UNBALANCED",
-        "rhr": 57,
-        "sleep_h": 7.89,
-        "sleep_score": 86,
-        "activity_h": 3.11,
-        "activity_desc": "Cardio 1.18h, Acqua 1.93h"
-      },
-      {
-        "date": "2026-11-15",
-        "label": "15/11",
-        "hrv": 40,
-        "hrv_status": "LOW",
-        "rhr": 57,
-        "sleep_h": 7.33,
-        "sleep_score": 82,
-        "activity_h": 1.61,
-        "activity_desc": "Acqua 1.61h"
-      },
-      {
-        "date": "2026-11-16",
-        "label": "16/11",
-        "hrv": 47,
-        "hrv_status": "LOW",
-        "rhr": 59,
-        "sleep_h": 8.58,
-        "sleep_score": 85,
-        "activity_h": 1.88,
-        "activity_desc": "Acqua 1.88h"
-      },
-      {
-        "date": "2026-11-17",
-        "label": "17/11",
-        "hrv": 52,
-        "hrv_status": "UNBALANCED",
-        "rhr": 57,
-        "sleep_h": 7.93,
-        "sleep_score": 85,
-        "activity_h": 2.82,
-        "activity_desc": "Cardio 0.75h, Acqua 2.07h"
-      },
-      {
-        "date": "2026-11-18",
-        "label": "18/11",
-        "hrv": 50,
-        "hrv_status": "BALANCED",
-        "rhr": 56,
-        "sleep_h": 7.22,
-        "sleep_score": 80,
-        "activity_h": 0,
-        "activity_desc": ""
-      }
-    ]
+    "attivita": {},
+    "history": []
   }
 }
