@@ -1,28 +1,28 @@
 {
   "meta": {
-    "generated_at": "2026-11-17T18:58:05.893486+01:00",
-    "generated_display": "17/11/2026 18:58",
-    "today_iso": "2026-11-17",
+    "generated_at": "2026-11-18T12:40:18.175085+01:00",
+    "generated_display": "18/11/2026 12:40",
+    "today_iso": "2026-11-18",
     "riccardo_synced": true,
     "flavio_synced": true
   },
   "riccardo": {
     "oggi": {
-      "data": "2026-11-17",
+      "data": "2026-11-18",
       "synced_today": true,
-      "recovery": 51.0,
-      "hrv": 85.1,
-      "rhr": 59.0,
-      "sleep_h": 7.88,
-      "bed_time": "01:27",
-      "wake_time": "10:01",
-      "hrv_baseline": 96.7,
-      "hrv_baseline_low": 88.1,
-      "hrv_baseline_high": 105.2,
-      "hrv_3gg": 90.9,
-      "hrv_7gg": 92.1,
-      "sonno_7gg": 7.66,
-      "recovery_baseline": 66.7
+      "recovery": 71.0,
+      "hrv": 96.4,
+      "rhr": 58.0,
+      "sleep_h": 6.9,
+      "bed_time": "00:30",
+      "wake_time": "08:09",
+      "hrv_baseline": 96.3,
+      "hrv_baseline_low": 87.9,
+      "hrv_baseline_high": 104.8,
+      "hrv_3gg": 89.4,
+      "hrv_7gg": 90.4,
+      "sonno_7gg": 7.58,
+      "recovery_baseline": 66.2
     },
     "peso": {
       "ultimo": 102.3,
@@ -39,7 +39,7 @@
       "dettagli": [
         [
           "Attività (Garmin)",
-          "+5 / 5 pt 🟢 (Kite in acqua 2.16h - 60.9km)"
+          "+5 / 5 pt 🟢 (Kite in acqua 1.86h - 40.3km)"
         ],
         [
           "Fisio & Piedi",
@@ -56,7 +56,7 @@
       ],
       "dolore": 2
     },
-    "trend_punti_7gg_pct": 71,
+    "trend_punti_7gg_pct": 56,
     "dolore_oggi": "2.0",
     "nota_dolore": "Mal di schiena in acqua",
     "quiver": {
@@ -70,12 +70,12 @@
     },
     "attivita": {
       "palestra": {
-        "ieri_dur": 1.2,
+        "ieri_dur": 0.0,
         "ieri_km": 0.0,
-        "ieri_hr": 115,
-        "avg7": 0.98,
-        "n7": 5,
-        "sum_dur7": 4.91,
+        "ieri_hr": null,
+        "avg7": 0.9,
+        "n7": 4,
+        "sum_dur7": 3.61,
         "sum_km7": 0.0,
         "avg_km7": 0.0,
         "avg30": 1.06,
@@ -87,21 +87,21 @@
         "n180": 55
       },
       "acqua": {
-        "ieri_dur": 2.16,
-        "ieri_km": 60.9,
-        "ieri_hr": 119,
-        "avg7": 1.82,
-        "n7": 5,
-        "sum_dur7": 9.1,
-        "sum_km7": 284.1,
-        "avg_km7": 56.8,
-        "avg30": 1.82,
-        "n30": 5,
-        "sess_wk_30": 1.2,
-        "h_wk_30": 2.12,
-        "km_wk_30": 66.3,
-        "avg180": 1.86,
-        "n180": 49
+        "ieri_dur": 1.86,
+        "ieri_km": 40.3,
+        "ieri_hr": 110,
+        "avg7": 1.57,
+        "n7": 7,
+        "sum_dur7": 10.96,
+        "sum_km7": 324.4,
+        "avg_km7": 46.3,
+        "avg30": 1.57,
+        "n30": 7,
+        "sess_wk_30": 1.6,
+        "h_wk_30": 2.56,
+        "km_wk_30": 75.7,
+        "avg180": 1.82,
+        "n180": 51
       },
       "cardio": {
         "ieri_dur": 0.0,
@@ -122,18 +122,6 @@
       }
     },
     "history": [
-      {
-        "date": "2026-10-28",
-        "label": "28/10",
-        "recovery": null,
-        "hrv": null,
-        "rhr": null,
-        "sleep_h": null,
-        "weight": 101.5,
-        "pain": null,
-        "points_pct": 90,
-        "tipo": "Autogestito"
-      },
       {
         "date": "2026-10-29",
         "label": "29/10",
@@ -197,10 +185,10 @@
       {
         "date": "2026-11-03",
         "label": "03/11",
-        "recovery": 77.0,
-        "hrv": 101.6,
-        "rhr": 54.0,
-        "sleep_h": 6.78,
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
         "weight": 103.6,
         "pain": null,
         "points_pct": 50,
@@ -373,6 +361,18 @@
         "pain": null,
         "points_pct": null,
         "tipo": null
+      },
+      {
+        "date": "2026-11-18",
+        "label": "18/11",
+        "recovery": 71.0,
+        "hrv": 96.4,
+        "rhr": 58.0,
+        "sleep_h": 6.9,
+        "weight": null,
+        "pain": null,
+        "points_pct": null,
+        "tipo": null
       }
     ]
   },
@@ -380,28 +380,28 @@
     "disponibile": true,
     "synced_today": true,
     "oggi": {
-      "data": "2026-11-17",
+      "data": "2026-11-18",
       "synced_today": true,
       "hrv": {
-        "val": 52,
-        "baseline_low": 47,
+        "val": 50,
+        "baseline_low": 46,
         "baseline_high": 58,
-        "weekly": 45,
-        "status": "UNBALANCED"
+        "weekly": 47,
+        "status": "BALANCED"
       },
       "rhr": {
-        "val": 57,
+        "val": 56,
         "baseline_30gg": 55.6,
-        "baseline_7gg": 57.7
+        "baseline_7gg": 57.6
       },
       "sonno": {
-        "ore": 7.93,
-        "score": 85,
+        "ore": 7.22,
+        "score": 80,
         "qual": "GOOD",
-        "baseline_ore_30gg": 7.29,
+        "baseline_ore_30gg": 7.28,
         "baseline_score_30gg": 79,
-        "baseline_ore_7gg": 7.8,
-        "baseline_score_7gg": 83
+        "baseline_ore_7gg": 7.85,
+        "baseline_score_7gg": 84
       }
     },
     "attivita": {
@@ -409,8 +409,8 @@
         "ieri_dur": 0.0,
         "ieri_km": 0.0,
         "avg7": 1.27,
-        "n7": 3,
-        "sum_dur7": 3.82,
+        "n7": 2,
+        "sum_dur7": 2.55,
         "sum_km7": 0.0,
         "avg_km7": 0.0,
         "avg30": 1.28,
@@ -422,50 +422,39 @@
         "n180": 16
       },
       "acqua": {
-        "ieri_dur": 1.88,
-        "ieri_km": 60.0,
-        "avg7": 1.77,
-        "n7": 5,
-        "sum_dur7": 8.83,
-        "sum_km7": 280.4,
-        "avg_km7": 56.1,
-        "avg30": 1.98,
-        "n30": 11,
-        "sess_wk_30": 2.6,
-        "h_wk_30": 5.09,
-        "km_wk_30": 159.0,
-        "avg180": 1.9,
-        "n180": 13
+        "ieri_dur": 2.07,
+        "ieri_km": 68.6,
+        "avg7": 1.82,
+        "n7": 6,
+        "sum_dur7": 10.9,
+        "sum_km7": 348.9,
+        "avg_km7": 58.2,
+        "avg30": 1.99,
+        "n30": 12,
+        "sess_wk_30": 2.8,
+        "h_wk_30": 5.57,
+        "km_wk_30": 175.0,
+        "avg180": 1.91,
+        "n180": 14
       },
       "cardio": {
-        "ieri_dur": 0.0,
-        "ieri_km": 0.0,
-        "avg7": 1.18,
-        "n7": 1,
-        "sum_dur7": 1.18,
-        "sum_km7": 30.6,
-        "avg_km7": 30.6,
-        "avg30": 1.18,
-        "n30": 1,
-        "sess_wk_30": 0.2,
-        "h_wk_30": 0.28,
-        "km_wk_30": 7.1,
-        "avg180": 1.82,
-        "n180": 6
+        "ieri_dur": 0.75,
+        "ieri_km": 20.8,
+        "avg7": 0.96,
+        "n7": 2,
+        "sum_dur7": 1.93,
+        "sum_km7": 51.4,
+        "avg_km7": 25.7,
+        "avg30": 0.96,
+        "n30": 2,
+        "sess_wk_30": 0.5,
+        "h_wk_30": 0.45,
+        "km_wk_30": 12.0,
+        "avg180": 1.67,
+        "n180": 7
       }
     },
     "history": [
-      {
-        "date": "2026-11-04",
-        "label": "04/11",
-        "hrv": 63,
-        "hrv_status": "BALANCED",
-        "rhr": 52,
-        "sleep_h": 8.07,
-        "sleep_score": 86,
-        "activity_h": 3.9,
-        "activity_desc": "Palestra 0.95h, Acqua 2.95h"
-      },
       {
         "date": "2026-11-05",
         "label": "05/11",
@@ -608,6 +597,17 @@
         "sleep_score": 85,
         "activity_h": 2.82,
         "activity_desc": "Cardio 0.75h, Acqua 2.07h"
+      },
+      {
+        "date": "2026-11-18",
+        "label": "18/11",
+        "hrv": 50,
+        "hrv_status": "BALANCED",
+        "rhr": 56,
+        "sleep_h": 7.22,
+        "sleep_score": 80,
+        "activity_h": 0,
+        "activity_desc": ""
       }
     ]
   }
