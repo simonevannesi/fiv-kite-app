@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-18T12:40:18.175085+01:00",
-    "generated_display": "18/11/2026 12:40",
+    "generated_at": "2026-11-18T13:00:52.739266+01:00",
+    "generated_display": "18/11/2026 13:00",
     "today_iso": "2026-11-18",
     "riccardo_synced": true,
     "flavio_synced": true
@@ -22,7 +22,8 @@
       "hrv_3gg": 89.4,
       "hrv_7gg": 90.4,
       "sonno_7gg": 7.58,
-      "recovery_baseline": 66.2
+      "recovery_baseline": 66.2,
+      "rhr_baseline": 54.5
     },
     "peso": {
       "ultimo": 102.3,
