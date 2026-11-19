@@ -1,65 +1,65 @@
 {
   "meta": {
-    "generated_at": "2026-11-18T20:39:46.021381+01:00",
-    "generated_display": "18/11/2026 20:39",
-    "today_iso": "2026-11-18",
-    "riccardo_synced": true,
+    "generated_at": "2026-11-19T02:32:25.742732+01:00",
+    "generated_display": "19/11/2026 02:32",
+    "today_iso": "2026-11-19",
+    "riccardo_synced": false,
     "flavio_synced": false
   },
   "riccardo": {
     "oggi": {
-      "data": "2026-11-18",
-      "synced_today": true,
-      "recovery": 71.0,
-      "hrv": 96.4,
-      "rhr": 58.0,
-      "sleep_h": 6.9,
-      "bed_time": "00:30",
-      "wake_time": "08:09",
-      "hrv_baseline": 96.3,
-      "hrv_baseline_low": 87.9,
-      "hrv_baseline_high": 104.8,
-      "hrv_3gg": 89.4,
-      "hrv_7gg": 90.4,
-      "sonno_7gg": 7.58,
-      "recovery_baseline": 66.2,
-      "rhr_baseline": 54.5
+      "data": "2026-11-17",
+      "synced_today": false,
+      "recovery": 51.0,
+      "hrv": 85.1,
+      "rhr": 59.0,
+      "sleep_h": 7.88,
+      "bed_time": "01:27",
+      "wake_time": "10:01",
+      "hrv_baseline": 96.7,
+      "hrv_baseline_low": 88.1,
+      "hrv_baseline_high": 105.2,
+      "hrv_3gg": 90.9,
+      "hrv_7gg": 92.1,
+      "sonno_7gg": 7.66,
+      "recovery_baseline": 66.7,
+      "rhr_baseline": 54.2
     },
     "peso": {
-      "ultimo": 102.3,
-      "media_3gg": 102.73,
-      "media_30gg": 101.91,
-      "delta_30gg": 0.82,
+      "ultimo": 103.4,
+      "media_3gg": 102.83,
+      "media_30gg": 102.27,
+      "delta_30gg": 0.56,
       "target_min": 103.0,
       "target_max": 105.0
     },
     "punti_ieri": {
       "tipo": "RADUNO",
       "max": 10,
-      "fatti": 9,
+      "fatti": 0,
       "dettagli": [
         [
           "Attività (Garmin)",
-          "+5 / 5 pt 🟢 (Kite in acqua 1.86h - 40.3km)"
+          "0 / 5 pt 🔴 (No wind - Nessun fitness registrato)"
         ],
         [
           "Fisio & Piedi",
-          "+3 / 3 pt 🟢 (Dolore: 2/5)"
+          "+0 / 3 pt 🔴 (Dolore: 1/5)"
         ],
         [
           "Cura Foil",
-          "+1 / 1 pt 🟢"
+          "+0 / 1 pt 🔴"
         ],
         [
           "Tattica & Video",
           "+0 / 1 pt 🔴"
         ]
       ],
-      "dolore": 2
+      "dolore": 1
     },
-    "trend_punti_7gg_pct": 56,
-    "dolore_oggi": "2.0",
-    "nota_dolore": "Mal di schiena in acqua",
+    "trend_punti_7gg_pct": 26,
+    "dolore_oggi": "1.0",
+    "nota_dolore": null,
     "quiver": {
       "totale": 23,
       "categorie": {
@@ -74,9 +74,9 @@
         "ieri_dur": 0.0,
         "ieri_km": 0.0,
         "ieri_hr": null,
-        "avg7": 0.9,
-        "n7": 4,
-        "sum_dur7": 3.61,
+        "avg7": 1.1,
+        "n7": 2,
+        "sum_dur7": 2.21,
         "sum_km7": 0.0,
         "avg_km7": 0.0,
         "avg30": 1.06,
@@ -88,9 +88,9 @@
         "n180": 55
       },
       "acqua": {
-        "ieri_dur": 1.86,
-        "ieri_km": 40.3,
-        "ieri_hr": 110,
+        "ieri_dur": 0.0,
+        "ieri_km": 0.0,
+        "ieri_hr": null,
         "avg7": 1.57,
         "n7": 7,
         "sum_dur7": 10.96,
@@ -123,18 +123,6 @@
       }
     },
     "history": [
-      {
-        "date": "2026-10-29",
-        "label": "29/10",
-        "recovery": null,
-        "hrv": null,
-        "rhr": null,
-        "sleep_h": null,
-        "weight": 101.7,
-        "pain": null,
-        "points_pct": 0,
-        "tipo": "TRAVEL"
-      },
       {
         "date": "2026-10-30",
         "label": "30/10",
@@ -186,10 +174,10 @@
       {
         "date": "2026-11-03",
         "label": "03/11",
-        "recovery": null,
-        "hrv": null,
-        "rhr": null,
-        "sleep_h": null,
+        "recovery": 77.0,
+        "hrv": 101.6,
+        "rhr": 54.0,
+        "sleep_h": 6.78,
         "weight": 103.6,
         "pain": null,
         "points_pct": 50,
@@ -347,7 +335,7 @@
         "rhr": 56.0,
         "sleep_h": 7.67,
         "weight": null,
-        "pain": 2.0,
+        "pain": 1.0,
         "points_pct": 40,
         "tipo": "Raduno"
       },
@@ -358,18 +346,30 @@
         "hrv": 85.1,
         "rhr": 59.0,
         "sleep_h": 7.88,
-        "weight": null,
-        "pain": null,
-        "points_pct": null,
-        "tipo": null
+        "weight": 103.4,
+        "pain": 1.0,
+        "points_pct": 30,
+        "tipo": "Raduno"
       },
       {
         "date": "2026-11-18",
         "label": "18/11",
-        "recovery": 71.0,
-        "hrv": 96.4,
-        "rhr": 58.0,
-        "sleep_h": 6.9,
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": null,
+        "pain": 1.0,
+        "points_pct": 0,
+        "tipo": "Raduno"
+      },
+      {
+        "date": "2026-11-19",
+        "label": "19/11",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
         "weight": null,
         "pain": null,
         "points_pct": null,
@@ -381,7 +381,7 @@
     "disponibile": false,
     "synced_today": false,
     "oggi": {
-      "data": "2026-11-18",
+      "data": "2026-11-19",
       "synced_today": false,
       "hrv": {},
       "rhr": {},
