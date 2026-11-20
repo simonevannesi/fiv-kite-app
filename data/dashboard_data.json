@@ -1,15 +1,15 @@
 {
   "meta": {
-    "generated_at": "2026-11-19T23:22:35.370581+01:00",
-    "generated_display": "19/11/2026 23:22",
-    "today_iso": "2026-11-19",
-    "riccardo_synced": true,
+    "generated_at": "2026-11-20T04:39:34.442786+01:00",
+    "generated_display": "20/11/2026 04:39",
+    "today_iso": "2026-11-20",
+    "riccardo_synced": false,
     "flavio_synced": false
   },
   "riccardo": {
     "oggi": {
       "data": "2026-11-19",
-      "synced_today": true,
+      "synced_today": false,
       "recovery": 70.0,
       "hrv": 91.6,
       "rhr": 54.0,
@@ -36,11 +36,11 @@
     "punti_ieri": {
       "tipo": "RADUNO",
       "max": 10,
-      "fatti": 0,
+      "fatti": 5,
       "dettagli": [
         [
           "Attività (Garmin)",
-          "0 / 5 pt 🔴 (No wind - Nessun fitness registrato)"
+          "+5 / 5 pt 🟢 (Kite in acqua 1.87h - 56.8km)"
         ],
         [
           "Fisio & Piedi",
@@ -57,7 +57,7 @@
       ],
       "dolore": 1
     },
-    "trend_punti_7gg_pct": 26,
+    "trend_punti_7gg_pct": 76,
     "dolore_oggi": "1.0",
     "nota_dolore": null,
     "quiver": {
@@ -71,38 +71,38 @@
     },
     "attivita": {
       "palestra": {
-        "ieri_dur": 0.0,
+        "ieri_dur": 1.39,
         "ieri_km": 0.0,
-        "ieri_hr": null,
-        "avg7": 1.1,
-        "n7": 2,
-        "sum_dur7": 2.21,
+        "ieri_hr": 120,
+        "avg7": 1.2,
+        "n7": 3,
+        "sum_dur7": 3.6,
         "sum_km7": 0.0,
         "avg_km7": 0.0,
-        "avg30": 1.06,
-        "n30": 14,
-        "sess_wk_30": 3.3,
-        "h_wk_30": 3.46,
+        "avg30": 1.08,
+        "n30": 15,
+        "sess_wk_30": 3.5,
+        "h_wk_30": 3.78,
         "km_wk_30": 0.5,
         "avg180": 1.19,
-        "n180": 55
+        "n180": 56
       },
       "acqua": {
-        "ieri_dur": 0.0,
-        "ieri_km": 0.0,
-        "ieri_hr": null,
-        "avg7": 1.57,
+        "ieri_dur": 1.87,
+        "ieri_km": 56.8,
+        "ieri_hr": 150,
+        "avg7": 1.46,
         "n7": 7,
-        "sum_dur7": 10.96,
-        "sum_km7": 324.4,
-        "avg_km7": 46.3,
-        "avg30": 1.57,
-        "n30": 7,
-        "sess_wk_30": 1.6,
-        "h_wk_30": 2.56,
-        "km_wk_30": 75.7,
+        "sum_dur7": 10.25,
+        "sum_km7": 295.1,
+        "avg_km7": 42.2,
+        "avg30": 1.6,
+        "n30": 8,
+        "sess_wk_30": 1.9,
+        "h_wk_30": 2.99,
+        "km_wk_30": 88.9,
         "avg180": 1.82,
-        "n180": 51
+        "n180": 52
       },
       "cardio": {
         "ieri_dur": 0.0,
@@ -123,18 +123,6 @@
       }
     },
     "history": [
-      {
-        "date": "2026-10-30",
-        "label": "30/10",
-        "recovery": null,
-        "hrv": null,
-        "rhr": null,
-        "sleep_h": null,
-        "weight": 101.3,
-        "pain": null,
-        "points_pct": 0,
-        "tipo": "TRAVEL"
-      },
       {
         "date": "2026-10-31",
         "label": "31/10",
@@ -374,6 +362,18 @@
         "pain": null,
         "points_pct": null,
         "tipo": null
+      },
+      {
+        "date": "2026-11-20",
+        "label": "20/11",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
+        "weight": null,
+        "pain": null,
+        "points_pct": null,
+        "tipo": null
       }
     ]
   },
@@ -381,7 +381,7 @@
     "disponibile": false,
     "synced_today": false,
     "oggi": {
-      "data": "2026-11-19",
+      "data": "2026-11-20",
       "synced_today": false,
       "hrv": {},
       "rhr": {},
