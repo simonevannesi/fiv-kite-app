@@ -1035,12 +1035,16 @@
         }
       }
 
-      const flaIsToday = (flaDataDate === realTodayIso && fla.synced_today === true);
+      const flaHasAnyData = Boolean(fh.val || fr.val || (fs.ore && fs.ore > 0));
+      const flaIsToday = (flaDataDate === realTodayIso && fla.synced_today === true && flaHasAnyData);
       const flaDateTag = fmtTag(flaDataDate);
       const flaBadge = document.getElementById('fla-sync-badge');
       if (flaIsToday) {
         flaBadge.className = 'sync-badge badge-green';
         flaBadge.textContent = `Garmin Sync ✓ (Oggi ${flaDateTag})`;
+      } else if (!flaHasAnyData) {
+        flaBadge.className = 'sync-badge badge-red';
+        flaBadge.textContent = `⚠️ Garmin Offline (${fmtTag(realTodayIso)})`;
       } else {
         flaBadge.className = 'sync-badge badge-amber';
         flaBadge.textContent = `⏳ Dati ${flaDateTag} (Attesa ${fmtTag(realTodayIso)})`;
@@ -1049,7 +1053,7 @@
       // Flavio HRV (Range 30gg Firstbeat): Verde pieno se dentro la baseline 47-58 ms
       document.getElementById('fla-hrv-val').textContent = fh.val ? `${fh.val} ms` : 'N/D';
       const fStatus = fh.status || 'N/D';
-      let fColor = 'green';
+      let fColor = 'amber';
       if (fh.val && fh.baseline_low) {
         if (fh.val >= fh.baseline_low && fh.val <= (fh.baseline_high || 999)) {
           fColor = 'green';
@@ -1058,7 +1062,7 @@
         } else {
           fColor = 'amber';
         }
-      } else {
+      } else if (fh.val) {
         fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
       }
       setDot('fla-hrv-dot', fColor);
@@ -1067,14 +1071,14 @@
       // Flavio RHR (Confronto scientifico con la baseline reale a 30gg)
       document.getElementById('fla-rhr-val').textContent = fr.val ? `${fr.val} bpm` : 'N/D';
       const baseRhr = fr.baseline_30gg || 55.6;
-      const rDelta = (fr.val && baseRhr) ? +(fr.val - baseRhr).toFixed(1) : 0;
-      const rhrColor = Math.abs(rDelta) <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red');
+      const rDelta = (fr.val && baseRhr) ? +(fr.val - baseRhr).toFixed(1) : null;
+      const rhrColor = rDelta === null ? 'amber' : (Math.abs(rDelta) <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red'));
       setDot('fla-rhr-dot', rhrColor);
-      document.getElementById('fla-rhr-sub').textContent = `Media 30gg: ${baseRhr} bpm (${rDelta >= 0 ? '+' + rDelta : rDelta} bpm)`;
+      document.getElementById('fla-rhr-sub').textContent = rDelta === null ? `Media 30gg: ${baseRhr} bpm (N/D)` : `Media 30gg: ${baseRhr} bpm (${rDelta >= 0 ? '+' + rDelta : rDelta} bpm)`;
 
       // Flavio Sleep (Score + Base 30gg)
       document.getElementById('fla-slp-val').textContent = fs.ore ? `${fs.ore}h` : 'N/D';
-      setDot('fla-slp-dot', fs.score >= 75 ? 'green' : (fs.score >= 65 ? 'amber' : 'red'));
+      setDot('fla-slp-dot', !fs.score ? 'amber' : (fs.score >= 75 ? 'green' : (fs.score >= 65 ? 'amber' : 'red')));
       const baseSlpH = fs.baseline_ore_30gg || fs.baseline_ore || '--';
       document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (Base 30gg: ${baseSlpH}h)`;
 
@@ -1098,39 +1102,45 @@
       const fRDelta = (fRhrVal && fBaseRhr) ? +(fRhrVal - fBaseRhr).toFixed(1) : 0;
       const fSlpH = fs.ore;
       const fScore = fs.score;
-      const fSt = fh.status || 'BALANCED';
+      const fSt = fh.status || 'N/D';
 
       let fDayColor = 'green';
       let fDayTitle = '🟢 GIORNATA VERDE: FULL PUSH / AGGRESSIVITÀ & COMBATTIMENTO';
-      let fDayDesc = `Sistema autonomico bilanciato (HRV ${fHrvVal || 50} ms | RHR ${fRhrVal || 56} bpm) e sonno ottimale (Score ${fScore || 80}). Condizioni ideali per spingere sul corpo a corpo: partenze al limite al pin, drill sandwich e tenuta della linea.`;
+      let fDayDesc = `Sistema autonomico bilanciato (HRV ${fHrvVal ?? '--'} ms | RHR ${fRhrVal ?? '--'} bpm) e sonno ottimale (Score ${fScore ?? '--'}). Condizioni ideali per spingere sul corpo a corpo: partenze al limite al pin, drill sandwich e tenuta della linea.`;
 
-      // Allerta solo su deviazioni fisiologiche reali
-      const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fBaseLow);
-      const fIsRed = (fSt === 'POOR') || (fHrvVal && fHrvVal < fBaseLow - 5) || (fRDelta >= 5.0) || (fSlpH !== null && fSlpH < 5.0) || (fScore !== null && fScore < 60);
-      const fIsAmber = (fHrvDepressed) || (fRDelta >= 3.0) || (fSlpH !== null && fSlpH < 6.5) || (fScore !== null && fScore < 72);
-
-      if (fIsRed) {
-        fDayColor = 'red';
-        fDayTitle = '🔴 GIORNATA ROSSA: SCARICO ATTIVO';
-        const reasons = [];
-        if (fSt === 'POOR' || (fHrvVal && fHrvVal < fBaseLow - 5)) reasons.push(`HRV depresso (${fHrvVal} ms)`);
-        if (fRDelta >= 5.0) reasons.push(`RHR +${fRDelta} bpm`);
-        if (fSlpH < 5.0) reasons.push(`Sonno critico (${fSlpH}h)`);
-        if (fScore < 60) reasons.push(`Sleep score ${fScore}`);
-        fDayDesc = `<b>Allarme autonomico (${reasons.join(', ')}):</b> Stop carichi neuromuscolari pesanti • Solo scarico o trim leggero • Controllo idratazione e riposo.`;
-      } else if (fIsAmber) {
+      if (!flaHasAnyData) {
         fDayColor = 'amber';
-        fDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & GESTIONE';
-        const reasons = [];
-        if (fHrvDepressed) reasons.push(`HRV sotto range (${fHrvVal} < ${fBaseLow} ms)`);
-        if (fRDelta >= 3.0) reasons.push(`RHR +${fRDelta} bpm`);
-        if (fSlpH < 6.5) reasons.push(`Sonno ${fSlpH}h`);
-        if (fScore < 72) reasons.push(`Sleep score ${fScore}`);
-        fDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Uscita kite e lavoro tecnico OK • Evitare doppio turno massimale • Focus sonno notturno.`;
-      }
+        fDayTitle = '⚠️ GARMIN FLAVIO NON SINCRONIZZATO';
+        fDayDesc = `Nessun dato Garmin ricevuto per oggi (${fmtTag(realTodayIso)}). Verifica che Flavio abbia sincronizzato l'orologio su Garmin Connect oppure controlla il token Garmin del server.`;
+      } else {
+        // Allerta solo su deviazioni fisiologiche reali
+        const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fBaseLow);
+        const fIsRed = (fSt === 'POOR') || (fHrvVal && fHrvVal < fBaseLow - 5) || (fRDelta >= 5.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 5.0) || (fScore !== null && fScore !== undefined && fScore < 60);
+        const fIsAmber = (fHrvDepressed) || (fRDelta >= 3.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) || (fScore !== null && fScore !== undefined && fScore < 72);
 
-      if (!flaIsToday) {
-        fDayDesc = `<span style="color:#fcd34d;">⚠️ <b>In attesa del sync Garmin di oggi (${fmtTag(realTodayIso)}):</b> i dati e la direttiva sottostanti sono riferiti a ieri (${flaDateTag}).</span><br>` + fDayDesc;
+        if (fIsRed) {
+          fDayColor = 'red';
+          fDayTitle = '🔴 GIORNATA ROSSA: SCARICO ATTIVO';
+          const reasons = [];
+          if (fSt === 'POOR' || (fHrvVal && fHrvVal < fBaseLow - 5)) reasons.push(`HRV depresso (${fHrvVal} ms)`);
+          if (fRDelta >= 5.0) reasons.push(`RHR +${fRDelta} bpm`);
+          if (fSlpH < 5.0) reasons.push(`Sonno critico (${fSlpH}h)`);
+          if (fScore < 60) reasons.push(`Sleep score ${fScore}`);
+          fDayDesc = `<b>Allarme autonomico (${reasons.join(', ')}):</b> Stop carichi neuromuscolari pesanti • Solo scarico o trim leggero • Controllo idratazione e riposo.`;
+        } else if (fIsAmber) {
+          fDayColor = 'amber';
+          fDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & GESTIONE';
+          const reasons = [];
+          if (fHrvDepressed) reasons.push(`HRV sotto range (${fHrvVal} < ${fBaseLow} ms)`);
+          if (fRDelta >= 3.0) reasons.push(`RHR +${fRDelta} bpm`);
+          if (fSlpH < 6.5) reasons.push(`Sonno ${fSlpH}h`);
+          if (fScore < 72) reasons.push(`Sleep score ${fScore}`);
+          fDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Uscita kite e lavoro tecnico OK • Evitare doppio turno massimale • Focus sonno notturno.`;
+        }
+
+        if (!flaIsToday) {
+          fDayDesc = `<span style="color:#fcd34d;">⚠️ <b>In attesa del sync Garmin di oggi (${fmtTag(realTodayIso)}):</b> i dati e la direttiva sottostanti sono riferiti a ieri (${flaDateTag}).</span><br>` + fDayDesc;
+        }
       }
 
       const flaBannerEl = document.getElementById('fla-readiness-banner');
