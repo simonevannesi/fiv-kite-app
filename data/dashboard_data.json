@@ -1,29 +1,29 @@
 {
   "meta": {
-    "generated_at": "2026-11-22T01:34:43.059059+01:00",
-    "generated_display": "22/11/2026 01:34",
+    "generated_at": "2026-11-22T10:04:38.471165+01:00",
+    "generated_display": "22/11/2026 10:04",
     "today_iso": "2026-11-22",
-    "riccardo_synced": false,
-    "flavio_synced": false
+    "riccardo_synced": true,
+    "flavio_synced": true
   },
   "riccardo": {
     "oggi": {
-      "data": "2026-11-21",
-      "synced_today": false,
-      "recovery": 46.0,
-      "hrv": 81.1,
-      "rhr": 57.0,
-      "sleep_h": 8.34,
-      "bed_time": "01:24",
-      "wake_time": "10:46",
-      "hrv_baseline": 94.6,
-      "hrv_baseline_low": 87.0,
-      "hrv_baseline_high": 102.2,
-      "hrv_3gg": 87.5,
-      "hrv_7gg": 90.2,
-      "sonno_7gg": 7.51,
-      "recovery_baseline": 63.5,
-      "rhr_baseline": 55.1
+      "data": "2026-11-22",
+      "synced_today": true,
+      "recovery": 78.0,
+      "hrv": 96.6,
+      "rhr": 51.0,
+      "sleep_h": 6.75,
+      "bed_time": "02:37",
+      "wake_time": "09:56",
+      "hrv_baseline": 94.9,
+      "hrv_baseline_low": 87.3,
+      "hrv_baseline_high": 102.5,
+      "hrv_3gg": 89.2,
+      "hrv_7gg": 89.6,
+      "sonno_7gg": 7.43,
+      "recovery_baseline": 65.4,
+      "rhr_baseline": 54.9
     },
     "peso": {
       "ultimo": 103.4,
@@ -120,6 +120,15 @@
         "km_wk_30": 40.6,
         "avg180": 1.06,
         "n180": 21
+      },
+      "blocco": {
+        "label": "Raduno",
+        "start": "2026-11-12",
+        "days": 10,
+        "kite_km_tot": 451.4,
+        "kite_km_day": 45.1,
+        "dry_h_tot": 5.9,
+        "dry_h_day": 0.59
       }
     },
     "history": [
@@ -186,10 +195,10 @@
       {
         "date": "2026-11-07",
         "label": "07/11",
-        "recovery": 58.0,
-        "hrv": 91.5,
-        "rhr": 53.0,
-        "sleep_h": 7.97,
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
         "weight": null,
         "pain": 1.0,
         "points_pct": 40,
@@ -366,10 +375,10 @@
       {
         "date": "2026-11-22",
         "label": "22/11",
-        "recovery": null,
-        "hrv": null,
-        "rhr": null,
-        "sleep_h": null,
+        "recovery": 78.0,
+        "hrv": 96.6,
+        "rhr": 51.0,
+        "sleep_h": 6.75,
         "weight": null,
         "pain": null,
         "points_pct": null,
@@ -378,16 +387,247 @@
     ]
   },
   "flavio": {
-    "disponibile": false,
-    "synced_today": false,
+    "disponibile": true,
+    "synced_today": true,
     "oggi": {
       "data": "2026-11-22",
-      "synced_today": false,
-      "hrv": {},
-      "rhr": {},
-      "sonno": {}
+      "synced_today": true,
+      "hrv": {
+        "val": 62,
+        "baseline_low": 46,
+        "baseline_high": 58,
+        "weekly": 50,
+        "status": "BALANCED"
+      },
+      "rhr": {
+        "val": 51,
+        "baseline_30gg": 55.5,
+        "baseline_7gg": 56.3
+      },
+      "sonno": {
+        "ore": 7.45,
+        "score": 90,
+        "qual": "EXCELLENT",
+        "baseline_ore_30gg": 7.31,
+        "baseline_score_30gg": 79,
+        "baseline_ore_7gg": 7.74,
+        "baseline_score_7gg": 83
+      }
     },
-    "attivita": {},
-    "history": []
+    "attivita": {
+      "palestra": {
+        "ieri_dur": 0.0,
+        "ieri_km": 0.0,
+        "avg7": 1.43,
+        "n7": 1,
+        "sum_dur7": 1.43,
+        "sum_km7": 0.0,
+        "avg_km7": 0.0,
+        "avg30": 1.31,
+        "n30": 11,
+        "sess_wk_30": 2.6,
+        "h_wk_30": 3.36,
+        "km_wk_30": 0.0,
+        "avg180": 1.33,
+        "n180": 17
+      },
+      "acqua": {
+        "ieri_dur": 0.0,
+        "ieri_km": 0.0,
+        "avg7": 2.05,
+        "n7": 5,
+        "sum_dur7": 10.26,
+        "sum_km7": 334.8,
+        "avg_km7": 67.0,
+        "avg30": 2.03,
+        "n30": 12,
+        "sess_wk_30": 2.8,
+        "h_wk_30": 5.69,
+        "km_wk_30": 181.8,
+        "avg180": 1.96,
+        "n180": 16
+      },
+      "cardio": {
+        "ieri_dur": 0.0,
+        "ieri_km": 0.0,
+        "avg7": 0.96,
+        "n7": 2,
+        "sum_dur7": 1.92,
+        "sum_km7": 51.5,
+        "avg_km7": 25.7,
+        "avg30": 1.04,
+        "n30": 3,
+        "sess_wk_30": 0.7,
+        "h_wk_30": 0.73,
+        "km_wk_30": 19.2,
+        "avg180": 1.61,
+        "n180": 8
+      },
+      "blocco": {
+        "label": "Raduno",
+        "start": "2026-11-12",
+        "days": 10,
+        "kite_km_tot": 500.8,
+        "kite_km_day": 50.1,
+        "dry_h_tot": 5.6,
+        "dry_h_day": 0.56
+      }
+    },
+    "history": [
+      {
+        "date": "2026-11-09",
+        "label": "09/11",
+        "hrv": 47,
+        "hrv_status": "BALANCED",
+        "rhr": 55,
+        "sleep_h": 5.97,
+        "sleep_score": 73,
+        "activity_h": 0,
+        "activity_desc": ""
+      },
+      {
+        "date": "2026-11-10",
+        "label": "10/11",
+        "hrv": 40,
+        "hrv_status": "BALANCED",
+        "rhr": 58,
+        "sleep_h": 7.56,
+        "sleep_score": 79,
+        "activity_h": 1.27,
+        "activity_desc": "Palestra 1.27h"
+      },
+      {
+        "date": "2026-11-11",
+        "label": "11/11",
+        "hrv": 36,
+        "hrv_status": "UNBALANCED",
+        "rhr": 59,
+        "sleep_h": 7.22,
+        "sleep_score": 75,
+        "activity_h": 1.43,
+        "activity_desc": "Palestra 1.43h"
+      },
+      {
+        "date": "2026-11-12",
+        "label": "12/11",
+        "hrv": 50,
+        "hrv_status": "UNBALANCED",
+        "rhr": 58,
+        "sleep_h": 7.55,
+        "sleep_score": 89,
+        "activity_h": 2.55,
+        "activity_desc": "Acqua 2.55h"
+      },
+      {
+        "date": "2026-11-13",
+        "label": "13/11",
+        "hrv": 46,
+        "hrv_status": "UNBALANCED",
+        "rhr": 56,
+        "sleep_h": 8.44,
+        "sleep_score": 86,
+        "activity_h": 1.98,
+        "activity_desc": "Palestra 1.12h, Acqua 0.86h"
+      },
+      {
+        "date": "2026-11-14",
+        "label": "14/11",
+        "hrv": 47,
+        "hrv_status": "UNBALANCED",
+        "rhr": 57,
+        "sleep_h": 7.89,
+        "sleep_score": 86,
+        "activity_h": 3.11,
+        "activity_desc": "Cardio 1.18h, Acqua 1.93h"
+      },
+      {
+        "date": "2026-11-15",
+        "label": "15/11",
+        "hrv": 40,
+        "hrv_status": "LOW",
+        "rhr": 57,
+        "sleep_h": 7.33,
+        "sleep_score": 82,
+        "activity_h": 1.61,
+        "activity_desc": "Acqua 1.61h"
+      },
+      {
+        "date": "2026-11-16",
+        "label": "16/11",
+        "hrv": 47,
+        "hrv_status": "LOW",
+        "rhr": 59,
+        "sleep_h": 8.58,
+        "sleep_score": 85,
+        "activity_h": 1.88,
+        "activity_desc": "Acqua 1.88h"
+      },
+      {
+        "date": "2026-11-17",
+        "label": "17/11",
+        "hrv": 52,
+        "hrv_status": "UNBALANCED",
+        "rhr": 57,
+        "sleep_h": 7.93,
+        "sleep_score": 85,
+        "activity_h": 2.82,
+        "activity_desc": "Cardio 0.75h, Acqua 2.07h"
+      },
+      {
+        "date": "2026-11-18",
+        "label": "18/11",
+        "hrv": 50,
+        "hrv_status": "BALANCED",
+        "rhr": 56,
+        "sleep_h": 7.22,
+        "sleep_score": 80,
+        "activity_h": 0,
+        "activity_desc": ""
+      },
+      {
+        "date": "2026-11-19",
+        "label": "19/11",
+        "hrv": 52,
+        "hrv_status": "BALANCED",
+        "rhr": 54,
+        "sleep_h": 7.36,
+        "sleep_score": 81,
+        "activity_h": 3.69,
+        "activity_desc": "Palestra 1.43h, Acqua 2.26h"
+      },
+      {
+        "date": "2026-11-20",
+        "label": "20/11",
+        "hrv": 45,
+        "hrv_status": "BALANCED",
+        "rhr": 57,
+        "sleep_h": 7.95,
+        "sleep_score": 85,
+        "activity_h": 3.62,
+        "activity_desc": "Cardio 1.18h, Acqua 2.44h"
+      },
+      {
+        "date": "2026-11-21",
+        "label": "21/11",
+        "hrv": 47,
+        "hrv_status": "BALANCED",
+        "rhr": 54,
+        "sleep_h": 7.8,
+        "sleep_score": 81,
+        "activity_h": 0,
+        "activity_desc": ""
+      },
+      {
+        "date": "2026-11-22",
+        "label": "22/11",
+        "hrv": 62,
+        "hrv_status": "BALANCED",
+        "rhr": 51,
+        "sleep_h": 7.45,
+        "sleep_score": 90,
+        "activity_h": 0,
+        "activity_desc": ""
+      }
+    ]
   }
 }
