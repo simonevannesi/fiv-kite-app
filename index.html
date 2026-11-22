@@ -1060,7 +1060,8 @@
       const fStatus = fh.status || 'N/D';
       let fColor = 'amber';
       if (fh.val && fh.baseline_low) {
-        if (fh.val >= fh.baseline_low && fh.val <= (fh.baseline_high || 999)) {
+        const fHighLimit = fh.baseline_high ? (fh.baseline_high * 1.25) : 999;
+        if (fh.val >= fh.baseline_low && fh.val <= fHighLimit) {
           fColor = 'green';
         } else if (fh.val < fh.baseline_low - 4) {
           fColor = 'red';
@@ -1074,10 +1075,11 @@
       document.getElementById('fla-hrv-sub').textContent = `${fh.val || '--'} ms | Range: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
 
       // Flavio RHR: Mostra delta +/- bpm rispetto alla baseline in grande e media 30gg sotto
+      // RHR più basso della baseline (negativo) è sempre un ottimo segnale di recupero -> VERDE
       const baseRhr = fr.baseline_30gg || 55.6;
       const rDelta = (fr.val && baseRhr) ? +(fr.val - baseRhr).toFixed(1) : null;
       document.getElementById('fla-rhr-val').textContent = rDelta !== null ? `${rDelta > 0 ? '+' : ''}${rDelta} bpm` : 'N/D';
-      const rhrColor = rDelta === null ? 'amber' : (Math.abs(rDelta) <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red'));
+      const rhrColor = rDelta === null ? 'amber' : (rDelta <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red'));
       setDot('fla-rhr-dot', rhrColor);
       document.getElementById('fla-rhr-sub').textContent = `${fr.val || '--'} bpm | Media 30gg: ${baseRhr} bpm`;
 
