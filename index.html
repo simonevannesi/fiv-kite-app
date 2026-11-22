@@ -817,10 +817,11 @@
 
       // HRV: Corridoio Scientifico Plews/Buchheit (SWC = 0.75 SD su 30gg)
       const hrv = ro.hrv;
-      document.getElementById('ric-hrv-val').textContent = hrv !== null ? `${hrv.toFixed(1)} ms` : 'N/D';
       const baseHrv = ro.hrv_baseline || 96.3;
       const lowHrv = ro.hrv_baseline_low || (baseHrv - 8.4);
       const highHrv = ro.hrv_baseline_high || (baseHrv + 8.5);
+      const hPct = (hrv !== null && baseHrv) ? Math.round(((hrv - baseHrv) / baseHrv) * 100) : null;
+      document.getElementById('ric-hrv-val').textContent = hPct !== null ? `${hPct > 0 ? '+' : ''}${hPct}%` : 'N/D';
       let hrvColor = 'green';
       if (hrv !== null) {
         if (hrv < (lowHrv * 0.85)) {
@@ -832,8 +833,7 @@
         }
       }
       setDot('ric-hrv-dot', hrvColor);
-      const hDelta = (hrv && baseHrv) ? +(hrv - baseHrv).toFixed(1) : 0;
-      document.getElementById('ric-hrv-sub').textContent = `Range 30gg: ${Math.round(lowHrv)}–${Math.round(highHrv)} ms (${hDelta >= 0 ? '+' + hDelta : hDelta} ms)`;
+      document.getElementById('ric-hrv-sub').textContent = `${hrv !== null ? hrv.toFixed(1) : '--'} ms | Range: ${Math.round(lowHrv)}–${Math.round(highHrv)} ms`;
 
       // Sleep
       const slp = ro.sleep_h;
@@ -977,21 +977,24 @@
       function setSummaryLoadBox(valId, subId, actsObj) {
         const a = actsObj || {};
         const cats = [];
-        const subs = [];
         if (a.acqua && a.acqua.ieri_dur > 0) {
           cats.push(`Kite ${a.acqua.ieri_dur}h`);
-          subs.push(`7gg: ${a.acqua.avg_km7 || 0} km/s | Sett 30gg: ${a.acqua.km_wk_30 || 0} km`);
         }
         if (a.palestra && a.palestra.ieri_dur > 0) {
           cats.push(`Palestra ${a.palestra.ieri_dur}h`);
-          subs.push(`7gg: ${a.palestra.n7 || 0} sess | Sett 30gg: ${a.palestra.sess_wk_30 || 0} sess`);
         }
         if (a.cardio && a.cardio.ieri_dur > 0) {
           cats.push(`Cardio ${a.cardio.ieri_dur}h`);
-          subs.push(`7gg: ${a.cardio.sum_dur7 || 0}h | Sett 30gg: ${a.cardio.h_wk_30 || 0}h`);
         }
         document.getElementById(valId).textContent = cats.length ? cats.join(' + ') : 'Riposo';
-        document.getElementById(subId).textContent = subs.length ? subs[0] : `Palestra 7gg: ${(a.palestra && a.palestra.n7) || 0} sess`;
+
+        const subEl = document.getElementById(subId);
+        if (a.blocco) {
+          const b = a.blocco;
+          subEl.innerHTML = `<b>${b.label} (${b.days}gg):</b> Kite ${b.kite_km_tot} km (${b.kite_km_day}/g)<br>Gym+Cardio: ${b.dry_h_tot}h (${b.dry_h_day}h/g)`;
+        } else {
+          subEl.textContent = `Palestra 7gg: ${(a.palestra && a.palestra.n7) || 0} sess`;
+        }
       }
 
       // Riccardo Carico Ieri Overview & Matrice
@@ -1050,8 +1053,10 @@
         flaBadge.textContent = `⏳ Dati ${flaDateTag} (Attesa ${fmtTag(realTodayIso)})`;
       }
 
-      // Flavio HRV (Range 30gg Firstbeat): Verde pieno se dentro la baseline 47-58 ms
-      document.getElementById('fla-hrv-val').textContent = fh.val ? `${fh.val} ms` : 'N/D';
+      // Flavio HRV (Range 30gg Firstbeat): Mostra % variazione rispetto alla baseline in grande e range sotto
+      const fBaseMid = (fh.baseline_low && fh.baseline_high) ? ((fh.baseline_low + fh.baseline_high) / 2) : (fh.weekly || null);
+      const fHrvPct = (fh.val && fBaseMid) ? Math.round(((fh.val - fBaseMid) / fBaseMid) * 100) : null;
+      document.getElementById('fla-hrv-val').textContent = fHrvPct !== null ? `${fHrvPct > 0 ? '+' : ''}${fHrvPct}%` : (fh.val ? `${fh.val} ms` : 'N/D');
       const fStatus = fh.status || 'N/D';
       let fColor = 'amber';
       if (fh.val && fh.baseline_low) {
@@ -1066,15 +1071,15 @@
         fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
       }
       setDot('fla-hrv-dot', fColor);
-      document.getElementById('fla-hrv-sub').textContent = `Range 30gg: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
+      document.getElementById('fla-hrv-sub').textContent = `${fh.val || '--'} ms | Range: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
 
-      // Flavio RHR (Confronto scientifico con la baseline reale a 30gg)
-      document.getElementById('fla-rhr-val').textContent = fr.val ? `${fr.val} bpm` : 'N/D';
+      // Flavio RHR: Mostra delta +/- bpm rispetto alla baseline in grande e media 30gg sotto
       const baseRhr = fr.baseline_30gg || 55.6;
       const rDelta = (fr.val && baseRhr) ? +(fr.val - baseRhr).toFixed(1) : null;
+      document.getElementById('fla-rhr-val').textContent = rDelta !== null ? `${rDelta > 0 ? '+' : ''}${rDelta} bpm` : 'N/D';
       const rhrColor = rDelta === null ? 'amber' : (Math.abs(rDelta) <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red'));
       setDot('fla-rhr-dot', rhrColor);
-      document.getElementById('fla-rhr-sub').textContent = rDelta === null ? `Media 30gg: ${baseRhr} bpm (N/D)` : `Media 30gg: ${baseRhr} bpm (${rDelta >= 0 ? '+' + rDelta : rDelta} bpm)`;
+      document.getElementById('fla-rhr-sub').textContent = `${fr.val || '--'} bpm | Media 30gg: ${baseRhr} bpm`;
 
       // Flavio Sleep (Score + Base 30gg)
       document.getElementById('fla-slp-val').textContent = fs.ore ? `${fs.ore}h` : 'N/D';
