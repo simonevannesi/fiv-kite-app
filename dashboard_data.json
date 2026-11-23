@@ -1,15 +1,15 @@
 {
   "meta": {
-    "generated_at": "2026-11-22T21:26:32.395186+01:00",
-    "generated_display": "22/11/2026 21:26",
-    "today_iso": "2026-11-22",
-    "riccardo_synced": true,
-    "flavio_synced": true
+    "generated_at": "2026-11-23T02:05:45.868913+01:00",
+    "generated_display": "23/11/2026 02:05",
+    "today_iso": "2026-11-23",
+    "riccardo_synced": false,
+    "flavio_synced": false
   },
   "riccardo": {
     "oggi": {
       "data": "2026-11-22",
-      "synced_today": true,
+      "synced_today": false,
       "recovery": 78.0,
       "hrv": 96.6,
       "rhr": 51.0,
@@ -36,11 +36,11 @@
     "punti_ieri": {
       "tipo": "RADUNO",
       "max": 10,
-      "fatti": 0,
+      "fatti": 5,
       "dettagli": [
         [
           "Attività (Garmin)",
-          "0 / 5 pt 🔴 (No wind - Nessun fitness registrato)"
+          "+5 / 5 pt 🟢 (Kite in acqua 2.25h - 67.1km)"
         ],
         [
           "Fisio & Piedi",
@@ -57,7 +57,7 @@
       ],
       "dolore": 1
     },
-    "trend_punti_7gg_pct": 26,
+    "trend_punti_7gg_pct": 76,
     "dolore_oggi": "1.0",
     "nota_dolore": null,
     "quiver": {
@@ -88,62 +88,50 @@
         "n180": 55
       },
       "acqua": {
-        "ieri_dur": 0.0,
-        "ieri_km": 0.0,
-        "ieri_hr": null,
-        "avg7": 1.62,
+        "ieri_dur": 2.25,
+        "ieri_km": 67.1,
+        "ieri_hr": 148,
+        "avg7": 1.74,
         "n7": 6,
-        "sum_dur7": 9.72,
-        "sum_km7": 276.6,
-        "avg_km7": 46.1,
-        "avg30": 1.68,
-        "n30": 9,
-        "sess_wk_30": 2.1,
-        "h_wk_30": 3.53,
-        "km_wk_30": 105.3,
-        "avg180": 1.83,
-        "n180": 53
+        "sum_dur7": 10.43,
+        "sum_km7": 295.3,
+        "avg_km7": 49.2,
+        "avg30": 1.74,
+        "n30": 10,
+        "sess_wk_30": 2.3,
+        "h_wk_30": 4.05,
+        "km_wk_30": 121.0,
+        "avg180": 1.84,
+        "n180": 54
       },
       "cardio": {
-        "ieri_dur": 0.0,
-        "ieri_km": 0.0,
-        "ieri_hr": null,
-        "avg7": 1.14,
-        "n7": 1,
-        "sum_dur7": 1.14,
-        "sum_km7": 30.0,
-        "avg_km7": 30.0,
-        "avg30": 1.06,
-        "n30": 7,
-        "sess_wk_30": 1.6,
-        "h_wk_30": 1.74,
-        "km_wk_30": 40.6,
+        "ieri_dur": 1.1,
+        "ieri_km": 30.4,
+        "ieri_hr": 153,
+        "avg7": 1.12,
+        "n7": 2,
+        "sum_dur7": 2.24,
+        "sum_km7": 60.4,
+        "avg_km7": 30.2,
+        "avg30": 1.07,
+        "n30": 8,
+        "sess_wk_30": 1.9,
+        "h_wk_30": 2.0,
+        "km_wk_30": 47.7,
         "avg180": 1.06,
         "n180": 21
       },
       "blocco": {
         "label": "Raduno",
         "start": "2026-11-09",
-        "days": 13,
-        "kite_km_tot": 451.4,
-        "kite_km_day": 34.7,
-        "dry_h_tot": 8.6,
-        "dry_h_day": 0.66
+        "days": 14,
+        "kite_km_tot": 518.5,
+        "kite_km_day": 37.0,
+        "dry_h_tot": 9.7,
+        "dry_h_day": 0.69
       }
     },
     "history": [
-      {
-        "date": "2026-11-02",
-        "label": "02/11",
-        "recovery": null,
-        "hrv": null,
-        "rhr": null,
-        "sleep_h": null,
-        "weight": null,
-        "pain": null,
-        "points_pct": 80,
-        "tipo": "Home"
-      },
       {
         "date": "2026-11-03",
         "label": "03/11",
@@ -379,6 +367,18 @@
         "hrv": 96.6,
         "rhr": 51.0,
         "sleep_h": 6.75,
+        "weight": null,
+        "pain": null,
+        "points_pct": null,
+        "tipo": null
+      },
+      {
+        "date": "2026-11-23",
+        "label": "23/11",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
         "weight": null,
         "pain": null,
         "points_pct": null,
