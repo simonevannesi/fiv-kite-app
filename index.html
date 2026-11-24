@@ -1024,18 +1024,20 @@
 
           let col1Label = 'Ultimi 7gg', col1Val = '';
           let col2Label = 'Media/Sett (30gg)', col2Val = '';
-          let col3Label = 'Media 6 Mesi', col3Val = `${s.avg180 || 0}h (${s.n180 || 0} sess)`;
+          let col3Label = 'Media/Sett (6 Mesi)', col3Val = '';
 
           if (c.key === 'palestra') {
-            col1Val = `${s.n7 || 0} sess (${s.avg7 || 0}h)`;
+            col1Val = `${s.n7 || 0} sess`;
             col2Val = `${s.sess_wk_30 || 0} sess/sett`;
+            col3Val = `${s.sess_wk_180 || 0} sess/sett`;
           } else if (c.key === 'cardio') {
-            col1Val = `${s.sum_dur7 || 0}h (${s.n7 || 0} sess)`;
-            col2Val = `${s.h_wk_30 || 0}h/sett`;
+            col1Val = `${s.sum_load7 || 0} pt`;
+            col2Val = `${s.load_wk_30 || 0} pt/sett`;
+            col3Val = `${s.load_wk_180 || 0} pt/sett`;
           } else {
-            // Acqua (Kite): media km ultimi 7gg e media km settimanali ultimo mese
-            col1Val = `${s.avg_km7 || 0} km/sess (${s.sum_km7 || 0} km)`;
+            col1Val = `${s.sum_km7 || 0} km`;
             col2Val = `${s.km_wk_30 || 0} km/sett`;
+            col3Val = `${s.km_wk_180 || 0} km/sett`;
           }
 
           return `
