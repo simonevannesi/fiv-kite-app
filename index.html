@@ -501,44 +501,25 @@
         <div id="ric-alert-box"></div>
         <div class="kpi-grid">
           <div class="kpi-box">
-            <div class="kpi-label">Motore Whoop <span id="ric-rec-dot" class="dot"></span></div>
-            <div class="kpi-value" id="ric-rec-val">--%</div>
-            <div class="kpi-sub" id="ric-rec-sub">Target oggi: --</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-label">HRV Notte <span id="ric-hrv-dot" class="dot"></span></div>
-            <div class="kpi-value" id="ric-hrv-val">-- ms</div>
+            <div class="kpi-label">HRV Notte (Whoop) <span id="ric-hrv-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-hrv-val">--%</div>
             <div class="kpi-sub" id="ric-hrv-sub">Range 30gg: -- ms</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">Sonno <span id="ric-slp-dot" class="dot"></span></div>
+            <div class="kpi-label">RHR Notte (Whoop) <span id="ric-rhr-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-rhr-val">-- bpm</div>
+            <div class="kpi-sub" id="ric-rhr-sub">Media 30gg: -- bpm</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Sonno (Whoop) <span id="ric-slp-dot" class="dot"></span></div>
             <div class="kpi-value" id="ric-slp-val">--h</div>
             <div class="kpi-sub" id="ric-slp-sub">--:-- ➔ --:--</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">Punti LA28 Ieri <span id="ric-pts-dot" class="dot"></span></div>
-            <div class="kpi-value" id="ric-pts-val">-- / --</div>
-            <div class="kpi-sub" id="ric-pts-sub">Trend 7gg: --% (Ob. ≥85%)</div>
+            <div class="kpi-label">Carico Ieri (Garmin)</div>
+            <div class="kpi-value" id="ric-act-val" style="font-size: 15px; margin-top: 4px;">--</div>
+            <div class="kpi-sub" id="ric-act-sub">Dettagli in tab Riccardo</div>
           </div>
-        </div>
-        <div class="weight-box">
-          <div class="weight-top">
-            <span>⚖️ Peso Corporeo: <strong id="ric-weight-val">-- kg</strong></span>
-            <span style="color: var(--azzurro);">Target: 103–105 kg</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="ric-weight-bar" style="width: 0%;"></div>
-          </div>
-          <div class="weight-scale">
-            <span>98 kg (Viana)</span>
-            <span id="ric-weight-30d">Media 30gg: -- kg</span>
-            <span>105 kg (Max)</span>
-          </div>
-        </div>
-        <div class="kpi-box" style="margin-bottom: 0;">
-          <div class="kpi-label">Carico Ieri (Garmin)</div>
-          <div class="kpi-value" id="ric-act-val" style="font-size: 15px; margin-top: 2px;">--</div>
-          <div class="kpi-sub" id="ric-act-sub">Dettagli completi in tab Riccardo</div>
         </div>
       </div>
 
@@ -552,22 +533,22 @@
         <div id="fla-alert-box"></div>
         <div class="kpi-grid">
           <div class="kpi-box">
-            <div class="kpi-label">HRV Notte <span id="fla-hrv-dot" class="dot"></span></div>
-            <div class="kpi-value" id="fla-hrv-val">-- ms</div>
+            <div class="kpi-label">HRV Notte (Garmin) <span id="fla-hrv-dot" class="dot"></span></div>
+            <div class="kpi-value" id="fla-hrv-val">--%</div>
             <div class="kpi-sub" id="fla-hrv-sub">Range 30gg: -- ms</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">RHR Notte <span id="fla-rhr-dot" class="dot"></span></div>
+            <div class="kpi-label">RHR Notte (Garmin) <span id="fla-rhr-dot" class="dot"></span></div>
             <div class="kpi-value" id="fla-rhr-val">-- bpm</div>
-            <div class="kpi-sub" id="fla-rhr-sub">Base 30gg: -- bpm</div>
+            <div class="kpi-sub" id="fla-rhr-sub">Media 30gg: -- bpm</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">Sonno Garmin <span id="fla-slp-dot" class="dot"></span></div>
+            <div class="kpi-label">Sonno (Garmin) <span id="fla-slp-dot" class="dot"></span></div>
             <div class="kpi-value" id="fla-slp-val">--h</div>
             <div class="kpi-sub" id="fla-slp-sub">Score: --/100</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">Carico Ieri</div>
+            <div class="kpi-label">Carico Ieri (Garmin)</div>
             <div class="kpi-value" id="fla-act-val" style="font-size: 15px; margin-top: 4px;">--</div>
             <div class="kpi-sub" id="fla-act-sub">Dettagli in tab Flavio</div>
           </div>
@@ -808,14 +789,7 @@
         ricBadge.textContent = `⏳ Dati ${ricDateTag} (Attesa ${fmtTag(realTodayIso)})`;
       }
 
-      // Recovery (Whoop 30d calibrated)
-      const rec = ro.recovery;
-      document.getElementById('ric-rec-val').textContent = rec !== null ? `${Math.round(rec)}%` : 'N/D';
-      const recColor = rec >= 67 ? 'green' : (rec >= 34 ? 'amber' : 'red');
-      setDot('ric-rec-dot', recColor);
-      document.getElementById('ric-rec-sub').textContent = `Base 30gg: ${ro.recovery_baseline || 66.2}% | ` + (rec >= 67 ? 'Pieno Carico' : (rec >= 34 ? 'Gestione' : 'Scarico'));
-
-      // HRV: Corridoio Scientifico Plews/Buchheit (SWC = 0.75 SD su 30gg)
+      // HRV (Whoop): Variazione % vs baseline 30gg (stile UAE/Plews)
       const hrv = ro.hrv;
       const baseHrv = ro.hrv_baseline || 96.3;
       const lowHrv = ro.hrv_baseline_low || (baseHrv - 8.4);
@@ -824,47 +798,34 @@
       document.getElementById('ric-hrv-val').textContent = hPct !== null ? `${hPct > 0 ? '+' : ''}${hPct}%` : 'N/D';
       let hrvColor = 'green';
       if (hrv !== null) {
-        if (hrv < (lowHrv * 0.85)) {
-          hrvColor = 'red'; // Crollo severo sotto il limite minimo
-        } else if (hrv < lowHrv || hrv > (highHrv * 1.20)) {
-          hrvColor = 'amber'; // Fuori corridoio (fatica acuta o iperattivita parasimpatica)
+        if (hrv < (lowHrv * 0.85) || (hPct !== null && hPct <= -20)) {
+          hrvColor = 'red';
+        } else if (hrv < lowHrv || hrv > (highHrv * 1.25)) {
+          hrvColor = 'amber';
         } else {
-          hrvColor = 'green'; // In pieno corridoio fisiologico
+          hrvColor = 'green';
         }
       }
       setDot('ric-hrv-dot', hrvColor);
       document.getElementById('ric-hrv-sub').textContent = `${hrv !== null ? hrv.toFixed(1) : '--'} ms | Range: ${Math.round(lowHrv)}–${Math.round(highHrv)} ms`;
 
-      // Sleep
+      // RHR (Whoop): Delta +/- bpm vs baseline 30gg (negativo = sempre verde)
+      const rRhr = ro.rhr;
+      const rRhrBase = ro.rhr_baseline || 55.0;
+      const rRhrDelta = (rRhr !== null && rRhr !== undefined && rRhrBase) ? +(rRhr - rRhrBase).toFixed(1) : null;
+      document.getElementById('ric-rhr-val').textContent = rRhrDelta !== null ? `${rRhrDelta > 0 ? '+' : ''}${rRhrDelta} bpm` : 'N/D';
+      const ricRhrColor = rRhrDelta === null ? 'amber' : (rRhrDelta <= 2.0 ? 'green' : (rRhrDelta <= 4.0 ? 'amber' : 'red'));
+      setDot('ric-rhr-dot', ricRhrColor);
+      document.getElementById('ric-rhr-sub').textContent = `${rRhr !== null && rRhr !== undefined ? Math.round(rRhr) : '--'} bpm | Media 30gg: ${rRhrBase} bpm`;
+
+      // Sleep (Whoop)
       const slp = ro.sleep_h;
       document.getElementById('ric-slp-val').textContent = slp !== null ? `${slp.toFixed(2)}h` : 'N/D';
       setDot('ric-slp-dot', slp >= 6.8 ? 'green' : (slp >= 6.0 ? 'amber' : 'red'));
       document.getElementById('ric-slp-sub').textContent = `${ro.bed_time} ➔ ${ro.wake_time} (Base 30gg: 7.4h)`;
 
-      // Points LA28
+      // Riccardo Pain Alert (dal Form LA28)
       const pi = ric.punti_ieri;
-      const t7 = ric.trend_punti_7gg_pct;
-      if (pi && pi.max > 0) {
-        document.getElementById('ric-pts-val').textContent = `${pi.fatti} / ${pi.max}`;
-        const pPct = Math.round((pi.fatti / pi.max) * 100);
-        setDot('ric-pts-dot', pPct >= 85 ? 'green' : (pPct >= 70 ? 'amber' : 'red'));
-      } else {
-        document.getElementById('ric-pts-val').textContent = 'Freeze';
-        setDot('ric-pts-dot', 'green');
-      }
-      document.getElementById('ric-pts-sub').textContent = `Trend 7gg: ${t7 !== null ? t7 + '%' : '--'} (Ob. ≥85%)`;
-
-      // Weight Bar (98 to 105 kg range)
-      const pw = ric.peso;
-      if (pw.ultimo) {
-        document.getElementById('ric-weight-val').textContent = `${pw.ultimo} kg`;
-        const pct = Math.min(100, Math.max(0, ((pw.ultimo - 98.0) / (105.0 - 98.0)) * 100));
-        document.getElementById('ric-weight-bar').style.width = `${pct}%`;
-        const deltaStr = pw.delta_30gg > 0 ? `+${pw.delta_30gg}` : pw.delta_30gg;
-        document.getElementById('ric-weight-30d').textContent = `Media 30gg: ${pw.media_30gg} kg (${deltaStr})`;
-      }
-
-      // Riccardo Pain Alert
       const dol = pi && pi.dolore ? pi.dolore : (ric.dolore_oggi ? parseFloat(ric.dolore_oggi) : 1);
       const ricAlert = document.getElementById('ric-alert-box');
       if (dol >= 3) {
@@ -873,44 +834,44 @@
         ricAlert.innerHTML = '';
       }
 
-      // Calcolo Direttiva Coach & Colore Generale Giornata Riccardo (Regola Gerarchica del Veto)
-      const rRec = rec !== null ? rec : 60;
+      // Direttiva Coach Scientifica Riccardo (Neurale HRV vs Metabolico RHR - stile UAE/FIV, NO Recovery % Whoop)
       const rDol = dol !== null ? dol : 1;
       const rHrv = hrv;
-      const rRhr = ro.rhr;
-      const rRhrBase = ro.rhr_baseline || 54.5;
-      const rRhrDelta = (rRhr && rRhrBase) ? +(rRhr - rRhrBase).toFixed(1) : 0;
       const rSlp = slp;
+      const rRhrValNum = rRhrDelta !== null ? rRhrDelta : 0;
 
       let rDayColor = 'green';
-      let rDayTitle = '🟢 GIORNATA VERDE: PIENO CARICO / SPEED WORK';
-      let rDayDesc = `Recupero Whoop solido (${Math.round(rRec)}%) con HRV in corridoio (${rHrv ? rHrv.toFixed(1) : '--'} ms) e piedi asintomatici. Pieno via libera a sessioni ad alta velocità nel chop, simulazioni di passo al traverso B2 a 37+ nodi e lavoro di forza completo.`;
+      let rDayTitle = '🟢 GIORNATA VERDE: FULL PUSH (ACQUA + TERRA)';
+      let rDayDesc = `SNC reattivo (HRV ${hPct !== null ? (hPct > 0 ? '+' : '') + hPct + '%' : '--'}) e recupero metabolico completo (RHR ${rRhrValNum > 0 ? '+' : ''}${rRhrValNum} bpm). Pieno via libera a velocità nel chop, traverso B2 a 37+ nodi e palestra completa.`;
 
-      // Veto Rigoroso: Solo condizioni clinicamente o autonomicamente limitanti attivano il rosso o l'ambra
-      // Fastidio 2/5 è fisiologico post-carico (punteggio pieno nel form LA28). Solo dolore >= 3/5 modula e >= 4/5 ferma.
-      const rIsRed = (rRec < 34) || (rDol >= 4) || (rHrv !== null && rHrv < (lowHrv * 0.75)) || (rSlp !== null && rSlp < 5.0) || (rRhrDelta >= 6.5 && rRec < 50);
-      const rIsAmber = (rRec < 67) || (rDol >= 3) || (rHrv !== null && (rHrv < lowHrv || rHrv > highHrv * 1.20)) || (rSlp !== null && rSlp < 6.5) || (rRhrDelta >= 4.5 && rRec < 67);
+      const rHrvRed = (rHrv !== null && (rHrv < (lowHrv * 0.85) || (hPct !== null && hPct <= -20)));
+      const rHrvAmber = (rHrv !== null && (rHrv < lowHrv || rHrv > (highHrv * 1.25)));
+      const rIsRed = (rDol >= 4) || rHrvRed || (rSlp !== null && rSlp < 5.0) || (rRhrValNum >= 5.0);
+      const rOnlyMetabolicAmber = !rIsRed && !rHrvAmber && (rDol < 3) && (rSlp === null || rSlp >= 6.5) && (rRhrValNum > 2.0);
+      const rIsAmber = !rIsRed && (rHrvAmber || (rDol >= 3) || (rSlp !== null && rSlp < 6.5) || (rRhrValNum > 2.0));
 
       if (rIsRed) {
         rDayColor = 'red';
         rDayTitle = '🔴 GIORNATA ROSSA: SCARICO ATTIVO & RECUPERO';
         const reasons = [];
-        if (rRec < 34) reasons.push(`Recovery Whoop ${Math.round(rRec)}%`);
         if (rDol >= 4) reasons.push(`Dolore plantare acuto ${rDol}/5`);
-        if (rHrv < lowHrv * 0.75) reasons.push(`Crollo HRV ${rHrv} ms`);
-        if (rSlp < 5.0) reasons.push(`Debito sonno severo (${rSlp}h)`);
-        if (rRhrDelta >= 6.5) reasons.push(`RHR elevato (+${rRhrDelta} bpm)`);
-        rDayDesc = `<b>Carico autonomico o dolore plantare critico (${reasons.join(', ')}):</b> Stop ai lavori ad alta velocità nel chop duro. Solo sessione tecnica leggera di trim a bassa intensità o scarico a terra, stretching plantare e sonno prioritario.`;
+        if (rHrvRed) reasons.push(`Crollo neurale HRV (${hPct}%)`);
+        if (rSlp !== null && rSlp < 5.0) reasons.push(`Debito sonno severo (${rSlp}h)`);
+        if (rRhrValNum >= 5.0) reasons.push(`RHR critico (+${rRhrValNum} bpm)`);
+        rDayDesc = `<b>Allarme fisiologico (${reasons.join(', ')}):</b> Stop velocità massimale nel chop duro e stop palestra. Solo trim leggero o recupero attivo, stretching plantare e sonno prioritario.`;
+      } else if (rOnlyMetabolicAmber) {
+        rDayColor = 'amber';
+        rDayTitle = '🟡 ACQUA SÌ (100%) / NO PALESTRA PESANTE';
+        rDayDesc = `<b>SNC pronto (HRV ${hPct > 0 ? '+' : ''}${hPct}% 🟢), carico metabolico residuo (RHR +${rRhrValNum} bpm):</b> Via libera in acqua su passo, velocità e manovre. Tagliare o alleggerire i sovraccarichi pesanti a terra per favorire il recupero muscolare.`;
       } else if (rIsAmber) {
         rDayColor = 'amber';
         rDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & MODULAZIONE';
         const reasons = [];
-        if (rRec < 67) reasons.push(`Recovery Whoop ${Math.round(rRec)}%`);
-        if (rDol >= 3) reasons.push(`Dolore plantare ${rDol}/5 da monitorare`);
-        if (rHrv < lowHrv) reasons.push(`HRV ${rHrv} ms sotto range`);
-        if (rSlp < 6.5) reasons.push(`Sonno ridotto (${rSlp}h)`);
-        if (rRhrDelta >= 4.5) reasons.push(`RHR +${rRhrDelta} bpm`);
-        rDayDesc = `<b>Fatica acuta o attenzione biomeccanica (${reasons.join(', ')}):</b> Volume in acqua consentito ma modulare l'intensità del traverso nel chop duro. Evitare carichi massimali a terra; verificare assetto e tensione straps.`;
+        if (rDol >= 3) reasons.push(`Dolore plantare ${rDol}/5`);
+        if (rHrvAmber) reasons.push(`HRV fuori corridoio (${hPct > 0 ? '+' : ''}${hPct}%)`);
+        if (rSlp !== null && rSlp < 6.5) reasons.push(`Sonno ridotto (${rSlp}h)`);
+        if (rRhrValNum > 2.0) reasons.push(`RHR +${rRhrValNum} bpm`);
+        rDayDesc = `<b>Fatica acuta o attenzione biomeccanica (${reasons.join(', ')}):</b> Volume tecnico in acqua consentito ma modulare l'intensità nel chop duro. Evitare carichi massimali a terra; verificare assetto e straps.`;
       }
 
       if (!ricIsToday) {
@@ -1112,18 +1073,18 @@
       const fSt = fh.status || 'N/D';
 
       let fDayColor = 'green';
-      let fDayTitle = '🟢 GIORNATA VERDE: FULL PUSH / AGGRESSIVITÀ & COMBATTIMENTO';
-      let fDayDesc = `Sistema autonomico bilanciato (HRV ${fHrvVal ?? '--'} ms | RHR ${fRhrVal ?? '--'} bpm) e sonno ottimale (Score ${fScore ?? '--'}). Condizioni ideali per spingere sul corpo a corpo: partenze al limite al pin, drill sandwich e tenuta della linea.`;
+      let fDayTitle = '🟢 GIORNATA VERDE: FULL PUSH (ACQUA + TERRA)';
+      let fDayDesc = `SNC reattivo (HRV ${fHrvPct !== null ? (fHrvPct > 0 ? '+' : '') + fHrvPct + '%' : '--'}) e recupero metabolico completo (RHR ${fRDelta > 0 ? '+' : ''}${fRDelta} bpm). Condizioni ideali per spingere sul corpo a corpo: partenze al limite al pin, drill sandwich e lavoro completo a terra.`;
 
       if (!flaHasAnyData) {
         fDayColor = 'amber';
         fDayTitle = '⚠️ GARMIN FLAVIO NON SINCRONIZZATO';
         fDayDesc = `Nessun dato Garmin ricevuto per oggi (${fmtTag(realTodayIso)}). Verifica che Flavio abbia sincronizzato l'orologio su Garmin Connect oppure controlla il token Garmin del server.`;
       } else {
-        // Allerta solo su deviazioni fisiologiche reali
         const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fBaseLow);
         const fIsRed = (fSt === 'POOR') || (fHrvVal && fHrvVal < fBaseLow - 5) || (fRDelta >= 5.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 5.0) || (fScore !== null && fScore !== undefined && fScore < 60);
-        const fIsAmber = (fHrvDepressed) || (fRDelta >= 3.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) || (fScore !== null && fScore !== undefined && fScore < 72);
+        const fOnlyMetabolicAmber = !fIsRed && !fHrvDepressed && (fSlpH === null || fSlpH === undefined || fSlpH >= 6.5) && (fScore === null || fScore === undefined || fScore >= 72) && (fRDelta > 2.0);
+        const fIsAmber = !fIsRed && ((fHrvDepressed) || (fRDelta > 2.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) || (fScore !== null && fScore !== undefined && fScore < 72));
 
         if (fIsRed) {
           fDayColor = 'red';
@@ -1133,13 +1094,17 @@
           if (fRDelta >= 5.0) reasons.push(`RHR +${fRDelta} bpm`);
           if (fSlpH < 5.0) reasons.push(`Sonno critico (${fSlpH}h)`);
           if (fScore < 60) reasons.push(`Sleep score ${fScore}`);
-          fDayDesc = `<b>Allarme autonomico (${reasons.join(', ')}):</b> Stop carichi neuromuscolari pesanti • Solo scarico o trim leggero • Controllo idratazione e riposo.`;
+          fDayDesc = `<b>Allarme fisiologico (${reasons.join(', ')}):</b> Stop carichi neuromuscolari pesanti • Solo scarico o trim leggero • Controllo idratazione e riposo.`;
+        } else if (fOnlyMetabolicAmber) {
+          fDayColor = 'amber';
+          fDayTitle = '🟡 ACQUA SÌ (100%) / NO PALESTRA PESANTE';
+          fDayDesc = `<b>SNC pronto (HRV ${fHrvPct > 0 ? '+' : ''}${fHrvPct}% 🟢), carico metabolico residuo (RHR +${fRDelta} bpm):</b> Via libera in acqua su partenze e corpo a corpo. Tagliare o alleggerire i sovraccarichi pesanti a terra.`;
         } else if (fIsAmber) {
           fDayColor = 'amber';
           fDayTitle = '🟡 GIORNATA GIALLA: MANTENIMENTO & GESTIONE';
           const reasons = [];
           if (fHrvDepressed) reasons.push(`HRV sotto range (${fHrvVal} < ${fBaseLow} ms)`);
-          if (fRDelta >= 3.0) reasons.push(`RHR +${fRDelta} bpm`);
+          if (fRDelta > 2.0) reasons.push(`RHR +${fRDelta} bpm`);
           if (fSlpH < 6.5) reasons.push(`Sonno ${fSlpH}h`);
           if (fScore < 72) reasons.push(`Sleep score ${fScore}`);
           fDayDesc = `<b>Fatica acuta (${reasons.join(', ')}):</b> Uscita kite e lavoro tecnico OK • Evitare doppio turno massimale • Focus sonno notturno.`;
