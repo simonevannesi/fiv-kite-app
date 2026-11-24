@@ -859,54 +859,43 @@
           return { color: 'red', title, desc };
         }
 
-        if (statusType === 'metabolic_amber') {
+        if (statusType === 'metabolic_amber' || statusType === 'amber') {
           if (isRegata) {
             return {
               color: 'amber',
-              title: `🟡 ${phaseTag}: GESTIONE ENERGIE TRA LE PROVE`,
-              desc: `<b>SNC pronto (HRV ${hrvStr} 🟢), fatica metabolica di gara (RHR ${rhrStr}):</b> Piena lucidità in regata; ridurre al minimo gli sforzi a vuoto in attesa partenza e massimizzare carboidrati/elettroliti e sonno.`
+              title: statusType === 'metabolic_amber'
+                ? `🟡 ${phaseTag}: GESTIONE ENERGIE TRA LE PROVE`
+                : `🟡 ${phaseTag}: GARA PULITA & RECUPERO RAPIDO`,
+              desc: `<b>Fatica di gara (${ctx.reasons.join(', ')}):</b> Zero carichi extra a terra; riscaldamento essenziale, risparmio energie in attesa partenza e priorità assoluta a carboidrati/elettroliti e sonno.`
             };
           }
           if (isTapering) {
             return {
               color: 'amber',
-              title: `🟡 ${phaseTag}: TAGLIO VOLUME / PRIORITÀ FRESCHEZZA`,
-              desc: `<b>SNC pronto (HRV ${hrvStr} 🟢), fatica residua (RHR ${rhrStr}):</b> Obiettivo brillantezza: stop palestra, in acqua solo test materiali e brevi richiami senza accumulare fatica.`
+              title: `🟡 ${phaseTag}: TAGLIO VOLUME IMMEDIATO (PRIORITÀ VERDE)`,
+              desc: `<b>Fatica residua pre-gara (${ctx.reasons.join(', ')}):</b> In Tapering l'obiettivo è verde costante: azzerare i carichi a terra e tagliare il volume in acqua per arrivare al 100% di freschezza al via.`
             };
           }
-          if (isCasa) {
+          // RADUNO o CASA (blocchi di carico): 1-2 giorni gialli = Functional Overreaching (stimolo confermato!); 3+ giorni gialli = scarico di assorbimento
+          const streak = ctx.consecYellow || 1;
+          if (ctx.painAlert) {
             return {
               color: 'amber',
-              title: `🟡 ${phaseTag}: TECNICA / AEROBICO Z2 (NO MASSIMALI)`,
-              desc: `<b>SNC pronto (HRV ${hrvStr} 🟢), smaltimento muscolare in corso (RHR ${rhrStr}):</b> Lavoro tecnico in acqua o cardio Z2 OK; rimandare picchi di forza massimale in palestra.`
+              title: `🟡 ${phaseTag}: MODULAZIONE BIOMECCANICA (PIEDI)`,
+              desc: `<b>Attenzione dolore plantare (${ctx.reasons.join(', ')}):</b> Mantenere lavoro tecnico ma modulare il traverso lungo e i carichi isometrici; verificare assetto e straps.`
+            };
+          }
+          if (streak >= 3) {
+            return {
+              color: 'amber',
+              title: `🟡 ${phaseTag}: ${streak} GG GIALLI — SCARICO DI ASSORBIMENTO`,
+              desc: `<b>Accumulo prolungato (${ctx.reasons.join(', ')}):</b> Dopo ${streak} giorni consecutivi di fatica, inserire oggi scarico/volume leggero per evitare Non-Functional Overreaching e far salire la supercompensazione.`
             };
           }
           return {
             color: 'amber',
-            title: `🟡 ${phaseTag}: ACQUA 100% / CARICO SELETTIVO A TERRA`,
-            desc: `<b>SNC pronto (HRV ${hrvStr} 🟢), stimolo metabolico da ieri (RHR ${rhrStr}):</b> Obiettivo sviluppo: spingere al 100% in acqua (${focusWater}), modulando solo i pesi pesanti a terra per evitare overreaching.`
-          };
-        }
-
-        if (statusType === 'amber') {
-          if (isRegata) {
-            return {
-              color: 'amber',
-              title: `🟡 ${phaseTag}: GARA PULITA & RECUPERO RAPIDO`,
-              desc: `<b>Fatica acuta (${ctx.reasons.join(', ')}):</b> Gestire le energie tra le prove, scaldarsi lo stretto necessario e anticipare il recupero serale.`
-            };
-          }
-          if (isTapering) {
-            return {
-              color: 'amber',
-              title: `🟡 ${phaseTag}: SCARICO ATTIVO & BRILLANTEZZA`,
-              desc: `<b>Segnale di fatica (${ctx.reasons.join(', ')}):</b> Tagliare subito il volume in acqua e azzerare il lavoro a terra per ripulire la fatica prima della regata.`
-            };
-          }
-          return {
-            color: 'amber',
-            title: `🟡 ${phaseTag}: CONSOLIDAMENTO TECNICO (NO ESTREMI)`,
-            desc: `<b>Fatica acuta (${ctx.reasons.join(', ')}):</b> Obiettivo qualità: volume tecnico in acqua OK (trim, manovre, assetto), evitare picchi massimali a terra e curare il sonno.`
+            title: `🟡 ${phaseTag}: STIMOLO CONFERMATO (OVERREACHING CONTROLLATO)`,
+            desc: `<b>Risposta di carico attesa (${ctx.reasons.join(', ')} | Giorno ${streak}/2):</b> Fisiologicamente normale in blocco di sviluppo. <b>Via libera allo stimolo in acqua (${focusWater})</b> e mantenimento del programma; curare sonno e idratazione stasera.`
           };
         }
 
@@ -921,7 +910,7 @@
         if (isTapering) {
           return {
             color: 'green',
-            title: `🟢 ${phaseTag}: RIFINITURA BREVE & BRILLANTEZZA`,
+            title: `🟢 ${phaseTag}: VERDE STABILE — RIFINITURA BREVE`,
             desc: `<b>Atleta fresco (HRV ${hrvStr} | RHR ${rhrStr}):</b> Brevi richiami ad alta qualità (${focusWater}) a volume ridotto per mantenere la brillantezza senza creare fatica.`
           };
         }
@@ -939,6 +928,19 @@
         };
       }
 
+      // Helper per contare i giorni gialli consecutivi (Functional vs Non-Functional Overreaching)
+      function countConsecYellow(histArr, isYellowFn, todayIsYellow) {
+        if (!todayIsYellow) return 0;
+        let streak = 1;
+        if (Array.isArray(histArr) && histArr.length > 1) {
+          for (let i = histArr.length - 2; i >= Math.max(0, histArr.length - 5); i--) {
+            if (isYellowFn(histArr[i])) streak++;
+            else break;
+          }
+        }
+        return streak;
+      }
+
       // Direttiva Coach Scientifica Riccardo (Neurale HRV vs Metabolico RHR + Obiettivo Fase Calendario)
       const rDol = dol !== null ? dol : 1;
       const rHrv = hrv;
@@ -952,6 +954,14 @@
       const rOnlyMetabolicAmber = !rIsRed && !rHrvAmber && (rDol < 3) && (rSlp === null || rSlp >= 6.5) && (rRhrValNum > 2.0);
       const rIsAmber = !rIsRed && (rHrvAmber || (rDol >= 3) || (rSlp !== null && rSlp < 6.5) || (rRhrValNum > 2.0));
 
+      const rStreak = countConsecYellow(ric.history, (h) => {
+        if (!h) return false;
+        const hLow = (h.hrv !== null && h.hrv < lowHrv);
+        const rHigh = (h.rhr !== null && (h.rhr - rRhrBase) > 2.0);
+        const sLow = (h.sleep_h !== null && h.sleep_h < 6.5);
+        return hLow || rHigh || sLow;
+      }, rIsAmber);
+
       const rReasons = [];
       if (rDol >= 3) rReasons.push(`Dolore plantare ${rDol}/5`);
       if (rHrvRed) rReasons.push(`Crollo neurale HRV (${hPct}%)`);
@@ -960,7 +970,9 @@
       if (rRhrValNum > 2.0) rReasons.push(`RHR +${rRhrValNum} bpm`);
 
       const rStatus = rIsRed ? 'red' : (rOnlyMetabolicAmber ? 'metabolic_amber' : (rIsAmber ? 'amber' : 'green'));
-      const rDir = buildPhaseDirective('riccardo', ricPhase, rStatus, { hrvPct: hPct, rhrDelta: rRhrValNum, reasons: rReasons });
+      const rDir = buildPhaseDirective('riccardo', ricPhase, rStatus, {
+        hrvPct: hPct, rhrDelta: rRhrValNum, reasons: rReasons, consecYellow: rStreak, painAlert: rDol >= 3
+      });
       let rDayColor = rDir.color;
       let rDayTitle = rDir.title;
       let rDayDesc = rDir.desc;
@@ -1185,8 +1197,18 @@
         if (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) fReasons.push(`Sonno ${fSlpH}h`);
         if (fScore !== null && fScore !== undefined && fScore < 72) fReasons.push(`Sleep score ${fScore}`);
 
+        const fStreak = countConsecYellow(fla.history, (h) => {
+          if (!h) return false;
+          const hLow = (h.hrv !== null && h.hrv < fBaseLow);
+          const rHigh = (h.rhr !== null && (h.rhr - fBaseRhr) > 2.0);
+          const sLow = (h.sleep_h !== null && h.sleep_h < 6.5) || (h.sleep_score !== null && h.sleep_score < 72);
+          return hLow || rHigh || sLow;
+        }, fIsAmber);
+
         const fStatusType = fIsRed ? 'red' : (fOnlyMetabolicAmber ? 'metabolic_amber' : (fIsAmber ? 'amber' : 'green'));
-        const fDir = buildPhaseDirective('flavio', flaPhase, fStatusType, { hrvPct: fHrvPct, rhrDelta: fRDelta, reasons: fReasons });
+        const fDir = buildPhaseDirective('flavio', flaPhase, fStatusType, {
+          hrvPct: fHrvPct, rhrDelta: fRDelta, reasons: fReasons, consecYellow: fStreak, painAlert: false
+        });
         fDayColor = fDir.color;
         fDayTitle = fDir.title;
         fDayDesc = fDir.desc;
