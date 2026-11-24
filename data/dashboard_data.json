@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-24T11:05:42.556224+01:00",
-    "generated_display": "24/11/2026 11:05",
+    "generated_at": "2026-11-24T13:56:49.231814+01:00",
+    "generated_display": "24/11/2026 13:56",
     "today_iso": "2026-11-24",
     "riccardo_synced": true,
     "flavio_synced": true
@@ -23,7 +23,9 @@
       "hrv_7gg": 90.4,
       "sonno_7gg": 7.41,
       "recovery_baseline": 61.7,
-      "rhr_baseline": 56.3
+      "rhr_baseline": 56.3,
+      "resp_rate": 13.2,
+      "resp_rate_baseline": 13.2
     },
     "peso": {
       "ultimo": 103.4,
@@ -120,6 +122,11 @@
         "km_wk_30": 47.7,
         "avg180": 1.06,
         "n180": 21
+      },
+      "acwr": {
+        "ratio": 1.63,
+        "load_7gg": 713.2,
+        "load_28gg_wk": 436.9
       },
       "blocco": {
         "label": "Raduno",
@@ -412,6 +419,10 @@
         "baseline_score_30gg": 80,
         "baseline_ore_7gg": 7.59,
         "baseline_score_7gg": 84
+      },
+      "resp_rate": {
+        "val": 14.0,
+        "baseline_30gg": 13.3
       }
     },
     "attivita": {
@@ -462,6 +473,11 @@
         "km_wk_30": 23.8,
         "avg180": 1.51,
         "n180": 9
+      },
+      "acwr": {
+        "ratio": 2.36,
+        "load_7gg": 748.4,
+        "load_28gg_wk": 317.6
       },
       "blocco": {
         "label": "Raduno",
