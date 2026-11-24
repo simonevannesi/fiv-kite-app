@@ -560,7 +560,7 @@
     <div id="view-riccardo" class="hidden">
       <div class="card">
         <div class="chart-title">
-          📈 Trend HRV & RHR (14gg)
+          📈 Trend HRV & RHR (28gg)
           <span id="ric-chart-base">Baseline HRV: -- ms</span>
         </div>
         <div class="chart-wrap">
@@ -579,7 +579,7 @@
       <div class="card">
         <div class="chart-title">
           🏆 Compliance Punti LA28 vs Target (≥85%)
-          <span>Ultime 2 settimane</span>
+          <span>Ultime 4 settimane</span>
         </div>
         <div class="chart-wrap">
           <canvas id="chartRicPoints"></canvas>
@@ -599,7 +599,7 @@
     <div id="view-flavio" class="hidden">
       <div class="card">
         <div class="chart-title">
-          📉 Andamento HRV & RHR Notturno (14gg)
+          📉 Andamento HRV & RHR Notturno (28gg)
           <span id="fla-chart-base">Monitoraggio carico & recupero</span>
         </div>
         <div class="chart-wrap">
@@ -1272,7 +1272,7 @@
         return { mean: mean.toFixed(1), cv: cv.toFixed(1) };
       }
 
-      const ricHist = (d.riccardo.history || []).slice(-14);
+      const ricHist = (d.riccardo.history || []).slice(-28);
       const ricBaseVal = d.riccardo.oggi.hrv_baseline || 100.1;
       const ric7 = calcHrv7Stats(ricHist);
       document.getElementById('ric-chart-base').textContent = ric7
