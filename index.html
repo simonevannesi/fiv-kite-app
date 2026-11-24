@@ -834,7 +834,7 @@
         ricAlert.innerHTML = '';
       }
 
-      // Helper condiviso: Direttiva Coach adattata all'OBIETTIVO della fase calendario (Raduno / Casa / Tapering / Regata)
+      // Helper condiviso: Stato Fisiologico & Gestione Carico per fase calendario (solo fisiologia, zero indicazioni tecniche)
       function buildPhaseDirective(athlete, phaseRaw, statusType, ctx) {
         const p = String(phaseRaw || 'Raduno').toUpperCase();
         const isTapering = p.includes('TAPER');
@@ -843,19 +843,16 @@
         const phaseTag = isTapering ? 'TAPERING' : (isRegata ? 'REGATA' : (isCasa ? 'CASA' : 'RADUNO'));
         const hrvStr = ctx.hrvPct !== null ? `${ctx.hrvPct > 0 ? '+' : ''}${ctx.hrvPct}%` : '--';
         const rhrStr = `${ctx.rhrDelta > 0 ? '+' : ''}${ctx.rhrDelta} bpm`;
-        const focusWater = athlete === 'riccardo'
-          ? 'velocità nel chop, traverso B2 a 37+ nodi e passo'
-          : 'partenze al pin, drill sandwich e corpo a corpo';
 
         if (statusType === 'red') {
           const title = isRegata
-            ? `🔴 ${phaseTag}: MODALITÀ RISPARMIO & LUCIDITÀ`
+            ? `🔴 ${phaseTag}: ALLARME FISIOLOGICO — RECUPERO PRIORITARIO`
             : (isTapering ? `🔴 ${phaseTag}: RIPOSO ASSOLUTO PRE-GARA` : `🔴 ${phaseTag}: SCARICO DI ASSORBIMENTO`);
           const desc = isRegata
-            ? `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Regata conservativa e pulita, evitare rischi inutili; priorità assoluta a reintegro e sonno tra le prove.`
+            ? `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Affaticamento marcato. Ridurre al minimo ogni dispendio extra e massimizzare reintegro e sonno.`
             : (isTapering
-              ? `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Stop totale a carichi e volume per arrivare freschi al via. Solo recupero, idratazione e sonno.`
-              : `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Stop stimoli ad alta intensità per assorbire il carico accumulato. Solo trim leggero o recupero attivo e sonno prioritario.`);
+              ? `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Stop totale ai carichi per recuperare freschezza prima del via. Priorità assoluta a riposo e idratazione.`
+              : `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Stop alta intensità per assorbire il carico accumulato. Solo recupero attivo, idratazione e sonno.`);
           return { color: 'red', title, desc };
         }
 
@@ -863,39 +860,36 @@
           if (isRegata) {
             return {
               color: 'amber',
-              title: statusType === 'metabolic_amber'
-                ? `🟡 ${phaseTag}: GESTIONE ENERGIE TRA LE PROVE`
-                : `🟡 ${phaseTag}: GARA PULITA & RECUPERO RAPIDO`,
-              desc: `<b>Fatica di gara (${ctx.reasons.join(', ')}):</b> Zero carichi extra a terra; riscaldamento essenziale, risparmio energie in attesa partenza e priorità assoluta a carboidrati/elettroliti e sonno.`
+              title: `🟡 ${phaseTag}: GESTIONE ENERGIE & RECUPERO`,
+              desc: `<b>Fatica metabolica/acuta (${ctx.reasons.join(', ')}):</b> Zero carichi extra a terra; contenere il dispendio energetico e massimizzare carboidrati, elettroliti e sonno.`
             };
           }
           if (isTapering) {
             return {
               color: 'amber',
-              title: `🟡 ${phaseTag}: TAGLIO VOLUME IMMEDIATO (PRIORITÀ VERDE)`,
-              desc: `<b>Fatica residua pre-gara (${ctx.reasons.join(', ')}):</b> In Tapering l'obiettivo è verde costante: azzerare i carichi a terra e tagliare il volume in acqua per arrivare al 100% di freschezza al via.`
+              title: `🟡 ${phaseTag}: TAGLIO VOLUME (PRIORITÀ VERDE)`,
+              desc: `<b>Fatica residua (${ctx.reasons.join(', ')}):</b> In Tapering l'obiettivo è tornare stabilmente verde: azzerare i carichi a terra e ridurre il volume complessivo.`
             };
           }
-          // RADUNO o CASA (blocchi di carico): 1-2 giorni gialli = Functional Overreaching (stimolo confermato!); 3+ giorni gialli = scarico di assorbimento
           const streak = ctx.consecYellow || 1;
           if (ctx.painAlert) {
             return {
               color: 'amber',
-              title: `🟡 ${phaseTag}: MODULAZIONE BIOMECCANICA (PIEDI)`,
-              desc: `<b>Attenzione dolore plantare (${ctx.reasons.join(', ')}):</b> Mantenere lavoro tecnico ma modulare il traverso lungo e i carichi isometrici; verificare assetto e straps.`
+              title: `🟡 ${phaseTag}: ATTENZIONE SOVRACCARICO PIEDI`,
+              desc: `<b>Segnale clinico (${ctx.reasons.join(', ')}):</b> Monitorare il dolore plantare e modulare i carichi isometrici prolungati.`
             };
           }
           if (streak >= 3) {
             return {
               color: 'amber',
               title: `🟡 ${phaseTag}: ${streak} GG GIALLI — SCARICO DI ASSORBIMENTO`,
-              desc: `<b>Accumulo prolungato (${ctx.reasons.join(', ')}):</b> Dopo ${streak} giorni consecutivi di fatica, inserire oggi scarico/volume leggero per evitare Non-Functional Overreaching e far salire la supercompensazione.`
+              desc: `<b>Accumulo prolungato (${ctx.reasons.join(', ')}):</b> Dopo ${streak} giorni consecutivi di fatica, inserire oggi scarico per evitare Non-Functional Overreaching e innescare la supercompensazione.`
             };
           }
           return {
             color: 'amber',
             title: `🟡 ${phaseTag}: STIMOLO CONFERMATO (OVERREACHING CONTROLLATO)`,
-            desc: `<b>Risposta di carico attesa (${ctx.reasons.join(', ')} | Giorno ${streak}/2):</b> Fisiologicamente normale in blocco di sviluppo. <b>Via libera allo stimolo in acqua (${focusWater})</b> e mantenimento del programma; curare sonno e idratazione stasera.`
+            desc: `<b>Risposta di carico attesa (${ctx.reasons.join(', ')} | Giorno ${streak}/2):</b> Fisiologicamente normale in fase di carico. Via libera al mantenimento dello stimolo; curare idratazione e sonno stasera.`
           };
         }
 
@@ -903,28 +897,28 @@
         if (isRegata) {
           return {
             color: 'green',
-            title: `🟢 ${phaseTag}: RACE READY — FULL ATTACK`,
-            desc: `<b>SNC (${hrvStr}) e motore (${rhrStr}) al 100%:</b> Massima aggressività su ${focusWater}. Zero extra a terra, focus totale su gara, idratazione e sonno.`
+            title: `🟢 ${phaseTag}: PRONTO AL 100% (RACE READY)`,
+            desc: `<b>SNC (${hrvStr}) e recupero metabolico (${rhrStr}) ottimali:</b> Piena disponibilità energetica. Zero carichi extra a terra, focus su idratazione e sonno.`
           };
         }
         if (isTapering) {
           return {
             color: 'green',
-            title: `🟢 ${phaseTag}: VERDE STABILE — RIFINITURA BREVE`,
-            desc: `<b>Atleta fresco (HRV ${hrvStr} | RHR ${rhrStr}):</b> Brevi richiami ad alta qualità (${focusWater}) a volume ridotto per mantenere la brillantezza senza creare fatica.`
+            title: `🟢 ${phaseTag}: VERDE STABILE — ALTA FRESCHEZZA`,
+            desc: `<b>Atleta fresco (HRV ${hrvStr} | RHR ${rhrStr}):</b> Stato ottimale pre-gara; mantenere basso il volume per preservare la brillantezza senza accumulare fatica.`
           };
         }
         if (isCasa) {
           return {
             color: 'green',
-            title: `🟢 ${phaseTag}: COSTRUZIONE & FORZA MASSIMA`,
-            desc: `<b>SNC (${hrvStr}) e tessuti (${rhrStr}) pronti:</b> Obiettivo miglioramento: via libera a progressioni in palestra, cardio strutturato e lavoro tecnico in acqua.`
+            title: `🟢 ${phaseTag}: PIENO CARICO / COSTRUZIONE`,
+            desc: `<b>SNC (${hrvStr}) e recupero (${rhrStr}) completi:</b> Via libera a pieno volume e progressioni di carico.`
           };
         }
         return {
           color: 'green',
-          title: `🟢 ${phaseTag}: OVERLOAD — STIMOLO MASSIMO`,
-          desc: `<b>SNC (${hrvStr}) e recupero (${rhrStr}) ottimali:</b> Obiettivo creare stimolo e migliorare: spingere forte su ${focusWater} e carico completo a terra.`
+          title: `🟢 ${phaseTag}: PIENO CARICO / STIMOLO MASSIMO`,
+          desc: `<b>SNC (${hrvStr}) e recupero (${rhrStr}) ottimali:</b> Massima disponibilità fisiologica per sostenere stimoli ad alto carico.`
         };
       }
 
