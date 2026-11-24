@@ -560,7 +560,7 @@
     <div id="view-riccardo" class="hidden">
       <div class="card">
         <div class="chart-title">
-          📈 Trend HRV & Recovery (14gg)
+          📈 Trend HRV & RHR (14gg)
           <span id="ric-chart-base">Baseline HRV: -- ms</span>
         </div>
         <div class="chart-wrap">
@@ -1263,11 +1263,10 @@
               yAxisID: 'y'
             },
             {
-              label: 'Recovery %',
-              data: ricHist.map(x => x.recovery),
-              borderColor: '#10b981',
-              borderDash: [3, 3],
-              borderWidth: 1.8,
+              label: 'RHR (bpm)',
+              data: ricHist.map(x => x.rhr),
+              borderColor: '#f59e0b',
+              borderWidth: 2,
               tension: 0.35,
               yAxisID: 'y1'
             }
@@ -1281,7 +1280,7 @@
           scales: {
             x: { grid: { display: false } },
             y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
-            y1: { type: 'linear', position: 'right', min: 0, max: 100, grid: { display: false } }
+            y1: { type: 'linear', position: 'right', grid: { display: false } }
           }
         }
       });
