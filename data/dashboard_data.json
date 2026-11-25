@@ -1,15 +1,15 @@
 {
   "meta": {
-    "generated_at": "2026-11-24T16:47:11.876024+01:00",
-    "generated_display": "24/11/2026 16:47",
-    "today_iso": "2026-11-24",
-    "riccardo_synced": true,
-    "flavio_synced": true
+    "generated_at": "2026-11-25T01:11:16.085695+01:00",
+    "generated_display": "25/11/2026 01:11",
+    "today_iso": "2026-11-25",
+    "riccardo_synced": false,
+    "flavio_synced": false
   },
   "riccardo": {
     "oggi": {
       "data": "2026-11-24",
-      "synced_today": true,
+      "synced_today": false,
       "recovery": 65.0,
       "hrv": 89.2,
       "rhr": 60.0,
@@ -42,7 +42,7 @@
       "dettagli": [
         [
           "Attività (Garmin)",
-          "+5 / 5 pt 🟢 (Kite in acqua 1.89h - 56.6km)"
+          "+5 / 5 pt 🟢 (Kite in acqua 1.76h - 60.2km)"
         ],
         [
           "Fisio & Piedi",
@@ -73,48 +73,48 @@
     },
     "attivita": {
       "palestra": {
-        "ieri_dur": 1.17,
+        "ieri_dur": 1.06,
         "ieri_km": 0.0,
-        "ieri_hr": 106,
-        "avg7": 1.28,
-        "n7": 2,
-        "sum_dur7": 2.56,
+        "ieri_hr": 113,
+        "avg7": 1.21,
+        "n7": 3,
+        "sum_dur7": 3.62,
         "sum_km7": 0.0,
         "avg_km7": 0.0,
-        "sum_load7": 17,
+        "sum_load7": 41,
         "avg30": 1.09,
-        "n30": 16,
-        "sess_wk_30": 3.7,
-        "h_wk_30": 4.06,
+        "n30": 17,
+        "sess_wk_30": 4.0,
+        "h_wk_30": 4.3,
         "km_wk_30": 0.5,
-        "load_wk_30": 94,
-        "avg180": 1.17,
+        "load_wk_30": 99,
+        "avg180": 1.16,
         "n180": 56,
         "sess_wk_180": 2.2,
         "km_wk_180": 0.1,
         "load_wk_180": 48
       },
       "acqua": {
-        "ieri_dur": 1.89,
-        "ieri_km": 56.6,
-        "ieri_hr": 114,
-        "avg7": 1.69,
-        "n7": 6,
-        "sum_dur7": 10.16,
-        "sum_km7": 291.0,
-        "avg_km7": 48.5,
-        "sum_load7": 561,
+        "ieri_dur": 1.76,
+        "ieri_km": 60.2,
+        "ieri_hr": 142,
+        "avg7": 2.01,
+        "n7": 5,
+        "sum_dur7": 10.06,
+        "sum_km7": 310.9,
+        "avg_km7": 62.2,
+        "sum_load7": 666,
         "avg30": 1.75,
-        "n30": 11,
-        "sess_wk_30": 2.6,
-        "h_wk_30": 4.49,
-        "km_wk_30": 134.2,
-        "load_wk_30": 153,
+        "n30": 12,
+        "sess_wk_30": 2.8,
+        "h_wk_30": 4.9,
+        "km_wk_30": 148.2,
+        "load_wk_30": 181,
         "avg180": 1.84,
-        "n180": 54,
+        "n180": 55,
         "sess_wk_180": 2.1,
-        "km_wk_180": 116.8,
-        "load_wk_180": 88
+        "km_wk_180": 119.1,
+        "load_wk_180": 92
       },
       "cardio": {
         "ieri_dur": 0.0,
@@ -139,33 +139,21 @@
         "load_wk_180": 91
       },
       "acwr": {
-        "ratio": 1.63,
-        "load_7gg": 713.2,
-        "load_28gg_wk": 436.9
+        "ratio": 1.99,
+        "load_7gg": 841.9,
+        "load_28gg_wk": 424.1
       },
       "blocco": {
         "label": "Raduno",
         "start": "2026-11-09",
-        "days": 15,
-        "kite_km_tot": 575.1,
-        "kite_km_day": 38.3,
-        "dry_h_tot": 10.9,
-        "dry_h_day": 0.73
+        "days": 16,
+        "kite_km_tot": 635.3,
+        "kite_km_day": 39.7,
+        "dry_h_tot": 12.0,
+        "dry_h_day": 0.75
       }
     },
     "history": [
-      {
-        "date": "2026-10-28",
-        "label": "28/10",
-        "recovery": null,
-        "hrv": null,
-        "rhr": null,
-        "sleep_h": null,
-        "weight": 101.5,
-        "pain": null,
-        "points_pct": 90,
-        "tipo": "Autogestito"
-      },
       {
         "date": "2026-10-29",
         "label": "29/10",
@@ -485,6 +473,18 @@
         "hrv": 89.2,
         "rhr": 60.0,
         "sleep_h": 9.22,
+        "weight": null,
+        "pain": null,
+        "points_pct": null,
+        "tipo": null
+      },
+      {
+        "date": "2026-11-25",
+        "label": "25/11",
+        "recovery": null,
+        "hrv": null,
+        "rhr": null,
+        "sleep_h": null,
         "weight": null,
         "pain": null,
         "points_pct": null,
