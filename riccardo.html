@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FIV Riccardo" />
+  <meta name="theme-color" content="#090e17" />
+  <title>FIV Kite | Riccardo</title>
+  <link rel="apple-touch-icon" href="./icon.png" />
+  <link rel="manifest" href="./manifest_riccardo.json" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #090e17;
+      --card: #111827;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --azzurro: #0ea5e9;
+      --azzurro-glow: rgba(14, 165, 233, 0.16);
+      --green: #10b981;
+      --green-bg: rgba(16, 185, 129, 0.15);
+      --amber: #f59e0b;
+      --amber-bg: rgba(245, 158, 11, 0.15);
+      --red: #ef4444;
+      --red-bg: rgba(239, 68, 68, 0.15);
+      --safe-top: env(safe-area-inset-top, 16px);
+      --safe-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+      padding-bottom: calc(80px + var(--safe-bottom));
+      overflow-x: hidden;
+    }
+
+    /* Sticky Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9, 14, 23, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: calc(12px + var(--safe-top)) 16px 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-flag {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0066cc, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-title p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .refresh-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .refresh-btn:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    /* Container */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 14px 14px 20px 14px;
+    }
+
+    /* Segmented Tabs */
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      border: 1px solid var(--card-border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 9px 6px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--azzurro);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(14, 165, 233, 0.35);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .athlete-name {
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sync-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 20px;
+    }
+
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .kpi-grid.cols-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kpi-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-left: 4px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .kpi-box.status-green {
+      background: rgba(16, 185, 129, 0.13);
+      border-color: rgba(16, 185, 129, 0.35);
+      border-left: 5px solid #10b981;
+    }
+    .kpi-box.status-green .kpi-value { color: #34d399; }
+
+    .kpi-box.status-amber {
+      background: rgba(245, 158, 11, 0.13);
+      border-color: rgba(245, 158, 11, 0.38);
+      border-left: 5px solid #f59e0b;
+    }
+    .kpi-box.status-amber .kpi-value { color: #fbbf24; }
+
+    .kpi-box.status-red {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.42);
+      border-left: 5px solid #ef4444;
+    }
+    .kpi-box.status-red .kpi-value { color: #f87171; }
+
+    .kpi-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: #cbd5e1;
+      margin-top: 3px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-green { background: #10b981; box-shadow: 0 0 10px #10b981; }
+    .dot-amber { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
+    .dot-red { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+
+    /* Alert Banner */
+    .alert-banner {
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.35;
+    }
+    .alert-amber { background: var(--amber-bg); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .alert-red { background: var(--red-bg); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .alert-green { background: var(--green-bg); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    /* Readiness Directive Banner */
+    .readiness-banner {
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .readiness-banner.banner-green {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .readiness-banner.banner-amber {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .readiness-banner.banner-red {
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+    .readiness-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .banner-green .readiness-title { color: #34d399; }
+    .banner-amber .readiness-title { color: #fbbf24; }
+    .banner-red .readiness-title { color: #f87171; }
+    .readiness-desc {
+      font-size: 11.5px;
+      color: #cbd5e1;
+      line-height: 1.35;
+    }
+
+    /* Weight Progress Bar */
+    .weight-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .weight-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .progress-track {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5e9, #10b981);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+    .weight-scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* Chart Container */
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chart-title span {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .chart-wrap {
+      position: relative;
+      height: 185px;
+      width: 100%;
+    }
+
+    /* Points Breakdown List */
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+    }
+    .breakdown-item:last-child {
+      border-bottom: none;
+    }
+    .breakdown-label {
+      color: var(--muted);
+    }
+    .breakdown-val {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Activity Matrix Table */
+    .matrix-row {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 11px 12px;
+      margin-bottom: 8px;
+    }
+    .matrix-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .matrix-cat {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .matrix-yesterday {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--azzurro);
+    }
+    .matrix-averages {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 6px;
+    }
+    .matrix-avg-val {
+      color: var(--text);
+      font-weight: 600;
+      display: block;
+      font-size: 12px;
+    }
+
+    /* Auth / Setup Modal */
+    .auth-screen {
+      max-width: 420px;
+      margin: 60px auto;
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      text-align: center;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: #090e17;
+      color: white;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: var(--azzurro);
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-flag">FIV</div>
+      <div class="brand-title">
+        <h1 id="header-title">Formula Kite Desk</h1>
+        <p id="last-updated">Caricamento dati...</p>
+      </div>
+    </div>
+    <button class="refresh-btn" onclick="loadDashboardData(true)">
+      <span>↻</span> Aggiorna
+    </button>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container" id="main-app">
+    <!-- Segmented Navigation -->
+    <div class="tabs" id="tabs-nav">
+      <button class="tab-btn active" id="tab-btn-oggi" onclick="switchTab('oggi')">Oggi (Squadra)</button>
+      <button class="tab-btn" id="tab-btn-riccardo" onclick="switchTab('riccardo')">Riccardo</button>
+      <button class="tab-btn" id="tab-btn-flavio" onclick="switchTab('flavio')">Flavio</button>
+    </div>
+
+    <!-- VIEW 1: SQUADRA OGGI -->
+    <div id="view-oggi">
+      <!-- Riccardo Summary Card -->
+      <div class="card" id="card-riccardo-oggi">
+        <div class="card-header">
+          <div class="athlete-name">👤 Riccardo Pianosi</div>
+          <span id="ric-sync-badge" class="sync-badge badge-green">Whoop OK</span>
+        </div>
+        <div id="ric-readiness-banner"></div>
+        <div id="ric-alert-box"></div>
+        <div class="kpi-grid">
+          <div class="kpi-box">
+            <div class="kpi-label">HRV Notte (Whoop) <span id="ric-hrv-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-hrv-val">--%</div>
+            <div class="kpi-sub" id="ric-hrv-sub">Range 30gg: -- ms</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">RHR Notte (Whoop) <span id="ric-rhr-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-rhr-val">-- bpm</div>
+            <div class="kpi-sub" id="ric-rhr-sub">Media 60gg: -- bpm</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Sonno (Whoop) <span id="ric-slp-dot" class="dot"></span></div>
+            <div class="kpi-value" id="ric-slp-val">--h</div>
+            <div class="kpi-sub" id="ric-slp-sub">--:-- ➔ --:--</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Carico Ieri (Garmin)</div>
+            <div class="kpi-value" id="ric-act-val" style="font-size: 15px; margin-top: 4px;">--</div>
+            <div class="kpi-sub" id="ric-act-sub">Dettagli in tab Riccardo</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flavio Summary Card -->
+      <div class="card" id="card-flavio-oggi">
+        <div class="card-header">
+          <div class="athlete-name">👤 Flavio Marx</div>
+          <span id="fla-sync-badge" class="sync-badge badge-green">Garmin OK</span>
+        </div>
+        <div id="fla-readiness-banner"></div>
+        <div id="fla-alert-box"></div>
+        <div class="kpi-grid">
+          <div class="kpi-box">
+            <div class="kpi-label">HRV Notte (Garmin) <span id="fla-hrv-dot" class="dot"></span></div>
+            <div class="kpi-value" id="fla-hrv-val">--%</div>
+            <div class="kpi-sub" id="fla-hrv-sub">Range 30gg: -- ms</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">RHR Notte (Garmin) <span id="fla-rhr-dot" class="dot"></span></div>
+            <div class="kpi-value" id="fla-rhr-val">-- bpm</div>
+            <div class="kpi-sub" id="fla-rhr-sub">Media 60gg: -- bpm</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Sonno (Garmin) <span id="fla-slp-dot" class="dot"></span></div>
+            <div class="kpi-value" id="fla-slp-val">--h</div>
+            <div class="kpi-sub" id="fla-slp-sub">Score: --/100</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Carico Ieri (Garmin)</div>
+            <div class="kpi-value" id="fla-act-val" style="font-size: 15px; margin-top: 4px;">--</div>
+            <div class="kpi-sub" id="fla-act-sub">Dettagli in tab Flavio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: RICCARDO DETTAGLIO & GRAFICI -->
+    <div id="view-riccardo" class="hidden">
+      <div class="card">
+        <div class="chart-title">
+          📈 Trend HRV & RHR (28gg)
+          <span id="ric-chart-base">Baseline HRV: -- ms</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chartRicHrv"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          🏋️‍♂️ Carichi Garmin: Ieri vs Medie Storiche
+          <span>Acqua, Palestra & Cardio</span>
+        </div>
+        <div id="ric-matrix-container"></div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          🏆 Compliance Punti LA28 vs Target (≥85%)
+          <span>Ultime 4 settimane</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chartRicPoints"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          📋 Bilancio Ieri & Dolore Plantare
+          <span id="ric-ctx-badge">--</span>
+        </div>
+        <div id="ric-breakdown-list"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: FLAVIO DETTAGLIO & GRAFICI -->
+    <div id="view-flavio" class="hidden">
+      <div class="card">
+        <div class="chart-title">
+          📉 Andamento HRV & RHR Notturno (28gg)
+          <span id="fla-chart-base">Monitoraggio carico & recupero</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chartFlaHrv"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">
+          🏋️‍♂️ Matrice Carichi: Ieri vs Medie Storiche
+          <span>Durata media per sessione</span>
+        </div>
+        <div id="fla-matrix-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Screen (Shown only on GitHub Pages without token) -->
+  <div id="auth-screen" class="auth-screen hidden">
+    <div class="brand-flag" style="margin: 0 auto 12px auto; width: 48px; height: 48px; font-size: 18px;">FIV</div>
+    <h2 style="margin-bottom: 8px;">Accesso Riservato Coach</h2>
+    <p style="font-size: 13px; color: var(--muted);">Inserisci la chiave di accesso FIV una sola volta. Verrà salvata in sicurezza nella memoria privata di questo iPhone.</p>
+    <input type="password" id="token-input" class="auth-input" placeholder="github_pat_..." />
+    <button class="auth-btn" onclick="saveTokenAndLoad()">Sblocca FIV Kite Desk</button>
+  </div>
+
+  <script>
+    const ATHLETE_MODE = 'riccardo'; // 'coach' | 'riccardo' | 'flavio'
+    let globalData = null;
+    let charts = {};
+
+    (function applyAthleteMode() {
+      if (ATHLETE_MODE === 'riccardo') {
+        document.getElementById('header-title').textContent = 'Riccardo Pianosi';
+        const tabs = document.getElementById('tabs-nav');
+        if (tabs) tabs.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        document.getElementById('tab-btn-oggi').textContent = 'Oggi';
+        document.getElementById('tab-btn-riccardo').textContent = 'Grafici & Carichi';
+        document.getElementById('tab-btn-flavio').classList.add('hidden');
+        document.getElementById('card-flavio-oggi').classList.add('hidden');
+        document.getElementById('view-flavio').classList.add('hidden');
+      } else if (ATHLETE_MODE === 'flavio') {
+        document.getElementById('header-title').textContent = 'Flavio Marx';
+        const tabs = document.getElementById('tabs-nav');
+        if (tabs) tabs.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        document.getElementById('tab-btn-oggi').textContent = 'Oggi';
+        document.getElementById('tab-btn-flavio').textContent = 'Grafici & Carichi';
+        document.getElementById('tab-btn-riccardo').classList.add('hidden');
+        document.getElementById('card-riccardo-oggi').classList.add('hidden');
+        document.getElementById('view-riccardo').classList.add('hidden');
+      }
+    })();
+
+    function persistToken(t) {
+      if (!t) return;
+      try { localStorage.setItem('fiv_gh_token', t); } catch (e) {}
+      try {
+        document.cookie = 'fiv_gh_token=' + encodeURIComponent(t) + '; max-age=31536000; path=/; SameSite=Lax; Secure';
+      } catch (e) {}
+    }
+
+    function getSavedToken() {
+      // 1. Check URL hash (#token=...)
+      if (window.location.hash && window.location.hash.includes('token=')) {
+        const params = new URLSearchParams(window.location.hash.substring(1));
+        const t = params.get('token');
+        if (t) {
+          persistToken(t);
+          return t;
+        }
+      }
+      // 2. Check localStorage
+      try {
+        const ls = localStorage.getItem('fiv_gh_token');
+        if (ls) return ls;
+      } catch (e) {}
+      // 3. Check Cookie
+      try {
+        const match = document.cookie.match(/(?:^|;\s*)fiv_gh_token=([^;]+)/);
+        if (match && match[1]) {
+          const ct = decodeURIComponent(match[1]);
+          try { localStorage.setItem('fiv_gh_token', ct); } catch (e) {}
+          return ct;
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    // Initialize token on boot without stripping hash so iOS Home Screen bookmarks keep it
+    getSavedToken();
+
+    function saveTokenAndLoad() {
+      const val = document.getElementById('token-input').value.trim();
+      if (!val) return;
+      persistToken(val);
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('main-app').classList.remove('hidden');
+      loadDashboardData(true);
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach((b, idx) => {
+        b.classList.remove('active');
+        if ((tab === 'oggi' && idx === 0) || (tab === 'riccardo' && idx === 1) || (tab === 'flavio' && idx === 2)) {
+          b.classList.add('active');
+        }
+      });
+      document.getElementById('view-oggi').classList.toggle('hidden', tab !== 'oggi');
+      document.getElementById('view-riccardo').classList.toggle('hidden', tab !== 'riccardo');
+      document.getElementById('view-flavio').classList.toggle('hidden', tab !== 'flavio');
+
+      // Trigger chart resize on tab reveal
+      setTimeout(() => {
+        Object.values(charts).forEach(c => c && c.resize());
+      }, 50);
+    }
+
+    async function fetchJsonData() {
+      // 1. Direct fetch with cache-busting timestamp (instant, works everywhere including github.io)
+      const localCandidates = ['./dashboard_data.json', './data/dashboard_data.json', '../data/dashboard_data.json'];
+      for (const path of localCandidates) {
+        try {
+          const res = await fetch(path + '?t=' + Date.now(), { cache: 'no-store' });
+          if (res.ok) {
+            const parsed = await res.json();
+            if (parsed && parsed.meta) return parsed;
+          }
+        } catch (e) {}
+      }
+
+      // 2. Fallback to Private GitHub Repo API using saved Coach token
+      const token = getSavedToken();
+      if (!token) {
+        document.getElementById('main-app').classList.add('hidden');
+        document.getElementById('auth-screen').classList.remove('hidden');
+        return null;
+      }
+
+      const apiUrl = 'https://api.github.com/repos/simonevannesi/Coaching_FIV/contents/data/dashboard_data.json?ref=main&_=' + Date.now();
+      const res = await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.raw'
+        },
+        cache: 'no-store'
+      });
+
+      if (res.status === 401) {
+        try { localStorage.removeItem('fiv_gh_token'); } catch (e) {}
+        document.getElementById('main-app').classList.add('hidden');
+        document.getElementById('auth-screen').classList.remove('hidden');
+        return null;
+      }
+      if (!res.ok) throw new Error('Errore caricamento dati GitHub: ' + res.status);
+      return await res.json();
+    }
+
+    function setDot(elId, color) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.className = 'dot dot-' + color;
+      const box = el.closest('.kpi-box');
+      if (box) {
+        box.classList.remove('status-green', 'status-amber', 'status-red');
+        box.classList.add('status-' + color);
+      }
+    }
+
+    function renderDashboard(d) {
+      globalData = d;
+      // Calcolo robusto della data odierna (YYYY-MM-DD) indipendente da Safari/locale
+      const now = new Date();
+      const realTodayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      function fmtTag(isoStr) {
+        if (!isoStr) return '--';
+        const p = isoStr.split('-');
+        return p.length >= 3 ? `${p[2]}/${p[1]}` : isoStr;
+      }
+
+      const isDataFromToday = (d.meta.today_iso === realTodayIso);
+      document.getElementById('last-updated').textContent = `Desk: ${d.meta.generated_display}` + (isDataFromToday ? '' : ' • Dati precedenti');
+
+      // ================= RICCARDO =================
+      const ric = d.riccardo;
+      const ro = ric.oggi || {};
+
+      // Fallback robusto da storico per Riccardo se per qualsiasi motivo oggi è vuoto
+      if (ro.recovery === null && ro.hrv === null && Array.isArray(ric.history) && ric.history.length > 0) {
+        for (let i = ric.history.length - 1; i >= 0; i--) {
+          const rh = ric.history[i];
+          if (rh.recovery !== null || rh.hrv !== null) {
+            ro.recovery = rh.recovery;
+            ro.hrv = rh.hrv;
+            ro.rhr = rh.rhr;
+            ro.sleep_h = rh.sleep_h;
+            if (!ro.data) ro.data = rh.date;
+            break;
+          }
+        }
+      }
+
+      const ricIsToday = (ro.data === realTodayIso && ro.synced_today === true);
+      const ricDateTag = fmtTag(ro.data);
+      const ricBadge = document.getElementById('ric-sync-badge');
+      if (ricIsToday) {
+        ricBadge.className = 'sync-badge badge-green';
+        ricBadge.textContent = `Whoop Sync ✓ (Oggi ${ricDateTag})`;
+      } else {
+        ricBadge.className = 'sync-badge badge-amber';
+        ricBadge.textContent = `⏳ Dati ${ricDateTag} (Attesa ${fmtTag(realTodayIso)})`;
+      }
+
+      // HRV (Whoop): Variazione % vs baseline 30gg (stile UAE/Plews)
+      const hrv = ro.hrv;
+      const baseHrv = ro.hrv_baseline || 96.3;
+      const lowHrv = ro.hrv_baseline_low || (baseHrv - 8.4);
+      const highHrv = ro.hrv_baseline_high || (baseHrv + 8.5);
+      const hPct = (hrv !== null && baseHrv) ? Math.round(((hrv - baseHrv) / baseHrv) * 100) : null;
+      document.getElementById('ric-hrv-val').textContent = hPct !== null ? `${hPct > 0 ? '+' : ''}${hPct}%` : 'N/D';
+      let hrvColor = 'green';
+      if (hrv !== null) {
+        if (hrv < (lowHrv * 0.85) || (hPct !== null && hPct <= -20)) {
+          hrvColor = 'red';
+        } else if (hrv < lowHrv || hrv > (highHrv * 1.25)) {
+          hrvColor = 'amber';
+        } else {
+          hrvColor = 'green';
+        }
+      }
+      setDot('ric-hrv-dot', hrvColor);
+      document.getElementById('ric-hrv-sub').textContent = `${hrv !== null ? hrv.toFixed(1) : '--'} ms | Range: ${Math.round(lowHrv)}–${Math.round(highHrv)} ms`;
+
+      // RHR (Whoop): Delta +/- bpm vs baseline 30gg (negativo = sempre verde)
+      const rRhr = ro.rhr;
+      const rRhrBase = ro.rhr_baseline || 55.0;
+      const rRhrDelta = (rRhr !== null && rRhr !== undefined && rRhrBase) ? +(rRhr - rRhrBase).toFixed(1) : null;
+      document.getElementById('ric-rhr-val').textContent = rRhrDelta !== null ? `${rRhrDelta > 0 ? '+' : ''}${rRhrDelta} bpm` : 'N/D';
+      const ricRhrColor = rRhrDelta === null ? 'amber' : (rRhrDelta <= 2.0 ? 'green' : (rRhrDelta <= 4.0 ? 'amber' : 'red'));
+      setDot('ric-rhr-dot', ricRhrColor);
+      document.getElementById('ric-rhr-sub').textContent = `${rRhr !== null && rRhr !== undefined ? Math.round(rRhr) : '--'} bpm | Media 60gg: ${rRhrBase} bpm`;
+
+      // Sleep (Whoop)
+      const slp = ro.sleep_h;
+      document.getElementById('ric-slp-val').textContent = slp !== null ? `${slp.toFixed(2)}h` : 'N/D';
+      setDot('ric-slp-dot', slp >= 6.8 ? 'green' : (slp >= 6.0 ? 'amber' : 'red'));
+      document.getElementById('ric-slp-sub').textContent = `${ro.bed_time} ➔ ${ro.wake_time} (Base 60gg: 7.4h)`;
+
+      // Riccardo Pain & Silent Respiratory Rate Alert
+      const pi = ric.punti_ieri;
+      const dol = pi && pi.dolore ? pi.dolore : (ric.dolore_oggi ? parseFloat(ric.dolore_oggi) : 1);
+      const ricAlert = document.getElementById('ric-alert-box');
+      let ricAlertsHtml = '';
+      if (dol >= 3) {
+        ricAlertsHtml += `<div class="alert-banner alert-red">⚠️ <b>Attenzione Dolore Plantare:</b> Segnalato livello <b>${dol}/5</b> nell'ultimo log.</div>`;
+      }
+      if (ro.resp_rate && ro.resp_rate_baseline && (ro.resp_rate - ro.resp_rate_baseline) >= 1.5) {
+        const rrD = +(ro.resp_rate - ro.resp_rate_baseline).toFixed(1);
+        ricAlertsHtml += `<div class="alert-banner alert-red">🫁 <b>Allerta Respirazione Notturna:</b> ${ro.resp_rate} atti/min (<b>+${rrD}</b> vs base ${ro.resp_rate_baseline}) — possibile stress virale/infezione latente.</div>`;
+      }
+      ricAlert.innerHTML = ricAlertsHtml;
+
+      // Helper condiviso: Stato Fisiologico & Gestione Carico per fase calendario (solo fisiologia, zero indicazioni tecniche)
+      function buildPhaseDirective(athlete, phaseRaw, statusType, ctx) {
+        const p = String(phaseRaw || 'Raduno').toUpperCase();
+        const isTapering = p.includes('TAPER');
+        const isRegata = p.includes('REGATA') || p.includes('GARA');
+        const isCasa = p.includes('CASA') || p.includes('HOME');
+        const phaseTag = isTapering ? 'TAPERING' : (isRegata ? 'REGATA' : (isCasa ? 'CASA' : 'RADUNO'));
+        const hrvStr = ctx.hrvPct !== null ? `${ctx.hrvPct > 0 ? '+' : ''}${ctx.hrvPct}%` : '--';
+        const rhrStr = `${ctx.rhrDelta > 0 ? '+' : ''}${ctx.rhrDelta} bpm`;
+
+        if (statusType === 'red') {
+          const title = isRegata
+            ? `🔴 ${phaseTag}: ALLARME FISIOLOGICO — RECUPERO PRIORITARIO`
+            : (isTapering ? `🔴 ${phaseTag}: RIPOSO ASSOLUTO PRE-GARA` : `🔴 ${phaseTag}: SCARICO DI ASSORBIMENTO`);
+          const desc = isRegata
+            ? `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Affaticamento marcato. Ridurre al minimo ogni dispendio extra e massimizzare reintegro e sonno.`
+            : (isTapering
+              ? `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Stop totale ai carichi per recuperare freschezza prima del via. Priorità assoluta a riposo e idratazione.`
+              : `<b>Allarme fisiologico (${ctx.reasons.join(', ')}):</b> Stop alta intensità per assorbire il carico accumulato. Solo recupero attivo, idratazione e sonno.`);
+          return { color: 'red', title, desc };
+        }
+
+        if (statusType === 'metabolic_amber' || statusType === 'amber') {
+          if (isRegata) {
+            return {
+              color: 'amber',
+              title: `🟡 ${phaseTag}: GESTIONE ENERGIE & RECUPERO`,
+              desc: `<b>Fatica metabolica/acuta (${ctx.reasons.join(', ')}):</b> Zero carichi extra a terra; contenere il dispendio energetico e massimizzare carboidrati, elettroliti e sonno.`
+            };
+          }
+          if (isTapering) {
+            return {
+              color: 'amber',
+              title: `🟡 ${phaseTag}: TAGLIO VOLUME (PRIORITÀ VERDE)`,
+              desc: `<b>Fatica residua (${ctx.reasons.join(', ')}):</b> In Tapering l'obiettivo è tornare stabilmente verde: azzerare i carichi a terra e ridurre il volume complessivo.`
+            };
+          }
+          const streak = ctx.consecYellow || 1;
+          if (ctx.painAlert) {
+            return {
+              color: 'amber',
+              title: `🟡 ${phaseTag}: ATTENZIONE SOVRACCARICO PIEDI`,
+              desc: `<b>Segnale clinico (${ctx.reasons.join(', ')}):</b> Monitorare il dolore plantare e modulare i carichi isometrici prolungati.`
+            };
+          }
+          if (streak >= 3) {
+            return {
+              color: 'amber',
+              title: `🟡 ${phaseTag}: ${streak} GG GIALLI — SCARICO DI ASSORBIMENTO`,
+              desc: `<b>Accumulo prolungato (${ctx.reasons.join(', ')}):</b> Dopo ${streak} giorni consecutivi di fatica, inserire oggi scarico per evitare Non-Functional Overreaching e innescare la supercompensazione.`
+            };
+          }
+          return {
+            color: 'amber',
+            title: `🟡 ${phaseTag}: STIMOLO CONFERMATO (OVERREACHING CONTROLLATO)`,
+            desc: `<b>Risposta di carico attesa (${ctx.reasons.join(', ')} | Giorno ${streak}/2):</b> Fisiologicamente normale in fase di carico. Via libera al mantenimento dello stimolo; curare idratazione e sonno stasera.`
+          };
+        }
+
+        // GREEN
+        if (isRegata) {
+          return {
+            color: 'green',
+            title: `🟢 ${phaseTag}: PRONTO AL 100% (RACE READY)`,
+            desc: `<b>SNC (${hrvStr}) e recupero metabolico (${rhrStr}) ottimali:</b> Piena disponibilità energetica. Zero carichi extra a terra, focus su idratazione e sonno.`
+          };
+        }
+        if (isTapering) {
+          return {
+            color: 'green',
+            title: `🟢 ${phaseTag}: VERDE STABILE — ALTA FRESCHEZZA`,
+            desc: `<b>Atleta fresco (HRV ${hrvStr} | RHR ${rhrStr}):</b> Stato ottimale pre-gara; mantenere basso il volume per preservare la brillantezza senza accumulare fatica.`
+          };
+        }
+        if (isCasa) {
+          return {
+            color: 'green',
+            title: `🟢 ${phaseTag}: PIENO CARICO / COSTRUZIONE`,
+            desc: `<b>SNC (${hrvStr}) e recupero (${rhrStr}) completi:</b> Via libera a pieno volume e progressioni di carico.`
+          };
+        }
+        return {
+          color: 'green',
+          title: `🟢 ${phaseTag}: PIENO CARICO / STIMOLO MASSIMO`,
+          desc: `<b>SNC (${hrvStr}) e recupero (${rhrStr}) ottimali:</b> Massima disponibilità fisiologica per sostenere stimoli ad alto carico.`
+        };
+      }
+
+      // Helper per contare i giorni gialli consecutivi (Functional vs Non-Functional Overreaching)
+      function countConsecYellow(histArr, isYellowFn, todayIsYellow) {
+        if (!todayIsYellow) return 0;
+        let streak = 1;
+        if (Array.isArray(histArr) && histArr.length > 1) {
+          for (let i = histArr.length - 2; i >= Math.max(0, histArr.length - 5); i--) {
+            if (isYellowFn(histArr[i])) streak++;
+            else break;
+          }
+        }
+        return streak;
+      }
+
+      // Direttiva Coach Scientifica Riccardo (Neurale HRV vs Metabolico RHR + Obiettivo Fase Calendario)
+      const rDol = dol !== null ? dol : 1;
+      const rHrv = hrv;
+      const rSlp = slp;
+      const rRhrValNum = rRhrDelta !== null ? rRhrDelta : 0;
+      const ricPhase = (ric.attivita && ric.attivita.blocco && ric.attivita.blocco.label) || 'Raduno';
+
+      const rHrvRed = (rHrv !== null && (rHrv < (lowHrv * 0.85) || (hPct !== null && hPct <= -20)));
+      const rHrvAmber = (rHrv !== null && (rHrv < lowHrv || rHrv > (highHrv * 1.25)));
+      const rIsRed = (rDol >= 4) || rHrvRed || (rSlp !== null && rSlp < 5.0) || (rRhrValNum >= 5.0);
+      const rOnlyMetabolicAmber = !rIsRed && !rHrvAmber && (rDol < 3) && (rSlp === null || rSlp >= 6.5) && (rRhrValNum > 2.0);
+      const rIsAmber = !rIsRed && (rHrvAmber || (rDol >= 3) || (rSlp !== null && rSlp < 6.5) || (rRhrValNum > 2.0));
+
+      const rStreak = countConsecYellow(ric.history, (h) => {
+        if (!h) return false;
+        const hLow = (h.hrv !== null && h.hrv < lowHrv);
+        const rHigh = (h.rhr !== null && (h.rhr - rRhrBase) > 2.0);
+        const sLow = (h.sleep_h !== null && h.sleep_h < 6.5);
+        return hLow || rHigh || sLow;
+      }, rIsAmber);
+
+      const rReasons = [];
+      if (rDol >= 3) rReasons.push(`Dolore plantare ${rDol}/5`);
+      if (rHrvRed) rReasons.push(`Crollo neurale HRV (${hPct}%)`);
+      else if (rHrvAmber) rReasons.push(`HRV fuori corridoio (${hPct > 0 ? '+' : ''}${hPct}%)`);
+      if (rSlp !== null && rSlp < 6.5) rReasons.push(`Sonno ${rSlp}h`);
+      if (rRhrValNum > 2.0) rReasons.push(`RHR +${rRhrValNum} bpm`);
+
+      const rStatus = rIsRed ? 'red' : (rOnlyMetabolicAmber ? 'metabolic_amber' : (rIsAmber ? 'amber' : 'green'));
+      const rDir = buildPhaseDirective('riccardo', ricPhase, rStatus, {
+        hrvPct: hPct, rhrDelta: rRhrValNum, reasons: rReasons, consecYellow: rStreak, painAlert: rDol >= 3
+      });
+      let rDayColor = rDir.color;
+      let rDayTitle = rDir.title;
+      let rDayDesc = rDir.desc;
+
+      if (!ricIsToday) {
+        rDayDesc = `<span style="color:#fcd34d;">⚠️ <b>In attesa del sync Whoop di oggi (${fmtTag(realTodayIso)}):</b> i dati e la direttiva sottostanti sono riferiti a ieri (${ricDateTag}).</span><br>` + rDayDesc;
+      }
+
+      const ricBannerEl = document.getElementById('ric-readiness-banner');
+      if (ricBannerEl) {
+        ricBannerEl.innerHTML = `
+          <div class="readiness-banner banner-${rDayColor}">
+            <div class="readiness-title">${rDayTitle}</div>
+            <div class="readiness-desc">${rDayDesc}</div>
+          </div>
+        `;
+      }
+
+      // Helper condiviso per Matrice Carichi (Palestra=sessioni, Cardio=ore, Acqua=km)
+      function renderActivityMatrix(containerId, actsObj) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        let acwrHtml = '';
+        if (actsObj && actsObj.acwr && actsObj.acwr.ratio !== null && actsObj.acwr.ratio !== undefined) {
+          const r = actsObj.acwr.ratio;
+          const badge = r > 1.5 ? '🔴 Picco Carico (>1.5)' : (r >= 0.8 ? '🟢 Zona Ottimale (0.8–1.3)' : '🔵 Scarico / Tapering (<0.8)');
+          const col = r > 1.5 ? '#f87171' : (r >= 0.8 ? '#34d399' : '#38bdf8');
+          acwrHtml = `
+            <div class="matrix-row" style="border-left: 4px solid ${col};">
+              <div class="matrix-top">
+                <span class="matrix-cat">⚡ ACWR (Firstbeat EPOC)</span>
+                <span style="font-weight:700; color:${col}; font-size:14px;">${r.toFixed(2)} — ${badge}</span>
+              </div>
+              <div class="matrix-averages" style="grid-template-columns: repeat(2, 1fr);">
+                <div>Carico Acuto (7gg) <span class="matrix-avg-val">${actsObj.acwr.load_7gg} pt</span></div>
+                <div>Media Cronica (28gg/sett) <span class="matrix-avg-val">${actsObj.acwr.load_28gg_wk} pt</span></div>
+              </div>
+            </div>
+          `;
+        }
+        const cats = [
+          { key: 'palestra', label: '🏋️‍♂️ Palestra' },
+          { key: 'acqua', label: '🪁 Acqua (Kite)' },
+          { key: 'cardio', label: '🚴‍♂️ Cardio' }
+        ];
+        el.innerHTML = acwrHtml + cats.map(c => {
+          const s = (actsObj && actsObj[c.key]) || {};
+          const kmStr = s.ieri_km > 0 ? ` (${s.ieri_km} km)` : '';
+          const hrStr = s.ieri_hr ? ` | FC ${s.ieri_hr} bpm` : '';
+          const ieriText = s.ieri_dur > 0 ? `${s.ieri_dur}h${kmStr}${hrStr}` : 'Riposo (0h)';
+
+          let col1Label = 'Ultimi 7gg', col1Val = '';
+          let col2Label = 'Media/Sett (30gg)', col2Val = '';
+          let col3Label = 'Media/Sett (6 Mesi)', col3Val = '';
+
+          if (c.key === 'palestra') {
+            col1Val = `${s.n7 || 0} sess`;
+            col2Val = `${s.sess_wk_30 || 0} sess/sett`;
+            col3Val = `${s.sess_wk_180 || 0} sess/sett`;
+          } else if (c.key === 'cardio') {
+            col1Val = `${s.sum_load7 || 0} pt`;
+            col2Val = `${s.load_wk_30 || 0} pt/sett`;
+            col3Val = `${s.load_wk_180 || 0} pt/sett`;
+          } else {
+            col1Val = `${s.sum_km7 || 0} km`;
+            col2Val = `${s.km_wk_30 || 0} km/sett`;
+            col3Val = `${s.km_wk_180 || 0} km/sett`;
+          }
+
+          return `
+            <div class="matrix-row">
+              <div class="matrix-top">
+                <span class="matrix-cat">${c.label}</span>
+                <span class="matrix-yesterday">Ieri: ${ieriText}</span>
+              </div>
+              <div class="matrix-averages">
+                <div>${col1Label} <span class="matrix-avg-val">${col1Val}</span></div>
+                <div>${col2Label} <span class="matrix-avg-val">${col2Val}</span></div>
+                <div>${col3Label} <span class="matrix-avg-val">${col3Val}</span></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function setSummaryLoadBox(valId, subId, actsObj) {
+        const a = actsObj || {};
+        const cats = [];
+        if (a.acqua && a.acqua.ieri_dur > 0) {
+          cats.push(`Kite ${a.acqua.ieri_dur}h`);
+        }
+        if (a.palestra && a.palestra.ieri_dur > 0) {
+          cats.push(`Palestra ${a.palestra.ieri_dur}h`);
+        }
+        if (a.cardio && a.cardio.ieri_dur > 0) {
+          cats.push(`Cardio ${a.cardio.ieri_dur}h`);
+        }
+        document.getElementById(valId).textContent = cats.length ? cats.join(' + ') : 'Riposo';
+
+        const subEl = document.getElementById(subId);
+        if (a.blocco) {
+          const b = a.blocco;
+          subEl.innerHTML = `<b>${b.label} (${b.days}gg):</b> Kite ${b.kite_km_tot} km (${b.kite_km_day}/g)<br>Gym+Cardio: ${b.dry_h_tot}h (${b.dry_h_day}h/g)`;
+        } else {
+          subEl.textContent = `Palestra 7gg: ${(a.palestra && a.palestra.n7) || 0} sess`;
+        }
+      }
+
+      // Riccardo Carico Ieri Overview & Matrice
+      const ricActs = ric.attivita || {};
+      setSummaryLoadBox('ric-act-val', 'ric-act-sub', ricActs);
+      renderActivityMatrix('ric-matrix-container', ricActs);
+
+      // Riccardo Breakdown list
+      const bdList = document.getElementById('ric-breakdown-list');
+      if (pi && pi.dettagli) {
+        document.getElementById('ric-ctx-badge').textContent = `${pi.tipo} (${pi.fatti}/${pi.max} pt)`;
+        bdList.innerHTML = pi.dettagli.map(([k, v]) => `
+          <div class="breakdown-item">
+            <span class="breakdown-label">${k}</span>
+            <span class="breakdown-val">${v}</span>
+          </div>
+        `).join('');
+      } else {
+        bdList.innerHTML = '<div style="color:var(--muted);font-size:13px;">Nessun dettaglio disponibile</div>';
+      }
+
+      // ================= FLAVIO =================
+      const fla = d.flavio;
+      const fo = fla.oggi || {};
+      let fh = fo.hrv || {};
+      let fr = fo.rhr || {};
+      let fs = fo.sonno || {};
+      let flaDataDate = fo.data;
+
+      // Fallback robusto da storico se oggi non ha dati validi (stesso principio di Riccardo)
+      if ((!fh.val && (!fs.ore || fs.ore === 0)) && Array.isArray(fla.history) && fla.history.length > 0) {
+        for (let i = fla.history.length - 1; i >= 0; i--) {
+          const h = fla.history[i];
+          if (h.hrv || h.sleep_h || h.rhr) {
+            fh = { val: h.hrv, status: h.hrv_status || 'N/D', baseline_low: fh.baseline_low, baseline_high: fh.baseline_high, weekly: fh.weekly };
+            fr = { val: h.rhr, baseline_7gg: fr.baseline_7gg };
+            fs = { ore: h.sleep_h, score: h.sleep_score, baseline_ore: fs.baseline_ore, baseline_score: fs.baseline_score };
+            if (!flaDataDate) flaDataDate = h.date;
+            break;
+          }
+        }
+      }
+
+      const flaHasAnyData = Boolean(fh.val || fr.val || (fs.ore && fs.ore > 0));
+      const flaIsToday = (flaDataDate === realTodayIso && fla.synced_today === true && flaHasAnyData);
+      const flaDateTag = fmtTag(flaDataDate);
+      const flaBadge = document.getElementById('fla-sync-badge');
+      if (flaIsToday) {
+        flaBadge.className = 'sync-badge badge-green';
+        flaBadge.textContent = `Garmin Sync ✓ (Oggi ${flaDateTag})`;
+      } else if (!flaHasAnyData) {
+        flaBadge.className = 'sync-badge badge-red';
+        flaBadge.textContent = `⚠️ Garmin Offline (${fmtTag(realTodayIso)})`;
+      } else {
+        flaBadge.className = 'sync-badge badge-amber';
+        flaBadge.textContent = `⏳ Dati ${flaDateTag} (Attesa ${fmtTag(realTodayIso)})`;
+      }
+
+      // Flavio HRV (Range 30gg Firstbeat): Mostra % variazione rispetto alla baseline in grande e range sotto
+      const fBaseMid = (fh.baseline_low && fh.baseline_high) ? ((fh.baseline_low + fh.baseline_high) / 2) : (fh.weekly || null);
+      const fHrvPct = (fh.val && fBaseMid) ? Math.round(((fh.val - fBaseMid) / fBaseMid) * 100) : null;
+      document.getElementById('fla-hrv-val').textContent = fHrvPct !== null ? `${fHrvPct > 0 ? '+' : ''}${fHrvPct}%` : (fh.val ? `${fh.val} ms` : 'N/D');
+      const fStatus = fh.status || 'N/D';
+      let fColor = 'amber';
+      if (fh.val && fh.baseline_low) {
+        const fHighLimit = fh.baseline_high ? (fh.baseline_high * 1.25) : 999;
+        if (fh.val >= fh.baseline_low && fh.val <= fHighLimit) {
+          fColor = 'green';
+        } else if (fh.val < fh.baseline_low - 4) {
+          fColor = 'red';
+        } else {
+          fColor = 'amber';
+        }
+      } else if (fh.val) {
+        fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
+      }
+      setDot('fla-hrv-dot', fColor);
+      document.getElementById('fla-hrv-sub').textContent = `${fh.val || '--'} ms | Range: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
+
+      // Flavio RHR: Mostra delta +/- bpm rispetto alla baseline in grande e media 30gg sotto
+      // RHR più basso della baseline (negativo) è sempre un ottimo segnale di recupero -> VERDE
+      const baseRhr = fr.baseline_30gg || 55.6;
+      const rDelta = (fr.val && baseRhr) ? +(fr.val - baseRhr).toFixed(1) : null;
+      document.getElementById('fla-rhr-val').textContent = rDelta !== null ? `${rDelta > 0 ? '+' : ''}${rDelta} bpm` : 'N/D';
+      const rhrColor = rDelta === null ? 'amber' : (rDelta <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red'));
+      setDot('fla-rhr-dot', rhrColor);
+      document.getElementById('fla-rhr-sub').textContent = `${fr.val || '--'} bpm | Media 60gg: ${baseRhr} bpm`;
+
+      // Flavio Sleep (Score + Base 30gg)
+      document.getElementById('fla-slp-val').textContent = fs.ore ? `${fs.ore}h` : 'N/D';
+      setDot('fla-slp-dot', !fs.score ? 'amber' : (fs.score >= 75 ? 'green' : (fs.score >= 65 ? 'amber' : 'red')));
+      const baseSlpH = fs.baseline_ore_30gg || fs.baseline_ore || '--';
+      document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (Base 60gg: ${baseSlpH}h)`;
+
+      // Flavio Yesterday Activity Summary con medie 7gg/30gg
+      const acts = fla.attivita || {};
+      setSummaryLoadBox('fla-act-val', 'fla-act-sub', acts);
+
+      // Flavio Silent Respiratory Rate Alert (compare solo se RR >= +1.5 atti/min)
+      const flaAlert = document.getElementById('fla-alert-box');
+      if (flaAlert) {
+        const fRr = fo.resp_rate || {};
+        if (fRr.val && fRr.baseline_30gg && (fRr.val - fRr.baseline_30gg) >= 1.5) {
+          const rrD = +(fRr.val - fRr.baseline_30gg).toFixed(1);
+          flaAlert.innerHTML = `<div class="alert-banner alert-red">🫁 <b>Allerta Respirazione Notturna:</b> ${fRr.val} atti/min (<b>+${rrD}</b> vs base ${fRr.baseline_30gg}) — possibile stress virale/infezione latente.</div>`;
+        } else {
+          flaAlert.innerHTML = '';
+        }
+      }
+
+      // Flavio Matrix
+      renderActivityMatrix('fla-matrix-container', acts);
+
+      // Calcolo Direttiva Coach & Colore Generale Giornata Flavio (Regola Gerarchica del Veto)
+      const fHrvVal = fh.val;
+      const fBaseLow = fh.baseline_low || 46;
+      const fBaseHigh = fh.baseline_high || 58;
+      const fRhrVal = fr.val;
+      const fBaseRhr = fr.baseline_30gg || 55.6;
+      const fRDelta = (fRhrVal && fBaseRhr) ? +(fRhrVal - fBaseRhr).toFixed(1) : 0;
+      const fSlpH = fs.ore;
+      const fScore = fs.score;
+      const fSt = fh.status || 'N/D';
+
+      const flaPhase = (acts && acts.blocco && acts.blocco.label) || 'Raduno';
+      let fDayColor = 'green';
+      let fDayTitle = '';
+      let fDayDesc = '';
+
+      if (!flaHasAnyData) {
+        fDayColor = 'amber';
+        fDayTitle = '⚠️ GARMIN FLAVIO NON SINCRONIZZATO';
+        fDayDesc = `Nessun dato Garmin ricevuto per oggi (${fmtTag(realTodayIso)}). Verifica che Flavio abbia sincronizzato l'orologio su Garmin Connect oppure controlla il token Garmin del server.`;
+      } else {
+        const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fBaseLow);
+        const fIsRed = (fSt === 'POOR') || (fHrvVal && fHrvVal < fBaseLow - 5) || (fRDelta >= 5.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 5.0) || (fScore !== null && fScore !== undefined && fScore < 60);
+        const fOnlyMetabolicAmber = !fIsRed && !fHrvDepressed && (fSlpH === null || fSlpH === undefined || fSlpH >= 6.5) && (fScore === null || fScore === undefined || fScore >= 72) && (fRDelta > 2.0);
+        const fIsAmber = !fIsRed && ((fHrvDepressed) || (fRDelta > 2.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) || (fScore !== null && fScore !== undefined && fScore < 72));
+
+        const fReasons = [];
+        if (fSt === 'POOR' || (fHrvVal && fHrvVal < fBaseLow - 5)) fReasons.push(`HRV depresso (${fHrvVal} ms)`);
+        else if (fHrvDepressed) fReasons.push(`HRV sotto range (${fHrvVal} < ${fBaseLow} ms)`);
+        if (fRDelta > 2.0) fReasons.push(`RHR +${fRDelta} bpm`);
+        if (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) fReasons.push(`Sonno ${fSlpH}h`);
+        if (fScore !== null && fScore !== undefined && fScore < 72) fReasons.push(`Sleep score ${fScore}`);
+
+        const fStreak = countConsecYellow(fla.history, (h) => {
+          if (!h) return false;
+          const hLow = (h.hrv !== null && h.hrv < fBaseLow);
+          const rHigh = (h.rhr !== null && (h.rhr - fBaseRhr) > 2.0);
+          const sLow = (h.sleep_h !== null && h.sleep_h < 6.5) || (h.sleep_score !== null && h.sleep_score < 72);
+          return hLow || rHigh || sLow;
+        }, fIsAmber);
+
+        const fStatusType = fIsRed ? 'red' : (fOnlyMetabolicAmber ? 'metabolic_amber' : (fIsAmber ? 'amber' : 'green'));
+        const fDir = buildPhaseDirective('flavio', flaPhase, fStatusType, {
+          hrvPct: fHrvPct, rhrDelta: fRDelta, reasons: fReasons, consecYellow: fStreak, painAlert: false
+        });
+        fDayColor = fDir.color;
+        fDayTitle = fDir.title;
+        fDayDesc = fDir.desc;
+
+        if (!flaIsToday) {
+          fDayDesc = `<span style="color:#fcd34d;">⚠️ <b>In attesa del sync Garmin di oggi (${fmtTag(realTodayIso)}):</b> i dati e la direttiva sottostanti sono riferiti a ieri (${flaDateTag}).</span><br>` + fDayDesc;
+        }
+      }
+
+      const flaBannerEl = document.getElementById('fla-readiness-banner');
+      if (flaBannerEl) {
+        flaBannerEl.innerHTML = `
+          <div class="readiness-banner banner-${fDayColor}">
+            <div class="readiness-title">${fDayTitle}</div>
+            <div class="readiness-desc">${fDayDesc}</div>
+          </div>
+        `;
+      }
+
+      // ================= CHARTS =================
+      renderCharts(d);
+    }
+
+    function renderCharts(d) {
+      Chart.defaults.color = '#94a3b8';
+      Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, sans-serif';
+      Chart.defaults.font.size = 11;
+
+      function calcHrv7Stats(histArr) {
+        const vals = (histArr || []).map(x => x.hrv).filter(v => v !== null && v !== undefined && !isNaN(v)).slice(-7);
+        if (vals.length < 2) return null;
+        const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
+        const variance = vals.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / vals.length;
+        const cv = mean > 0 ? (Math.sqrt(variance) / mean) * 100 : 0;
+        return { mean: mean.toFixed(1), cv: cv.toFixed(1) };
+      }
+
+      const ricHist = (d.riccardo.history || []).slice(-28);
+      const ricBaseVal = d.riccardo.oggi.hrv_baseline || 100.1;
+      const ric7 = calcHrv7Stats(ricHist);
+      document.getElementById('ric-chart-base').textContent = ric7
+        ? `7gg: ${ric7.mean} ms | CV: ${ric7.cv}%`
+        : `Baseline HRV: ${ricBaseVal} ms`;
+
+      const fla7 = calcHrv7Stats(d.flavio.history || []);
+      const flaBaseEl = document.getElementById('fla-chart-base');
+      if (flaBaseEl && fla7) {
+        flaBaseEl.textContent = `7gg: ${fla7.mean} ms | CV: ${fla7.cv}%`;
+      }
+
+      // Chart 1: Riccardo HRV, Baseline Line & Recovery
+      if (charts.ricHrv) charts.ricHrv.destroy();
+      charts.ricHrv = new Chart(document.getElementById('chartRicHrv'), {
+        type: 'line',
+        data: {
+          labels: ricHist.map(x => x.label),
+          datasets: [
+            {
+              label: 'HRV (ms)',
+              data: ricHist.map(x => x.hrv),
+              borderColor: '#0ea5e9',
+              backgroundColor: 'rgba(14, 165, 233, 0.12)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: true,
+              yAxisID: 'y'
+            },
+            {
+              label: `Baseline (${ricBaseVal} ms)`,
+              data: ricHist.map(() => ricBaseVal),
+              borderColor: '#f8fafc',
+              borderDash: [6, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false,
+              yAxisID: 'y'
+            },
+            {
+              label: 'RHR (bpm)',
+              data: ricHist.map(x => x.rhr),
+              borderColor: '#f59e0b',
+              borderWidth: 2,
+              tension: 0.35,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
+            y1: { type: 'linear', position: 'right', grid: { display: false } }
+          }
+        }
+      });
+
+      // Chart 2: Riccardo LA28 Points vs 85% Target Line
+      if (charts.ricPts) charts.ricPts.destroy();
+      charts.ricPts = new Chart(document.getElementById('chartRicPoints'), {
+        type: 'bar',
+        data: {
+          labels: ricHist.map(x => x.label),
+          datasets: [
+            {
+              type: 'line',
+              label: 'Target 85%',
+              data: ricHist.map(() => 85),
+              borderColor: '#f8fafc',
+              borderDash: [5, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false
+            },
+            {
+              type: 'bar',
+              label: '% Punti LA28',
+              data: ricHist.map(x => x.points_pct),
+              backgroundColor: ricHist.map(x => x.points_pct >= 85 ? '#10b981' : (x.points_pct >= 70 ? '#f59e0b' : '#ef4444')),
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+
+      // Chart 3: Flavio HRV, Baseline Min & RHR
+      const flaHist = d.flavio.history || [];
+      const flaBaseLow = (d.flavio.oggi && d.flavio.oggi.hrv && d.flavio.oggi.hrv.baseline_low) || 47;
+      if (charts.flaHrv) charts.flaHrv.destroy();
+      charts.flaHrv = new Chart(document.getElementById('chartFlaHrv'), {
+        type: 'line',
+        data: {
+          labels: flaHist.map(x => x.label),
+          datasets: [
+            {
+              label: 'HRV (ms)',
+              data: flaHist.map(x => x.hrv),
+              borderColor: '#38bdf8',
+              backgroundColor: 'rgba(56, 189, 248, 0.14)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: true,
+              yAxisID: 'y'
+            },
+            {
+              label: `Soglia Min (${flaBaseLow} ms)`,
+              data: flaHist.map(() => flaBaseLow),
+              borderColor: '#f8fafc',
+              borderDash: [6, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false,
+              yAxisID: 'y'
+            },
+            {
+              label: 'RHR (bpm)',
+              data: flaHist.map(x => x.rhr),
+              borderColor: '#f59e0b',
+              borderWidth: 2,
+              tension: 0.35,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
+            y1: { type: 'linear', position: 'right', grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    async function triggerCloudWorkflow(token) {
+      if (!token) return false;
+      try {
+        const res = await fetch('https://api.github.com/repos/simonevannesi/Coaching_FIV/actions/workflows/morning_recap.yml/dispatches', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ref: 'main' })
+        });
+        return res.status === 204;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function loadDashboardData(force = false) {
+      const statusEl = document.getElementById('last-updated');
+      const token = getSavedToken();
+
+      if (force) {
+        statusEl.textContent = 'Richiesta sync inviata al cloud...';
+        triggerCloudWorkflow(token).then(dispatched => {
+          if (dispatched) {
+            statusEl.textContent = '⚡ Cloud Sync attivo! Estrazione Garmin & Whoop...';
+            // Auto-refresh after cloud job completes
+            setTimeout(async () => {
+              const d = await fetchJsonData();
+              if (d) renderDashboard(d);
+            }, 18000);
+            setTimeout(async () => {
+              const d = await fetchJsonData();
+              if (d) renderDashboard(d);
+            }, 35000);
+          }
+        });
+      }
+
+      try {
+        if (!force) statusEl.textContent = 'Caricamento dati...';
+        const data = await fetchJsonData();
+        if (data) renderDashboard(data);
+      } catch (e) {
+        statusEl.textContent = 'Errore caricamento dati';
+        console.error(e);
+      }
+    }
+
+    loadDashboardData();
+  </script>
+</body>
+</html>
