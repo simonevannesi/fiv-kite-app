@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-26T13:27:40.322855+01:00",
-    "generated_display": "26/11/2026 13:27",
+    "generated_at": "2026-11-26T17:52:40.291941+01:00",
+    "generated_display": "26/11/2026 17:52",
     "today_iso": "2026-11-26",
     "riccardo_synced": true,
     "flavio_synced": true
@@ -507,15 +507,15 @@
       },
       "rhr": {
         "val": 54,
-        "baseline_30gg": 55.4,
+        "baseline_30gg": 55.3,
         "baseline_7gg": 54.4
       },
       "sonno": {
         "ore": 6.63,
         "score": 83,
         "qual": "GOOD",
-        "baseline_ore_30gg": 7.41,
-        "baseline_score_30gg": 80,
+        "baseline_ore_30gg": 7.26,
+        "baseline_score_30gg": 78,
         "baseline_ore_7gg": 7.57,
         "baseline_score_7gg": 83
       },
