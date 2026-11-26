@@ -567,6 +567,7 @@
         <div class="chart-wrap">
           <canvas id="chartRicHrv"></canvas>
         </div>
+        <div id="ric-hrv-stats" style="margin-top:12px;"></div>
       </div>
 
       <div class="card">
@@ -606,6 +607,7 @@
         <div class="chart-wrap">
           <canvas id="chartFlaHrv"></canvas>
         </div>
+        <div id="fla-hrv-stats" style="margin-top:12px;"></div>
       </div>
 
       <div class="card">
@@ -1312,29 +1314,82 @@
       Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, sans-serif';
       Chart.defaults.font.size = 11;
 
-      function calcHrv7Stats(histArr) {
-        const vals = (histArr || []).map(x => x.hrv).filter(v => v !== null && v !== undefined && !isNaN(v)).slice(-7);
-        if (vals.length < 2) return null;
-        const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
-        const variance = vals.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / vals.length;
-        const cv = mean > 0 ? (Math.sqrt(variance) / mean) * 100 : 0;
-        return { mean: mean.toFixed(1), cv: cv.toFixed(1) };
+      function calcWindowStats(histArr, nDays) {
+        const slice = (histArr || []).slice(-nDays);
+        const hrvs = slice.map(x => x.hrv).filter(v => v !== null && v !== undefined && !isNaN(v));
+        const rhrs = slice.map(x => x.rhr).filter(v => v !== null && v !== undefined && !isNaN(v));
+        let hrvMean = null, cv = null, rhrMean = null;
+        if (hrvs.length >= 2) {
+          const m = hrvs.reduce((a, b) => a + b, 0) / hrvs.length;
+          const v = hrvs.reduce((a, b) => a + Math.pow(b - m, 2), 0) / hrvs.length;
+          hrvMean = m.toFixed(1);
+          cv = m > 0 ? ((Math.sqrt(v) / m) * 100).toFixed(1) : '0.0';
+        } else if (hrvs.length === 1) {
+          hrvMean = hrvs[0].toFixed(1);
+        }
+        if (rhrs.length >= 1) {
+          rhrMean = (rhrs.reduce((a, b) => a + b, 0) / rhrs.length).toFixed(1);
+        }
+        return { hrvMean, cv, rhrMean };
+      }
+
+      function renderHrvRhrSummary(containerId, histArr) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        const s7 = calcWindowStats(histArr, 7);
+        const s28 = calcWindowStats(histArr, 28);
+        const s60 = calcWindowStats(histArr, 60);
+        el.innerHTML = `
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 12px;">
+            <div style="display:grid; grid-template-columns: 74px repeat(3, 1fr); gap:6px; font-size:11px; color:var(--muted); font-weight:600; margin-bottom:6px; text-align:right;">
+              <span style="text-align:left;">Metrica</span>
+              <span>7gg</span>
+              <span>28gg</span>
+              <span>60gg</span>
+            </div>
+            <div style="display:grid; grid-template-columns: 74px repeat(3, 1fr); gap:6px; font-size:12px; font-weight:700; margin-bottom:5px; text-align:right; color:#38bdf8;">
+              <span style="text-align:left; color:var(--text);">HRV Medio</span>
+              <span>${s7.hrvMean ? s7.hrvMean + ' ms' : '--'}</span>
+              <span>${s28.hrvMean ? s28.hrvMean + ' ms' : '--'}</span>
+              <span>${s60.hrvMean ? s60.hrvMean + ' ms' : '--'}</span>
+            </div>
+            <div style="display:grid; grid-template-columns: 74px repeat(3, 1fr); gap:6px; font-size:12px; font-weight:700; margin-bottom:5px; text-align:right; color:#34d399;">
+              <span style="text-align:left; color:var(--text);">HRV CV%</span>
+              <span>${s7.cv ? s7.cv + '%' : '--'}</span>
+              <span>${s28.cv ? s28.cv + '%' : '--'}</span>
+              <span>${s60.cv ? s60.cv + '%' : '--'}</span>
+            </div>
+            <div style="display:grid; grid-template-columns: 74px repeat(3, 1fr); gap:6px; font-size:12px; font-weight:700; text-align:right; color:#fbbf24;">
+              <span style="text-align:left; color:var(--text);">RHR Medio</span>
+              <span>${s7.rhrMean ? s7.rhrMean + ' bpm' : '--'}</span>
+              <span>${s28.rhrMean ? s28.rhrMean + ' bpm' : '--'}</span>
+              <span>${s60.rhrMean ? s60.rhrMean + ' bpm' : '--'}</span>
+            </div>
+          </div>
+        `;
       }
 
       const ricHist = (d.riccardo.history || []).slice(-60);
-      const ricBaseVal = d.riccardo.oggi.hrv_baseline || 100.1;
-      const ric7 = calcHrv7Stats(ricHist);
-      document.getElementById('ric-chart-base').textContent = ric7
-        ? `7gg: ${ric7.mean} ms | CV: ${ric7.cv}%`
-        : `Baseline HRV: ${ricBaseVal} ms`;
+      const ricBaseVal = d.riccardo.oggi.hrv_baseline || 95.8;
+      const ricRhrBaseVal = d.riccardo.oggi.rhr_baseline || 52.5;
+      const ric7 = calcWindowStats(ricHist, 7);
+      document.getElementById('ric-chart-base').textContent = ric7.cv
+        ? `7gg: ${ric7.hrvMean} ms | CV: ${ric7.cv}%`
+        : `Base 60gg: ${ricBaseVal} ms`;
+      renderHrvRhrSummary('ric-hrv-stats', ricHist);
 
-      const fla7 = calcHrv7Stats(d.flavio.history || []);
+      const flaHist = (d.flavio.history || []).slice(-60);
+      const fla7 = calcWindowStats(flaHist, 7);
+      const fla60 = calcWindowStats(flaHist, 60);
+      const flaBaseHrv = fla60.hrvMean ? parseFloat(fla60.hrvMean) : ((d.flavio.oggi && d.flavio.oggi.hrv && d.flavio.oggi.hrv.baseline_low) || 50);
+      const flaBaseRhr = (d.flavio.oggi && d.flavio.oggi.rhr && d.flavio.oggi.rhr.baseline_30gg) || (fla60.rhrMean ? parseFloat(fla60.rhrMean) : 55.3);
       const flaBaseEl = document.getElementById('fla-chart-base');
-      if (flaBaseEl && fla7) {
-        flaBaseEl.textContent = `7gg: ${fla7.mean} ms | CV: ${fla7.cv}%`;
+      if (flaBaseEl && fla7.cv) {
+        flaBaseEl.textContent = `7gg: ${fla7.hrvMean} ms | CV: ${fla7.cv}%`;
       }
+      renderHrvRhrSummary('fla-hrv-stats', flaHist);
 
-      // Chart 1: Riccardo HRV, Baseline Line & Recovery
+      // Chart 1: Riccardo HRV, Base HRV 60gg, RHR & Base RHR 60gg
       if (charts.ricHrv) charts.ricHrv.destroy();
       charts.ricHrv = new Chart(document.getElementById('chartRicHrv'), {
         type: 'line',
@@ -1346,15 +1401,16 @@
               data: ricHist.map(x => x.hrv),
               borderColor: '#0ea5e9',
               backgroundColor: 'rgba(14, 165, 233, 0.12)',
-              borderWidth: 2.5,
-              tension: 0.35,
+              borderWidth: 2,
+              pointRadius: 1.5,
+              tension: 0.3,
               fill: true,
               yAxisID: 'y'
             },
             {
-              label: `Baseline (${ricBaseVal} ms)`,
+              label: `Media HRV (${ricBaseVal} ms)`,
               data: ricHist.map(() => ricBaseVal),
-              borderColor: '#f8fafc',
+              borderColor: '#7dd3fc',
               borderDash: [6, 4],
               borderWidth: 1.5,
               pointRadius: 0,
@@ -1366,7 +1422,18 @@
               data: ricHist.map(x => x.rhr),
               borderColor: '#f59e0b',
               borderWidth: 2,
-              tension: 0.35,
+              pointRadius: 1.5,
+              tension: 0.3,
+              yAxisID: 'y1'
+            },
+            {
+              label: `Media RHR (${ricRhrBaseVal} bpm)`,
+              data: ricHist.map(() => ricRhrBaseVal),
+              borderColor: 'rgba(245, 158, 11, 0.65)',
+              borderDash: [4, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false,
               yAxisID: 'y1'
             }
           ]
@@ -1375,7 +1442,7 @@
           responsive: true,
           maintainAspectRatio: false,
           interaction: { mode: 'index', intersect: false },
-          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8 } } },
           scales: {
             x: { grid: { display: false } },
             y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
@@ -1421,9 +1488,7 @@
         }
       });
 
-      // Chart 3: Flavio HRV, Baseline Min & RHR
-      const flaHist = d.flavio.history || [];
-      const flaBaseLow = (d.flavio.oggi && d.flavio.oggi.hrv && d.flavio.oggi.hrv.baseline_low) || 47;
+      // Chart 3: Flavio HRV, Media HRV 60gg, RHR & Media RHR 60gg
       if (charts.flaHrv) charts.flaHrv.destroy();
       charts.flaHrv = new Chart(document.getElementById('chartFlaHrv'), {
         type: 'line',
@@ -1435,15 +1500,16 @@
               data: flaHist.map(x => x.hrv),
               borderColor: '#38bdf8',
               backgroundColor: 'rgba(56, 189, 248, 0.14)',
-              borderWidth: 2.5,
-              tension: 0.35,
+              borderWidth: 2,
+              pointRadius: 1.5,
+              tension: 0.3,
               fill: true,
               yAxisID: 'y'
             },
             {
-              label: `Soglia Min (${flaBaseLow} ms)`,
-              data: flaHist.map(() => flaBaseLow),
-              borderColor: '#f8fafc',
+              label: `Media HRV (${flaBaseHrv} ms)`,
+              data: flaHist.map(() => flaBaseHrv),
+              borderColor: '#7dd3fc',
               borderDash: [6, 4],
               borderWidth: 1.5,
               pointRadius: 0,
@@ -1455,7 +1521,18 @@
               data: flaHist.map(x => x.rhr),
               borderColor: '#f59e0b',
               borderWidth: 2,
-              tension: 0.35,
+              pointRadius: 1.5,
+              tension: 0.3,
+              yAxisID: 'y1'
+            },
+            {
+              label: `Media RHR (${flaBaseRhr} bpm)`,
+              data: flaHist.map(() => flaBaseRhr),
+              borderColor: 'rgba(245, 158, 11, 0.65)',
+              borderDash: [4, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false,
               yAxisID: 'y1'
             }
           ]
@@ -1464,7 +1541,7 @@
           responsive: true,
           maintainAspectRatio: false,
           interaction: { mode: 'index', intersect: false },
-          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } } },
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8 } } },
           scales: {
             x: { grid: { display: false } },
             y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
