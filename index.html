@@ -9,6 +9,7 @@
   <meta name="theme-color" content="#090e17" />
   <title>FIV Kite Desk | LA28</title>
   <link rel="apple-touch-icon" href="./icon.png" />
+  <link rel="manifest" href="./manifest.json" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -471,7 +472,7 @@
     <div class="brand">
       <div class="brand-flag">FIV</div>
       <div class="brand-title">
-        <h1>Formula Kite Desk</h1>
+        <h1 id="header-title">Formula Kite Desk</h1>
         <p id="last-updated">Caricamento dati...</p>
       </div>
     </div>
@@ -483,16 +484,16 @@
   <!-- Main Container -->
   <div class="container" id="main-app">
     <!-- Segmented Navigation -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('oggi')">Oggi (Squadra)</button>
-      <button class="tab-btn" onclick="switchTab('riccardo')">Riccardo</button>
-      <button class="tab-btn" onclick="switchTab('flavio')">Flavio</button>
+    <div class="tabs" id="tabs-nav">
+      <button class="tab-btn active" id="tab-btn-oggi" onclick="switchTab('oggi')">Oggi (Squadra)</button>
+      <button class="tab-btn" id="tab-btn-riccardo" onclick="switchTab('riccardo')">Riccardo</button>
+      <button class="tab-btn" id="tab-btn-flavio" onclick="switchTab('flavio')">Flavio</button>
     </div>
 
     <!-- VIEW 1: SQUADRA OGGI -->
     <div id="view-oggi">
       <!-- Riccardo Summary Card -->
-      <div class="card">
+      <div class="card" id="card-riccardo-oggi">
         <div class="card-header">
           <div class="athlete-name">👤 Riccardo Pianosi</div>
           <span id="ric-sync-badge" class="sync-badge badge-green">Whoop OK</span>
@@ -524,7 +525,7 @@
       </div>
 
       <!-- Flavio Summary Card -->
-      <div class="card">
+      <div class="card" id="card-flavio-oggi">
         <div class="card-header">
           <div class="athlete-name">👤 Flavio Marx</div>
           <span id="fla-sync-badge" class="sync-badge badge-green">Garmin OK</span>
@@ -627,8 +628,31 @@
   </div>
 
   <script>
+    const ATHLETE_MODE = 'coach'; // 'coach' | 'riccardo' | 'flavio'
     let globalData = null;
     let charts = {};
+
+    (function applyAthleteMode() {
+      if (ATHLETE_MODE === 'riccardo') {
+        document.getElementById('header-title').textContent = 'Riccardo Pianosi';
+        const tabs = document.getElementById('tabs-nav');
+        if (tabs) tabs.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        document.getElementById('tab-btn-oggi').textContent = 'Oggi';
+        document.getElementById('tab-btn-riccardo').textContent = 'Grafici & Carichi';
+        document.getElementById('tab-btn-flavio').classList.add('hidden');
+        document.getElementById('card-flavio-oggi').classList.add('hidden');
+        document.getElementById('view-flavio').classList.add('hidden');
+      } else if (ATHLETE_MODE === 'flavio') {
+        document.getElementById('header-title').textContent = 'Flavio Marx';
+        const tabs = document.getElementById('tabs-nav');
+        if (tabs) tabs.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        document.getElementById('tab-btn-oggi').textContent = 'Oggi';
+        document.getElementById('tab-btn-flavio').textContent = 'Grafici & Carichi';
+        document.getElementById('tab-btn-riccardo').classList.add('hidden');
+        document.getElementById('card-riccardo-oggi').classList.add('hidden');
+        document.getElementById('view-riccardo').classList.add('hidden');
+      }
+    })();
 
     function persistToken(t) {
       if (!t) return;
