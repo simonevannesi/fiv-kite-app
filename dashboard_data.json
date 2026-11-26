@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-26T18:12:13.749047+01:00",
-    "generated_display": "26/11/2026 18:12",
+    "generated_at": "2026-11-26T18:22:53.346895+01:00",
+    "generated_display": "26/11/2026 18:22",
     "today_iso": "2026-11-26",
     "riccardo_synced": true,
     "flavio_synced": true
@@ -36,30 +36,18 @@
       "target_max": 105.0
     },
     "punti_ieri": {
-      "tipo": "RADUNO",
-      "max": 10,
-      "fatti": 5,
+      "tipo": "RADUNO (Con Coach)",
+      "max": 0,
+      "fatti": 0,
       "dettagli": [
         [
-          "Attività (Garmin)",
-          "+5 / 5 pt 🟢 (Kite in acqua 1.18h - 33.3km)"
-        ],
-        [
-          "Fisio & Piedi",
-          "+0 / 3 pt 🔴 (Dolore: 1/5)"
-        ],
-        [
-          "Cura Foil",
-          "+0 / 1 pt 🔴"
-        ],
-        [
-          "Tattica & Video",
-          "+0 / 1 pt 🔴"
+          "Log LA28",
+          "In pausa con Coach — compilare solo Log Materiali"
         ]
       ],
       "dolore": 1
     },
-    "trend_punti_7gg_pct": 76,
+    "trend_punti_7gg_pct": null,
     "dolore_oggi": "1.0",
     "nota_dolore": null,
     "quiver": {
@@ -136,7 +124,30 @@
         "n180": 22,
         "sess_wk_180": 0.9,
         "km_wk_180": 20.8,
-        "load_wk_180": 96
+        "load_wk_180": 96,
+        "zones": {
+          "7gg": [
+            11,
+            69,
+            109,
+            36,
+            14
+          ],
+          "28gg": [
+            39,
+            164,
+            252,
+            62,
+            31
+          ],
+          "60gg": [
+            68,
+            262,
+            419,
+            227,
+            87
+          ]
+        }
       },
       "acwr": {
         "ratio": 2.17,
@@ -912,6 +923,7 @@
       "palestra": {
         "ieri_dur": 1.04,
         "ieri_km": 0.0,
+        "ieri_hr": 101,
         "avg7": 1.19,
         "n7": 4,
         "sum_dur7": 4.75,
@@ -933,6 +945,7 @@
       "acqua": {
         "ieri_dur": 1.14,
         "ieri_km": 33.3,
+        "ieri_hr": 116,
         "avg7": 2.02,
         "n7": 6,
         "sum_dur7": 12.11,
@@ -954,6 +967,7 @@
       "cardio": {
         "ieri_dur": 1.7,
         "ieri_km": 47.7,
+        "ieri_hr": 138,
         "avg7": 1.2,
         "n7": 3,
         "sum_dur7": 3.61,
@@ -970,7 +984,30 @@
         "n180": 10,
         "sess_wk_180": 0.4,
         "km_wk_180": 14.1,
-        "load_wk_180": 47
+        "load_wk_180": 47,
+        "zones": {
+          "7gg": [
+            13,
+            132,
+            42,
+            29,
+            0
+          ],
+          "28gg": [
+            22,
+            222,
+            58,
+            29,
+            0
+          ],
+          "60gg": [
+            92,
+            337,
+            292,
+            189,
+            1
+          ]
+        }
       },
       "acwr": {
         "ratio": 2.47,
