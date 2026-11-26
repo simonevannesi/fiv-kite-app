@@ -815,16 +815,17 @@
         ricBadge.textContent = `⏳ Dati ${ricDateTag} (Attesa ${fmtTag(realTodayIso)})`;
       }
 
-      // HRV (Whoop): Variazione % vs baseline 30gg (stile UAE/Plews)
+      // HRV (Whoop): Standard Pro Plews & Buchheit su ln(RMSSD) 60gg (SWC = ±0.75 SD, Red = -1.5 SD)
       const hrv = ro.hrv;
-      const baseHrv = ro.hrv_baseline || 96.3;
-      const lowHrv = ro.hrv_baseline_low || (baseHrv - 8.4);
-      const highHrv = ro.hrv_baseline_high || (baseHrv + 8.5);
+      const baseHrv = ro.hrv_baseline || 95.8;
+      const lowHrv = ro.hrv_baseline_low || (baseHrv * 0.91);
+      const highHrv = ro.hrv_baseline_high || (baseHrv * 1.09);
+      const redHrv = ro.hrv_red_low || (lowHrv * 0.88);
       const hPct = (hrv !== null && baseHrv) ? Math.round(((hrv - baseHrv) / baseHrv) * 100) : null;
       document.getElementById('ric-hrv-val').textContent = hPct !== null ? `${hPct > 0 ? '+' : ''}${hPct}%` : 'N/D';
       let hrvColor = 'green';
       if (hrv !== null) {
-        if (hrv < (lowHrv * 0.85) || (hPct !== null && hPct <= -20)) {
+        if (hrv < redHrv) {
           hrvColor = 'red';
         } else if (hrv < lowHrv || hrv > (highHrv * 1.25)) {
           hrvColor = 'amber';
@@ -835,12 +836,15 @@
       setDot('ric-hrv-dot', hrvColor);
       document.getElementById('ric-hrv-sub').textContent = `${hrv !== null ? hrv.toFixed(1) : '--'} ms | Range: ${Math.round(lowHrv)}–${Math.round(highHrv)} ms`;
 
-      // RHR (Whoop): Delta +/- bpm vs baseline 30gg (negativo = sempre verde)
+      // RHR (Whoop): Soglie su SD individuale 60gg (+0.75 SD giallo / +1.5 SD rosso; negativo = sempre verde)
       const rRhr = ro.rhr;
-      const rRhrBase = ro.rhr_baseline || 55.0;
+      const rRhrBase = ro.rhr_baseline || 52.5;
+      const rRhrSd = ro.rhr_sd_60 || 2.0;
+      const rRhrAmberThr = +(0.75 * rRhrSd).toFixed(1);
+      const rRhrRedThr = +(1.50 * rRhrSd).toFixed(1);
       const rRhrDelta = (rRhr !== null && rRhr !== undefined && rRhrBase) ? +(rRhr - rRhrBase).toFixed(1) : null;
       document.getElementById('ric-rhr-val').textContent = rRhrDelta !== null ? `${rRhrDelta > 0 ? '+' : ''}${rRhrDelta} bpm` : 'N/D';
-      const ricRhrColor = rRhrDelta === null ? 'amber' : (rRhrDelta <= 2.0 ? 'green' : (rRhrDelta <= 4.0 ? 'amber' : 'red'));
+      const ricRhrColor = rRhrDelta === null ? 'amber' : (rRhrDelta <= rRhrAmberThr ? 'green' : (rRhrDelta <= rRhrRedThr ? 'amber' : 'red'));
       setDot('ric-rhr-dot', ricRhrColor);
       document.getElementById('ric-rhr-sub').textContent = `${rRhr !== null && rRhr !== undefined ? Math.round(rRhr) : '--'} bpm | Media 60gg: ${rRhrBase} bpm`;
 
@@ -965,33 +969,36 @@
         return streak;
       }
 
-      // Direttiva Coach Scientifica Riccardo (Neurale HRV vs Metabolico RHR + Obiettivo Fase Calendario)
+      // Direttiva Scientifica Riccardo (lnRMSSD 60gg + RHR SD individuale + Trend 7gg Plews 2013)
       const rDol = dol !== null ? dol : 1;
       const rHrv = hrv;
       const rSlp = slp;
       const rRhrValNum = rRhrDelta !== null ? rRhrDelta : 0;
       const ricPhase = (ric.attivita && ric.attivita.blocco && ric.attivita.blocco.label) || 'Raduno';
+      const rTrend7Low = ro.hrv_trend7_low || (baseHrv * 0.94);
+      const rTrend7Depressed = (ro.hrv_7gg !== null && ro.hrv_7gg !== undefined && ro.hrv_7gg < rTrend7Low);
 
-      const rHrvRed = (rHrv !== null && (rHrv < (lowHrv * 0.85) || (hPct !== null && hPct <= -20)));
+      const rHrvRed = (rHrv !== null && rHrv < redHrv);
       const rHrvAmber = (rHrv !== null && (rHrv < lowHrv || rHrv > (highHrv * 1.25)));
-      const rIsRed = (rDol >= 4) || rHrvRed || (rSlp !== null && rSlp < 5.0) || (rRhrValNum >= 5.0);
-      const rOnlyMetabolicAmber = !rIsRed && !rHrvAmber && (rDol < 3) && (rSlp === null || rSlp >= 6.5) && (rRhrValNum > 2.0);
-      const rIsAmber = !rIsRed && (rHrvAmber || (rDol >= 3) || (rSlp !== null && rSlp < 6.5) || (rRhrValNum > 2.0));
+      const rIsRed = (rDol >= 4) || rHrvRed || (rSlp !== null && rSlp < 5.0) || (rRhrValNum > rRhrRedThr);
+      const rOnlyMetabolicAmber = !rIsRed && !rHrvAmber && !rTrend7Depressed && (rDol < 3) && (rSlp === null || rSlp >= 6.5) && (rRhrValNum > rRhrAmberThr);
+      const rIsAmber = !rIsRed && (rHrvAmber || rTrend7Depressed || (rDol >= 3) || (rSlp !== null && rSlp < 6.5) || (rRhrValNum > rRhrAmberThr));
 
       const rStreak = countConsecYellow(ric.history, (h) => {
         if (!h) return false;
         const hLow = (h.hrv !== null && h.hrv < lowHrv);
-        const rHigh = (h.rhr !== null && (h.rhr - rRhrBase) > 2.0);
+        const rHigh = (h.rhr !== null && (h.rhr - rRhrBase) > rRhrAmberThr);
         const sLow = (h.sleep_h !== null && h.sleep_h < 6.5);
         return hLow || rHigh || sLow;
       }, rIsAmber);
 
       const rReasons = [];
       if (rDol >= 3) rReasons.push(`Dolore plantare ${rDol}/5`);
-      if (rHrvRed) rReasons.push(`Crollo neurale HRV (${hPct}%)`);
-      else if (rHrvAmber) rReasons.push(`HRV fuori corridoio (${hPct > 0 ? '+' : ''}${hPct}%)`);
+      if (rHrvRed) rReasons.push(`Crollo HRV < -1.5 SD (${hPct}%)`);
+      else if (rHrvAmber) rReasons.push(`HRV fuori SWC (${hPct > 0 ? '+' : ''}${hPct}%)`);
+      if (rTrend7Depressed) rReasons.push(`Media HRV 7gg sotto -0.5 SD (${ro.hrv_7gg} < ${rTrend7Low} ms)`);
       if (rSlp !== null && rSlp < 6.5) rReasons.push(`Sonno ${rSlp}h`);
-      if (rRhrValNum > 2.0) rReasons.push(`RHR +${rRhrValNum} bpm`);
+      if (rRhrValNum > rRhrAmberThr) rReasons.push(`RHR +${rRhrValNum} bpm (> +${rRhrAmberThr})`);
 
       const rStatus = rIsRed ? 'red' : (rOnlyMetabolicAmber ? 'metabolic_amber' : (rIsAmber ? 'amber' : 'green'));
       const rDir = buildPhaseDirective('riccardo', ricPhase, rStatus, {
@@ -1204,43 +1211,45 @@
         flaBadge.textContent = `⏳ Dati ${flaDateTag} (Attesa ${fmtTag(realTodayIso)})`;
       }
 
-      // Flavio HRV (Range 30gg Firstbeat): Mostra % variazione rispetto alla baseline in grande e range sotto
-      const fBaseMid = (fh.baseline_low && fh.baseline_high) ? ((fh.baseline_low + fh.baseline_high) / 2) : (fh.weekly || null);
+      // Flavio HRV: Standard Pro Plews & Buchheit su ln(RMSSD) 60gg (fallback su range Firstbeat Garmin)
+      const fBaseMid = fh.ln_baseline || ((fh.baseline_low && fh.baseline_high) ? ((fh.baseline_low + fh.baseline_high) / 2) : (fh.weekly || null));
+      const fLowLim = fh.ln_low || fh.baseline_low || 46;
+      const fHighLim = fh.ln_high || fh.baseline_high || 58;
+      const fRedLim = fh.ln_red_low || (fLowLim * 0.88);
       const fHrvPct = (fh.val && fBaseMid) ? Math.round(((fh.val - fBaseMid) / fBaseMid) * 100) : null;
       document.getElementById('fla-hrv-val').textContent = fHrvPct !== null ? `${fHrvPct > 0 ? '+' : ''}${fHrvPct}%` : (fh.val ? `${fh.val} ms` : 'N/D');
       const fStatus = fh.status || 'N/D';
       let fColor = 'amber';
-      if (fh.val && fh.baseline_low) {
-        const fHighLimit = fh.baseline_high ? (fh.baseline_high * 1.25) : 999;
-        if (fh.val >= fh.baseline_low && fh.val <= fHighLimit) {
-          fColor = 'green';
-        } else if (fh.val < fh.baseline_low - 4) {
+      if (fh.val) {
+        if (fh.val < fRedLim) {
           fColor = 'red';
-        } else {
+        } else if (fh.val < fLowLim || fh.val > (fHighLim * 1.25)) {
           fColor = 'amber';
+        } else {
+          fColor = 'green';
         }
-      } else if (fh.val) {
-        fColor = fStatus === 'BALANCED' ? 'green' : ((fStatus.includes('LOW') || fStatus.includes('POOR')) ? 'red' : 'amber');
       }
       setDot('fla-hrv-dot', fColor);
-      document.getElementById('fla-hrv-sub').textContent = `${fh.val || '--'} ms | Range: ${fh.baseline_low || '--'}–${fh.baseline_high || '--'} ms (${fStatus})`;
+      document.getElementById('fla-hrv-sub').textContent = `${fh.val || '--'} ms | Range: ${Math.round(fLowLim)}–${Math.round(fHighLim)} ms (${fStatus})`;
 
-      // Flavio RHR: Mostra delta +/- bpm rispetto alla baseline in grande e media 30gg sotto
-      // RHR più basso della baseline (negativo) è sempre un ottimo segnale di recupero -> VERDE
-      const baseRhr = fr.baseline_30gg || 55.6;
+      // Flavio RHR: Soglie su SD individuale 60gg (+0.75 SD giallo / +1.5 SD rosso; negativo = sempre verde)
+      const baseRhr = fr.baseline_30gg || 55.3;
+      const fRhrSd = fr.sd_60gg || 2.0;
+      const fRhrAmberThr = +(0.75 * fRhrSd).toFixed(1);
+      const fRhrRedThr = +(1.50 * fRhrSd).toFixed(1);
       const rDelta = (fr.val && baseRhr) ? +(fr.val - baseRhr).toFixed(1) : null;
       document.getElementById('fla-rhr-val').textContent = rDelta !== null ? `${rDelta > 0 ? '+' : ''}${rDelta} bpm` : 'N/D';
-      const rhrColor = rDelta === null ? 'amber' : (rDelta <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red'));
+      const rhrColor = rDelta === null ? 'amber' : (rDelta <= fRhrAmberThr ? 'green' : (rDelta <= fRhrRedThr ? 'amber' : 'red'));
       setDot('fla-rhr-dot', rhrColor);
       document.getElementById('fla-rhr-sub').textContent = `${fr.val || '--'} bpm | Media 60gg: ${baseRhr} bpm`;
 
-      // Flavio Sleep (Score + Base 30gg)
+      // Flavio Sleep (Score + Base 60gg)
       document.getElementById('fla-slp-val').textContent = fs.ore ? `${fs.ore}h` : 'N/D';
       setDot('fla-slp-dot', !fs.score ? 'amber' : (fs.score >= 75 ? 'green' : (fs.score >= 65 ? 'amber' : 'red')));
       const baseSlpH = fs.baseline_ore_30gg || fs.baseline_ore || '--';
       document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (Base 60gg: ${baseSlpH}h)`;
 
-      // Flavio Yesterday Activity Summary con medie 7gg/30gg
+      // Flavio Yesterday Activity Summary con blocco attuale
       const acts = fla.attivita || {};
       setSummaryLoadBox('fla-act-val', 'fla-act-sub', acts);
 
@@ -1259,16 +1268,17 @@
       // Flavio Matrix
       renderActivityMatrix('fla-matrix-container', acts);
 
-      // Calcolo Direttiva Coach & Colore Generale Giornata Flavio (Regola Gerarchica del Veto)
+      // Direttiva Scientifica Flavio (lnRMSSD 60gg + RHR SD individuale + Trend 7gg Plews 2013)
       const fHrvVal = fh.val;
-      const fBaseLow = fh.baseline_low || 46;
-      const fBaseHigh = fh.baseline_high || 58;
       const fRhrVal = fr.val;
-      const fBaseRhr = fr.baseline_30gg || 55.6;
+      const fBaseRhr = baseRhr;
       const fRDelta = (fRhrVal && fBaseRhr) ? +(fRhrVal - fBaseRhr).toFixed(1) : 0;
       const fSlpH = fs.ore;
       const fScore = fs.score;
       const fSt = fh.status || 'N/D';
+      const fTrend7Low = fh.ln_trend7_low || (fBaseMid ? fBaseMid * 0.94 : 46);
+      const fHrv7Ln = fh.hrv_7gg_ln || fh.weekly;
+      const fTrend7Depressed = (fHrv7Ln !== null && fHrv7Ln !== undefined && fHrv7Ln < fTrend7Low);
 
       const flaPhase = (acts && acts.blocco && acts.blocco.label) || 'Raduno';
       let fDayColor = 'green';
@@ -1280,22 +1290,24 @@
         fDayTitle = '⚠️ GARMIN FLAVIO NON SINCRONIZZATO';
         fDayDesc = `Nessun dato Garmin ricevuto per oggi (${fmtTag(realTodayIso)}). Verifica che Flavio abbia sincronizzato l'orologio su Garmin Connect oppure controlla il token Garmin del server.`;
       } else {
-        const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fBaseLow);
-        const fIsRed = (fSt === 'POOR') || (fHrvVal && fHrvVal < fBaseLow - 5) || (fRDelta >= 5.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 5.0) || (fScore !== null && fScore !== undefined && fScore < 60);
-        const fOnlyMetabolicAmber = !fIsRed && !fHrvDepressed && (fSlpH === null || fSlpH === undefined || fSlpH >= 6.5) && (fScore === null || fScore === undefined || fScore >= 72) && (fRDelta > 2.0);
-        const fIsAmber = !fIsRed && ((fHrvDepressed) || (fRDelta > 2.0) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) || (fScore !== null && fScore !== undefined && fScore < 72));
+        const fHrvRed = (fSt === 'POOR') || (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fRedLim);
+        const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fLowLim);
+        const fIsRed = fHrvRed || (fRDelta > fRhrRedThr) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 5.0) || (fScore !== null && fScore !== undefined && fScore < 60);
+        const fOnlyMetabolicAmber = !fIsRed && !fHrvDepressed && !fTrend7Depressed && (fSlpH === null || fSlpH === undefined || fSlpH >= 6.5) && (fScore === null || fScore === undefined || fScore >= 72) && (fRDelta > fRhrAmberThr);
+        const fIsAmber = !fIsRed && (fHrvDepressed || fTrend7Depressed || (fRDelta > fRhrAmberThr) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) || (fScore !== null && fScore !== undefined && fScore < 72));
 
         const fReasons = [];
-        if (fSt === 'POOR' || (fHrvVal && fHrvVal < fBaseLow - 5)) fReasons.push(`HRV depresso (${fHrvVal} ms)`);
-        else if (fHrvDepressed) fReasons.push(`HRV sotto range (${fHrvVal} < ${fBaseLow} ms)`);
-        if (fRDelta > 2.0) fReasons.push(`RHR +${fRDelta} bpm`);
+        if (fHrvRed) fReasons.push(`Crollo HRV < -1.5 SD (${fHrvVal} ms)`);
+        else if (fHrvDepressed) fReasons.push(`HRV fuori SWC (${fHrvVal} < ${Math.round(fLowLim)} ms)`);
+        if (fTrend7Depressed) fReasons.push(`Media HRV 7gg sotto -0.5 SD (${fHrv7Ln} < ${fTrend7Low} ms)`);
+        if (fRDelta > fRhrAmberThr) fReasons.push(`RHR +${fRDelta} bpm (> +${fRhrAmberThr})`);
         if (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) fReasons.push(`Sonno ${fSlpH}h`);
         if (fScore !== null && fScore !== undefined && fScore < 72) fReasons.push(`Sleep score ${fScore}`);
 
         const fStreak = countConsecYellow(fla.history, (h) => {
           if (!h) return false;
-          const hLow = (h.hrv !== null && h.hrv < fBaseLow);
-          const rHigh = (h.rhr !== null && (h.rhr - fBaseRhr) > 2.0);
+          const hLow = (h.hrv !== null && h.hrv < fLowLim);
+          const rHigh = (h.rhr !== null && (h.rhr - fBaseRhr) > fRhrAmberThr);
           const sLow = (h.sleep_h !== null && h.sleep_h < 6.5) || (h.sleep_score !== null && h.sleep_score < 72);
           return hLow || rHigh || sLow;
         }, fIsAmber);
