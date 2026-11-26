@@ -508,7 +508,7 @@
           <div class="kpi-box">
             <div class="kpi-label">RHR Notte (Whoop) <span id="ric-rhr-dot" class="dot"></span></div>
             <div class="kpi-value" id="ric-rhr-val">-- bpm</div>
-            <div class="kpi-sub" id="ric-rhr-sub">Media 30gg: -- bpm</div>
+            <div class="kpi-sub" id="ric-rhr-sub">Media 60gg: -- bpm</div>
           </div>
           <div class="kpi-box">
             <div class="kpi-label">Sonno (Whoop) <span id="ric-slp-dot" class="dot"></span></div>
@@ -540,7 +540,7 @@
           <div class="kpi-box">
             <div class="kpi-label">RHR Notte (Garmin) <span id="fla-rhr-dot" class="dot"></span></div>
             <div class="kpi-value" id="fla-rhr-val">-- bpm</div>
-            <div class="kpi-sub" id="fla-rhr-sub">Media 30gg: -- bpm</div>
+            <div class="kpi-sub" id="fla-rhr-sub">Media 60gg: -- bpm</div>
           </div>
           <div class="kpi-box">
             <div class="kpi-label">Sonno (Garmin) <span id="fla-slp-dot" class="dot"></span></div>
@@ -816,13 +816,13 @@
       document.getElementById('ric-rhr-val').textContent = rRhrDelta !== null ? `${rRhrDelta > 0 ? '+' : ''}${rRhrDelta} bpm` : 'N/D';
       const ricRhrColor = rRhrDelta === null ? 'amber' : (rRhrDelta <= 2.0 ? 'green' : (rRhrDelta <= 4.0 ? 'amber' : 'red'));
       setDot('ric-rhr-dot', ricRhrColor);
-      document.getElementById('ric-rhr-sub').textContent = `${rRhr !== null && rRhr !== undefined ? Math.round(rRhr) : '--'} bpm | Media 30gg: ${rRhrBase} bpm`;
+      document.getElementById('ric-rhr-sub').textContent = `${rRhr !== null && rRhr !== undefined ? Math.round(rRhr) : '--'} bpm | Media 60gg: ${rRhrBase} bpm`;
 
       // Sleep (Whoop)
       const slp = ro.sleep_h;
       document.getElementById('ric-slp-val').textContent = slp !== null ? `${slp.toFixed(2)}h` : 'N/D';
       setDot('ric-slp-dot', slp >= 6.8 ? 'green' : (slp >= 6.0 ? 'amber' : 'red'));
-      document.getElementById('ric-slp-sub').textContent = `${ro.bed_time} ➔ ${ro.wake_time} (Base 30gg: 7.4h)`;
+      document.getElementById('ric-slp-sub').textContent = `${ro.bed_time} ➔ ${ro.wake_time} (Base 60gg: 7.4h)`;
 
       // Riccardo Pain & Silent Respiratory Rate Alert
       const pi = ric.punti_ieri;
@@ -1163,13 +1163,13 @@
       document.getElementById('fla-rhr-val').textContent = rDelta !== null ? `${rDelta > 0 ? '+' : ''}${rDelta} bpm` : 'N/D';
       const rhrColor = rDelta === null ? 'amber' : (rDelta <= 2.0 ? 'green' : (rDelta <= 4.0 ? 'amber' : 'red'));
       setDot('fla-rhr-dot', rhrColor);
-      document.getElementById('fla-rhr-sub').textContent = `${fr.val || '--'} bpm | Media 30gg: ${baseRhr} bpm`;
+      document.getElementById('fla-rhr-sub').textContent = `${fr.val || '--'} bpm | Media 60gg: ${baseRhr} bpm`;
 
       // Flavio Sleep (Score + Base 30gg)
       document.getElementById('fla-slp-val').textContent = fs.ore ? `${fs.ore}h` : 'N/D';
       setDot('fla-slp-dot', !fs.score ? 'amber' : (fs.score >= 75 ? 'green' : (fs.score >= 65 ? 'amber' : 'red')));
       const baseSlpH = fs.baseline_ore_30gg || fs.baseline_ore || '--';
-      document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (Base 30gg: ${baseSlpH}h)`;
+      document.getElementById('fla-slp-sub').textContent = `Score: ${fs.score || '--'}/100 (Base 60gg: ${baseSlpH}h)`;
 
       // Flavio Yesterday Activity Summary con medie 7gg/30gg
       const acts = fla.attivita || {};
