@@ -1,0 +1,17 @@
+{
+  "name": "FIV Formula Kite - Flavio Marx",
+  "short_name": "FIV Flavio",
+  "description": "Dashboard personale Formula Kite - FIV Formula Kite - Flavio Marx",
+  "start_url": "./flavio.html",
+  "display": "standalone",
+  "background_color": "#090e17",
+  "theme_color": "#090e17",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
