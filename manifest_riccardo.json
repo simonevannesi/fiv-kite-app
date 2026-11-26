@@ -1,0 +1,17 @@
+{
+  "name": "FIV Formula Kite - Riccardo Pianosi",
+  "short_name": "FIV Riccardo",
+  "description": "Dashboard personale Formula Kite - FIV Formula Kite - Riccardo Pianosi",
+  "start_url": "./riccardo.html",
+  "display": "standalone",
+  "background_color": "#090e17",
+  "theme_color": "#090e17",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
