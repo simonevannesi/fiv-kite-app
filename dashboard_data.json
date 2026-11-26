@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-11-26T18:51:26.805332+01:00",
+    "generated_at": "2026-11-26T18:51:23.250384+01:00",
     "generated_display": "26/11/2026 18:51",
     "today_iso": "2026-11-26",
     "riccardo_synced": true,
@@ -16,14 +16,17 @@
       "sleep_h": 7.18,
       "bed_time": "00:49",
       "wake_time": "08:26",
-      "hrv_baseline": 95.8,
-      "hrv_baseline_low": 87.0,
-      "hrv_baseline_high": 104.6,
+      "hrv_baseline": 95.1,
+      "hrv_baseline_low": 86.5,
+      "hrv_baseline_high": 104.4,
+      "hrv_red_low": 78.8,
+      "hrv_trend7_low": 89.3,
       "hrv_3gg": 99.7,
       "hrv_7gg": 93.5,
       "sonno_7gg": 7.32,
       "recovery_baseline": 63.9,
-      "rhr_baseline": 52.5,
+      "rhr_baseline": 53.8,
+      "rhr_sd_60": 3.27,
       "resp_rate": 13.2,
       "resp_rate_baseline": 12.9
     },
@@ -898,12 +901,19 @@
         "baseline_low": 46,
         "baseline_high": 58,
         "weekly": 53,
-        "status": "BALANCED"
+        "status": "BALANCED",
+        "ln_baseline": 49.3,
+        "ln_low": 45.3,
+        "ln_high": 53.8,
+        "ln_red_low": 41.6,
+        "ln_trend7_low": 46.6,
+        "hrv_7gg_ln": 53.1
       },
       "rhr": {
         "val": 54,
         "baseline_30gg": 55.3,
-        "baseline_7gg": 54.4
+        "baseline_7gg": 54.4,
+        "sd_60gg": 2.18
       },
       "sonno": {
         "ore": 6.63,
