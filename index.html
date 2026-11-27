@@ -848,10 +848,10 @@
       setDot('ric-rhr-dot', ricRhrColor);
       document.getElementById('ric-rhr-sub').textContent = `${rRhr !== null && rRhr !== undefined ? Math.round(rRhr) : '--'} bpm | Media 60gg: ${rRhrBase} bpm`;
 
-      // Sleep (Whoop)
+      // Sleep (Whoop): >= 6.0h verde, 5.0-5.99h giallo, < 5.0h rosso (allineato al banner)
       const slp = ro.sleep_h;
       document.getElementById('ric-slp-val').textContent = slp !== null ? `${slp.toFixed(2)}h` : 'N/D';
-      setDot('ric-slp-dot', slp >= 6.8 ? 'green' : (slp >= 6.0 ? 'amber' : 'red'));
+      setDot('ric-slp-dot', slp >= 6.0 ? 'green' : (slp >= 5.0 ? 'amber' : 'red'));
       document.getElementById('ric-slp-sub').textContent = `${ro.bed_time} ➔ ${ro.wake_time} (Base 60gg: 7.4h)`;
 
       // Riccardo Pain & Silent Respiratory Rate Alert
@@ -981,14 +981,14 @@
       const rHrvRed = (rHrv !== null && rHrv < redHrv);
       const rHrvAmber = (rHrv !== null && (rHrv < lowHrv || rHrv > (highHrv * 1.25)));
       const rIsRed = (rDol >= 4) || rHrvRed || (rSlp !== null && rSlp < 5.0) || (rRhrValNum > rRhrRedThr);
-      const rOnlyMetabolicAmber = !rIsRed && !rHrvAmber && !rTrend7Depressed && (rDol < 3) && (rSlp === null || rSlp >= 6.5) && (rRhrValNum > rRhrAmberThr);
-      const rIsAmber = !rIsRed && (rHrvAmber || rTrend7Depressed || (rDol >= 3) || (rSlp !== null && rSlp < 6.5) || (rRhrValNum > rRhrAmberThr));
+      const rOnlyMetabolicAmber = !rIsRed && !rHrvAmber && !rTrend7Depressed && (rDol < 3) && (rSlp === null || rSlp >= 6.0) && (rRhrValNum > rRhrAmberThr);
+      const rIsAmber = !rIsRed && (rHrvAmber || rTrend7Depressed || (rDol >= 3) || (rSlp !== null && rSlp < 6.0) || (rRhrValNum > rRhrAmberThr));
 
       const rStreak = countConsecYellow(ric.history, (h) => {
         if (!h) return false;
         const hLow = (h.hrv !== null && h.hrv < lowHrv);
         const rHigh = (h.rhr !== null && (h.rhr - rRhrBase) > rRhrAmberThr);
-        const sLow = (h.sleep_h !== null && h.sleep_h < 6.5);
+        const sLow = (h.sleep_h !== null && h.sleep_h < 6.0);
         return hLow || rHigh || sLow;
       }, rIsAmber);
 
@@ -997,7 +997,7 @@
       if (rHrvRed) rReasons.push(`Crollo HRV < -1.5 SD (${hPct}%)`);
       else if (rHrvAmber) rReasons.push(`HRV fuori SWC (${hPct > 0 ? '+' : ''}${hPct}%)`);
       if (rTrend7Depressed) rReasons.push(`Media HRV 7gg sotto -0.5 SD (${ro.hrv_7gg} < ${rTrend7Low} ms)`);
-      if (rSlp !== null && rSlp < 6.5) rReasons.push(`Sonno ${rSlp}h`);
+      if (rSlp !== null && rSlp < 6.0) rReasons.push(`Sonno ${rSlp}h`);
       if (rRhrValNum > rRhrAmberThr) rReasons.push(`RHR +${rRhrValNum} bpm (> +${rRhrAmberThr})`);
 
       const rStatus = rIsRed ? 'red' : (rOnlyMetabolicAmber ? 'metabolic_amber' : (rIsAmber ? 'amber' : 'green'));
@@ -1293,22 +1293,22 @@
         const fHrvRed = (fSt === 'POOR') || (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fRedLim);
         const fHrvDepressed = (fHrvVal !== null && fHrvVal !== undefined && fHrvVal < fLowLim);
         const fIsRed = fHrvRed || (fRDelta > fRhrRedThr) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 5.0) || (fScore !== null && fScore !== undefined && fScore < 60);
-        const fOnlyMetabolicAmber = !fIsRed && !fHrvDepressed && !fTrend7Depressed && (fSlpH === null || fSlpH === undefined || fSlpH >= 6.5) && (fScore === null || fScore === undefined || fScore >= 72) && (fRDelta > fRhrAmberThr);
-        const fIsAmber = !fIsRed && (fHrvDepressed || fTrend7Depressed || (fRDelta > fRhrAmberThr) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) || (fScore !== null && fScore !== undefined && fScore < 72));
+        const fOnlyMetabolicAmber = !fIsRed && !fHrvDepressed && !fTrend7Depressed && (fSlpH === null || fSlpH === undefined || fSlpH >= 6.0) && (fScore === null || fScore === undefined || fScore >= 72) && (fRDelta > fRhrAmberThr);
+        const fIsAmber = !fIsRed && (fHrvDepressed || fTrend7Depressed || (fRDelta > fRhrAmberThr) || (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.0) || (fScore !== null && fScore !== undefined && fScore < 72));
 
         const fReasons = [];
         if (fHrvRed) fReasons.push(`Crollo HRV < -1.5 SD (${fHrvVal} ms)`);
         else if (fHrvDepressed) fReasons.push(`HRV fuori SWC (${fHrvVal} < ${Math.round(fLowLim)} ms)`);
         if (fTrend7Depressed) fReasons.push(`Media HRV 7gg sotto -0.5 SD (${fHrv7Ln} < ${fTrend7Low} ms)`);
         if (fRDelta > fRhrAmberThr) fReasons.push(`RHR +${fRDelta} bpm (> +${fRhrAmberThr})`);
-        if (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.5) fReasons.push(`Sonno ${fSlpH}h`);
+        if (fSlpH !== null && fSlpH !== undefined && fSlpH < 6.0) fReasons.push(`Sonno ${fSlpH}h`);
         if (fScore !== null && fScore !== undefined && fScore < 72) fReasons.push(`Sleep score ${fScore}`);
 
         const fStreak = countConsecYellow(fla.history, (h) => {
           if (!h) return false;
           const hLow = (h.hrv !== null && h.hrv < fLowLim);
           const rHigh = (h.rhr !== null && (h.rhr - fBaseRhr) > fRhrAmberThr);
-          const sLow = (h.sleep_h !== null && h.sleep_h < 6.5) || (h.sleep_score !== null && h.sleep_score < 72);
+          const sLow = (h.sleep_h !== null && h.sleep_h < 6.0) || (h.sleep_score !== null && h.sleep_score < 72);
           return hLow || rHigh || sLow;
         }, fIsAmber);
 
