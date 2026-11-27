@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-27T09:45:44.698831+01:00",
-    "generated_display": "27/11/2026 09:45",
+    "generated_at": "2026-11-27T10:08:59.486544+01:00",
+    "generated_display": "27/11/2026 10:08",
     "today_iso": "2026-11-27",
     "riccardo_synced": true,
     "flavio_synced": true
@@ -158,13 +158,13 @@
         "load_28gg_wk": 453.7
       },
       "blocco": {
-        "label": "Raduno",
-        "start": "2026-11-09",
-        "days": 18,
-        "kite_km_tot": 668.6,
-        "kite_km_day": 37.1,
-        "dry_h_tot": 14.6,
-        "dry_h_day": 0.81
+        "label": "Casa",
+        "start": "2026-11-27",
+        "days": 1,
+        "kite_km_tot": 0.0,
+        "kite_km_day": 0.0,
+        "dry_h_tot": 0.0,
+        "dry_h_day": 0.0
       }
     },
     "history": [
@@ -1025,13 +1025,13 @@
         "load_28gg_wk": 370.2
       },
       "blocco": {
-        "label": "Raduno",
-        "start": "2026-11-09",
-        "days": 18,
-        "kite_km_tot": 737.7,
-        "kite_km_day": 41.0,
-        "dry_h_tot": 14.1,
-        "dry_h_day": 0.78
+        "label": "Casa",
+        "start": "2026-11-27",
+        "days": 1,
+        "kite_km_tot": 0.0,
+        "kite_km_day": 0.0,
+        "dry_h_tot": 0.0,
+        "dry_h_day": 0.0
       }
     },
     "history": [
